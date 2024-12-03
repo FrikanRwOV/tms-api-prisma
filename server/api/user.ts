@@ -35,6 +35,35 @@ router.post("", async (req, res) => {
 
 /**
  * @swagger
+ * user:
+ *   get:
+ *     tags:
+ *       - User
+ *     summary: Get all users
+ *     responses:
+ *       200:
+ *         description: List of users retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Server error
+ */
+router.get("", async (req, res) => {
+  try {
+    const users = await prisma.user.findMany();
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to retrieve users", details: error });
+  }
+});
+
+/**
+ * @swagger
  * user/{id}:
  *   get:
  *     tags:
