@@ -1,11 +1,11 @@
 import { Router } from "express";
-import prisma from "../libs/prisma";
+import prisma from "../../libs/prisma";
 import { VehicleStatus } from "@prisma/client";
-import authenticateToken from "../middleware/auth";
+import { authenticateToken } from "../middleware/auth";
 
 const router = Router();
 
-/**
+/** 
  * @swagger
  * /vehicles:
  *   get:
