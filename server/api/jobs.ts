@@ -128,16 +128,29 @@ router.get('/jobs/:id', async (req, res) => {
  *         description: Error creating job
  */
 router.post('/jobs', async (req, res) => {
-  const { 
-    title, 
-    description, 
-    priority, 
-    siteClassification, 
-    assignedDriverId,
-    requesterId 
-  } = req.body;
+  const { title, description, priority, siteClassification, assignedDriverId } = req.body;
   
+  // Validate required fields
+  if (!title) {
+    return res.status(400).json({ error: 'Title is required' });
+  }
+
+  // Validate priority if provided
+  if (priority && !['LOW', 'MEDIUM', 'HIGH'].includes(priority)) {
+    return res.status(400).json({ error: 'Invalid priority value. Must be LOW, MEDIUM, or HIGH' });
+  }
+
   try {
+    // Check if assigned driver exists if provided
+    if (assignedDriverId) {
+      const driver = await prisma.driver.findUnique({
+        where: { id: assignedDriverId },
+      });
+      if (!driver) {
+        return res.status(400).json({ error: 'Assigned driver not found' });
+      }
+    }
+
     const job = await prisma.job.create({
       data: {
         title,
@@ -145,16 +158,19 @@ router.post('/jobs', async (req, res) => {
         priority,
         siteClassification,
         assignedDriverId,
-        requesterId,
-      },
-      include: {
-        assignedDriver: true,
-        requester: true,
+        status: 'PENDING', // Set default status
       },
     });
     res.status(201).json(job);
   } catch (error) {
-    res.status(400).json({ error: 'Error creating job' });
+    console.error('Error creating job:', error);
+    if (error.code === 'P2002') {
+      res.status(400).json({ error: 'A job with this title already exists' });
+    } else if (error.code === 'P2003') {
+      res.status(400).json({ error: 'Invalid reference to related record' });
+    } else {
+      res.status(500).json({ error: 'Internal server error while creating job' });
+    }
   }
 });
 
