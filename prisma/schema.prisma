@@ -98,7 +98,8 @@ model User {
   permissions   Permission[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  assignedJobs  Job[]
+  assignedJobs  Job[] @relation("JobToDriver")
+  requestedJobs Job[] @relation("JobToRequester")
   jobComments   JobComment[]
   executions  Execution[]
 }
@@ -160,18 +161,20 @@ model Maintenance {
 }
 
 model Job {
-  id                String            @id @default(cuid())
+  id                 String            @id @default(cuid())
   title             String
   description       String
   priority          JobPriority
   siteClassification SiteClassification
   status            JobStatus         @default(PENDING)
-  assignedDriver    User              @relation(fields: [assignedDriverId], references: [id])
-  assignedDriverId  String
+  assignedDriver    User?              @relation("JobToDriver", fields: [assignedDriverId], references: [id])
+  assignedDriverId  String?
+  requester         User?              @relation("JobToRequester", fields: [requesterId], references: [id])
+  requesterId       String?
   attachments       JobAttachment[]
   comments          JobComment[]
-  location          String?           // Location details for the job site
-  completionProof   String?          // URL or reference to completion evidence
+  location          String?
+  completionProof   String?
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
 }

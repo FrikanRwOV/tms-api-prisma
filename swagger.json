@@ -286,6 +286,9 @@
                   },
                   "assignedDriverId": {
                     "type": "string"
+                  },
+                  "requesterId": {
+                    "type": "string"
                   }
                 }
               }

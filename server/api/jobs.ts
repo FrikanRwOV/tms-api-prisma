@@ -115,6 +115,8 @@ router.get('/jobs/:id', async (req, res) => {
  *                 type: string
  *               assignedDriverId:
  *                 type: string
+ *               requesterId:
+ *                 type: string
  *     responses:
  *       201:
  *         description: Job created successfully
@@ -126,7 +128,15 @@ router.get('/jobs/:id', async (req, res) => {
  *         description: Error creating job
  */
 router.post('/jobs', async (req, res) => {
-  const { title, description, priority, siteClassification, assignedDriverId } = req.body;
+  const { 
+    title, 
+    description, 
+    priority, 
+    siteClassification, 
+    assignedDriverId,
+    requesterId 
+  } = req.body;
+  
   try {
     const job = await prisma.job.create({
       data: {
@@ -135,6 +145,11 @@ router.post('/jobs', async (req, res) => {
         priority,
         siteClassification,
         assignedDriverId,
+        requesterId,
+      },
+      include: {
+        assignedDriver: true,
+        requester: true,
       },
     });
     res.status(201).json(job);

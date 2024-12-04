@@ -86,7 +86,11 @@ router.post("/verify-code", async (req, res) => {
     return res.status(400).json({ error: result.message });
   }
 
-  res.json({ token: result.token, message: result.message });
+  res.json({ 
+    token: result.token, 
+    user: result.user,
+    message: result.message 
+  });
 });
 
 export default router;

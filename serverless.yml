@@ -14,7 +14,11 @@ provider:
   environment:
     STAGE: ${self:provider.stage}
     NODE_ENV: ${self:provider.stage}
-    SWAGGER_BUCKET_NAME: ${self:service}-swagger-docs
+    SWAGGER_BUCKET_NAME: ${env:SWAGGER_BUCKET_NAME}
+    JWT_SECRET: ${env:JWT_SECRET}
+    DATABASE_URL: ${env:DATABASE_URL}
+    DEFAULT_FROM_EMAIL: ${env:DEFAULT_FROM_EMAIL}
+    
   iam:
     role:
       statements:
@@ -50,38 +54,10 @@ functions:
     handler: index.handler
     events:
       - httpApi: "*"
-
-resources:
-  Resources:
-    SwaggerBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: ${self:provider.environment.SWAGGER_BUCKET_NAME}-${self:provider.stage}
-        PublicAccessBlockConfiguration:
-          BlockPublicAcls: false
-          BlockPublicPolicy: false
-          IgnorePublicAcls: false
-          RestrictPublicBuckets: false
-        WebsiteConfiguration:
-          IndexDocument: index.html
-          ErrorDocument: index.html
-        CorsConfiguration:
-          CorsRules:
-            - AllowedHeaders: ['*']
-              AllowedMethods: [GET]
-              AllowedOrigins: ['*']
-              MaxAge: 3000
-
-    SwaggerBucketPolicy:
-      Type: AWS::S3::BucketPolicy
-      Properties:
-        Bucket: !Ref SwaggerBucket
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Sid: PublicReadGetObject
-              Effect: Allow
-              Principal: '*'
-              Action: s3:GetObject
-              Resource: arn:aws:s3:::${self:provider.environment.SWAGGER_BUCKET_NAME}-${self:provider.stage}/*
+  autoAssignJobs:
+    handler: lambdas/autoAssignJobs.handler
+    events:
+      - schedule: rate(2 minutes)
+    environment:
+      DATABASE_URL: ${env:DATABASE_URL}
 

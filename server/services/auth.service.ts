@@ -34,13 +34,15 @@ export class AuthService {
     const authCode = this.generateAuthCode();
     const authCodeExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { authCode, authCodeExpires },
-    });
+ 
 
     // Send auth code via email
     try {
+         await prisma.user.update({
+           where: { id: user.id },
+           data: { authCode, authCodeExpires },
+         });
+         
       await sendEmail({
         to: email,
         subject: "Your Authentication Code",
@@ -62,7 +64,7 @@ export class AuthService {
   async verifyAuthCode(
     email: string,
     code: string
-  ): Promise<{ success: boolean; token?: string; message: string }> {
+  ): Promise<{ success: boolean; token?: string; user?: any; message: string }> {
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
@@ -88,6 +90,15 @@ export class AuthService {
     });
 
     const token = this.generateToken(user.id);
-    return { success: true, token, message: "Authentication successful" };
+    
+    // Remove sensitive information from user object
+    const { password, authCode, authCodeExpires, ...userWithoutSensitiveInfo } = user;
+    
+    return { 
+      success: true, 
+      token, 
+      user: userWithoutSensitiveInfo,
+      message: "Authentication successful" 
+    };
   }
 }
