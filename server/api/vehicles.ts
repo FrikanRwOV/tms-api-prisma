@@ -35,7 +35,7 @@ const router = Router();
  *       500:
  *         description: Failed to fetch vehicles
  */
-router.get("/", authenticateToken, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const { type, status } = req.query;
     const filters: any = {};
@@ -82,7 +82,7 @@ router.get("/", authenticateToken, async (req, res) => {
  *       500:
  *         description: Failed to fetch vehicle
  */
-router.get("/:id", authenticateToken, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const vehicle = await prisma.vehicle.findUnique({
@@ -122,7 +122,7 @@ router.get("/:id", authenticateToken, async (req, res) => {
  *       500:
  *         description: Failed to create vehicle
  */
-router.post("/", authenticateToken, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const data = req.body;
     const vehicle = await prisma.vehicle.create({
@@ -171,7 +171,7 @@ router.post("/", authenticateToken, async (req, res) => {
  *       500:
  *         description: Failed to update vehicle
  */
-router.put("/:id", authenticateToken, async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const data = req.body;
@@ -216,7 +216,7 @@ router.put("/:id", authenticateToken, async (req, res) => {
  *       500:
  *         description: Failed to delete vehicle
  */
-router.delete("/:id", authenticateToken, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     await prisma.vehicle.delete({

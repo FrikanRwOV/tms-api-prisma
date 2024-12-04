@@ -191,6 +191,64 @@ const main = async () => {
     },
   ]);
 
+  await seed.job([
+    {
+      id: "1",
+      title: "Emergency Equipment Transport",
+      description: "Transport critical medical equipment to Johannesburg General Hospital",
+      priority: "HIGH",
+      siteClassification: "RED",
+      status: "IN_PROGRESS",
+      assignedDriverId: "3", // Test Driver
+      location: "Johannesburg General Hospital, 7 York Road, Parktown",
+      completionProof: null,
+    },
+    {
+      id: "2",
+      title: "Construction Materials Delivery",
+      description: "Deliver building materials to new residential development site",
+      priority: "MEDIUM",
+      siteClassification: "ORANGE",
+      status: "PENDING",
+      assignedDriverId: "3", // Test Driver
+      location: "123 Construction Site, Pretoria West",
+      completionProof: null,
+    },
+    {
+      id: "3",
+      title: "Regular Office Supplies Distribution",
+      description: "Monthly office supplies delivery to regional branches",
+      priority: "LOW",
+      siteClassification: "GREEN",
+      status: "COMPLETED",
+      assignedDriverId: "3", // Test Driver
+      location: "Multiple locations in Gauteng",
+      completionProof: "https://storage.example.com/proof/delivery-receipt-123.pdf",
+    },
+    {
+      id: "4",
+      title: "Hazardous Materials Transport",
+      description: "Transport of classified industrial materials requiring special handling",
+      priority: "HIGH",
+      siteClassification: "RED",
+      status: "PENDING",
+      assignedDriverId: "3", // Test Driver
+      location: "Industrial Zone B, Germiston",
+      completionProof: null,
+    },
+    {
+      id: "5",
+      title: "Retail Store Restocking",
+      description: "Weekly inventory restocking for suburban retail chain",
+      priority: "MEDIUM",
+      siteClassification: "GREEN",
+      status: "IN_PROGRESS",
+      assignedDriverId: "3", // Test Driver
+      location: "Sandton City Shopping Centre",
+      completionProof: null,
+    }
+  ]);
+
   console.log("Database seeded successfully!");
 
   process.exit();
