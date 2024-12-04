@@ -91,7 +91,9 @@ model User {
   id            String    @id @default(cuid())
   email         String    @unique
   name          String
-  password      String
+  password      String?
+  authCode      String?
+  authCodeExpires DateTime?
   role          Role
   permissions   Permission[]
   createdAt     DateTime  @default(now())

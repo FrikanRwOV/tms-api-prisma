@@ -4,20 +4,20 @@ const serverless = require("serverless-http");
 import userRoutes from "./server/api/user";
 import jobRoutes from "./server/api/jobs";
 import vehicleRoutes from "./server/api/vehicles";
-
+import authRoutes from "./server/api/auth";
 const app = express();
 app.use(express.json());
 
 // Redirect /docs to static Swagger documentation
 app.get('/docs', (req, res) => {
   const stage = process.env.STAGE || "dev";
-  const bucketName = process.env.SWAGGER_BUCKET_NAME || "tms-api-swagger-docs";
+  const bucketName = process.env.SWAGGER_BUCKET_NAME || "tms-swagger-api-dev";
   res.redirect(
     `https://${bucketName}-${stage}.s3.eu-west-1.amazonaws.com/${stage}/index.html`
   );
 });
 
-
+app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/jobs", jobRoutes);
 app.use("/vehicles", vehicleRoutes);

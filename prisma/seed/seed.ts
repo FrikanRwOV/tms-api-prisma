@@ -140,7 +140,7 @@ const main = async () => {
     },
     {
       id: "2",
-      email: "transport@example.com",
+      email: "frikan+transport@openvantage.co.za",
       name: "Transport Manager",
       role: "TRANSPORT_MANAGER",
       permissions: [
@@ -154,7 +154,7 @@ const main = async () => {
     },
     {
       id: "3",
-      email: "driver@example.com",
+      email: "frikan+driver@openvantage.co.za",
       name: "Test Driver",
       role: "DRIVER",
       permissions: [
@@ -166,7 +166,7 @@ const main = async () => {
     },
     {
       id: "4",
-      email: "workshop@example.com",
+      email: "frikan+workshop@openvantage.co.za",
       name: "Workshop Manager",
       role: "WORKSHOP_MANAGER",
       permissions: [
@@ -180,7 +180,7 @@ const main = async () => {
     },
     {
       id: "5",
-      email: "requester@example.com",
+      email: "frikan+requester@openvantage.co.za",
       name: "Transport Requester",
       role: "REQUESTER",
       permissions: [
