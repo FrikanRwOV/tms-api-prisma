@@ -947,10 +947,12 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "Auto-generated unique identifier"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "format": "email"
           },
           "firstName": {
             "type": "string"
@@ -982,10 +984,14 @@
             }
           },
           "createdAt": {
-            "$ref": "#/components/schemas/Date"
+            "$ref": "#/components/schemas/Date",
+            "type": "string",
+            "format": "date-time"
           },
           "updatedAt": {
-            "$ref": "#/components/schemas/Date"
+            "$ref": "#/components/schemas/Date",
+            "type": "string",
+            "format": "date-time"
           },
           "assignedJobs": {
             "type": "array",
@@ -1014,8 +1020,32 @@
               "$ref": "#/components/schemas/Execution"
             },
             "nullable": true
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "idNumber": {
+            "type": "string"
+          },
+          "contactNumber": {
+            "type": "string"
+          },
+          "whatsapp": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
           }
-        }
+        },
+        "required": [
+          "email",
+          "firstName",
+          "lastName",
+          "role"
+        ]
       },
       "Vehicle": {
         "type": "object",

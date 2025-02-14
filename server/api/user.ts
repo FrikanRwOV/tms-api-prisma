@@ -5,6 +5,51 @@ const router = Router();
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - email
+ *         - firstName
+ *         - lastName
+ *         - role
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Auto-generated unique identifier
+ *         email:
+ *           type: string
+ *           format: email
+ *         firstName:
+ *           type: string
+ *         lastName:
+ *           type: string
+ *         middleName:
+ *           type: string
+ *         idNumber:
+ *           type: string
+ *         contactNumber:
+ *           type: string
+ *         whatsapp:
+ *           type: string
+ *         address:
+ *           type: string
+ *         password:
+ *           type: string
+ *         role:
+ *           type: string
+ *           enum: [ADMINISTRATOR, TRANSPORT_MANAGER, DRIVER, REQUESTER, WORKSHOP_MANAGER]
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ */
+
+/**
+ * @swagger
  * /user:
  *   post:
  *     tags:
