@@ -18,7 +18,8 @@ export async function sendEmail({
   const recipients = Array.isArray(to) ? to : [to];
 
   const params = {
-    Source: from || process.env.DEFAULT_FROM_EMAIL || "frikan@openvantage.co.za",
+    Source:
+      from || process.env.DEFAULT_FROM_EMAIL || "magaya@openvantage.co.za",
     Destination: {
       ToAddresses: recipients,
     },
@@ -37,7 +38,8 @@ export async function sendEmail({
   };
 
   try {
-    await ses.sendEmail(params).promise();
+    const response = await ses.sendEmail(params).promise();
+    console.log(response);
   } catch (error) {
     console.error("Failed to send email:", error);
     throw new Error("Failed to send email");

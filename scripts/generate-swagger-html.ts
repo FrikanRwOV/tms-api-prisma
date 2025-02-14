@@ -1,7 +1,7 @@
 import fs from "fs";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import SwaggerUI from "swagger-ui-dist";
-const swaggerJson = require('./swagger.json')
+const swaggerJson = require('../swagger.json')
 const s3Client = new S3Client({
   region: process.env.AWS_REGION || "eu-west-1",
 });

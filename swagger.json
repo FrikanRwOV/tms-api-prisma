@@ -14,72 +14,267 @@
       }
     },
     "schemas": {
-      "User": {
+      "AnswerType": {
+        "type": "string",
+        "enum": [
+          "TEXT",
+          "BOOLEAN",
+          "CHOICE",
+          "FILE_UPLOAD"
+        ]
+      },
+      "ExecutionStatus": {
+        "type": "string",
+        "enum": [
+          "IN_PROGRESS",
+          "COMPLETED",
+          "CANCELLED"
+        ]
+      },
+      "JobPriority": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "JobStatus": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "PLANNED",
+          "BLOCKED",
+          "IN_PROGRESS",
+          "COMPLETED",
+          "CANCELLED"
+        ]
+      },
+      "JobType": {
+        "type": "string",
+        "enum": [
+          "COLLECT_INTERNAL_SANDS",
+          "COLLECT_EXTERNAL_SANDS",
+          "COLLECT_INTERNAL_ORES",
+          "COLLECT_EXTERNAL_ORES"
+        ]
+      },
+      "Permission": {
+        "type": "string",
+        "enum": [
+          "CREATE_USER",
+          "READ_USER",
+          "UPDATE_USER",
+          "DELETE_USER",
+          "MANAGE_ROLES",
+          "CREATE_TRANSPORT_REQUEST",
+          "READ_TRANSPORT_REQUEST",
+          "UPDATE_TRANSPORT_REQUEST",
+          "DELETE_TRANSPORT_REQUEST",
+          "CREATE_MAINTENANCE",
+          "READ_MAINTENANCE",
+          "UPDATE_MAINTENANCE",
+          "DELETE_MAINTENANCE",
+          "VIEW_ASSIGNMENTS",
+          "CREATE_VEHICLE",
+          "READ_VEHICLE",
+          "UPDATE_VEHICLE",
+          "DELETE_VEHICLE"
+        ]
+      },
+      "ProcedureType": {
+        "type": "string",
+        "enum": [
+          "STANDARD",
+          "EXCEPTION"
+        ]
+      },
+      "QuestionType": {
+        "type": "string",
+        "enum": [
+          "TEXT",
+          "BOOLEAN",
+          "CHOICE",
+          "FILE_UPLOAD"
+        ]
+      },
+      "Role": {
+        "type": "string",
+        "enum": [
+          "ADMINISTRATOR",
+          "TRANSPORT_MANAGER",
+          "DRIVER",
+          "REQUESTER",
+          "WORKSHOP_MANAGER"
+        ]
+      },
+      "SiteClassification": {
+        "type": "string",
+        "enum": [
+          "GREEN",
+          "ORANGE",
+          "RED"
+        ]
+      },
+      "VehicleStatus": {
+        "type": "string",
+        "enum": [
+          "AVAILABLE",
+          "IN_TRANSIT",
+          "UNDER_MAINTENANCE",
+          "OUT_OF_SERVICE"
+        ]
+      },
+      "Area": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
-          },
-          "email": {
             "type": "string"
           },
           "name": {
             "type": "string"
           },
-          "role": {
-            "type": "string",
-            "enum": [
-              "ADMINISTRATOR",
-              "TRANSPORT_MANAGER",
-              "DRIVER",
-              "REQUESTER",
-              "WORKSHOP_MANAGER"
-            ]
+          "site": {
+            "$ref": "#/components/schemas/Site",
+            "nullable": true
           },
-          "permissions": {
+          "siteId": {
+            "type": "string"
+          },
+          "shafts": {
             "type": "array",
             "items": {
-              "type": "string"
-            }
+              "$ref": "#/components/schemas/Shaft"
+            },
+            "nullable": true
           },
           "createdAt": {
-            "type": "string",
-            "format": "date-time"
+            "$ref": "#/components/schemas/Date"
           },
           "updatedAt": {
-            "type": "string",
-            "format": "date-time"
+            "$ref": "#/components/schemas/Date"
           }
         }
       },
-      "Vehicle": {
+      "Client": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string"
           },
-          "registrationNumber": {
+          "firstName": {
             "type": "string"
           },
-          "typeId": {
+          "lastName": {
             "type": "string"
+          },
+          "idNumber": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "contactNumber": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "shafts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Shaft"
+            },
+            "nullable": true
+          },
+          "syndicates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Syndicate"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "Exception": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "execution": {
+            "$ref": "#/components/schemas/Execution",
+            "nullable": true
+          },
+          "executionId": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "evidence": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          }
+        }
+      },
+      "Execution": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "procedure": {
+            "$ref": "#/components/schemas/Procedure",
+            "nullable": true
+          },
+          "procedureId": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string"
+          },
+          "responses": {
+            "$ref": "#/components/schemas/JsonValue"
           },
           "status": {
             "type": "string",
             "enum": [
-              "AVAILABLE",
-              "IN_TRANSIT",
-              "UNDER_MAINTENANCE",
-              "OUT_OF_SERVICE"
+              "IN_PROGRESS",
+              "COMPLETED",
+              "CANCELLED"
             ]
           },
+          "startTime": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "exceptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Exception"
+            },
+            "nullable": true
+          },
           "createdAt": {
-            "type": "string",
-            "format": "date-time"
+            "$ref": "#/components/schemas/Date"
           },
           "updatedAt": {
-            "type": "string",
-            "format": "date-time"
+            "$ref": "#/components/schemas/Date"
           }
         }
       },
@@ -95,38 +290,824 @@
           "description": {
             "type": "string"
           },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "HIGH",
+              "MEDIUM",
+              "LOW"
+            ]
+          },
+          "siteClassification": {
+            "type": "string",
+            "enum": [
+              "GREEN",
+              "ORANGE",
+              "RED"
+            ]
+          },
           "status": {
             "type": "string",
             "enum": [
               "PENDING",
+              "PLANNED",
+              "BLOCKED",
               "IN_PROGRESS",
               "COMPLETED",
               "CANCELLED"
             ]
           },
-          "priority": {
-            "type": "string",
-            "enum": [
-              "LOW",
-              "MEDIUM",
-              "HIGH"
-            ]
+          "attachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JobAttachment"
+            },
+            "nullable": true
           },
-          "siteClassification": {
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JobComment"
+            },
+            "nullable": true
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "shaft": {
+            "$ref": "#/components/schemas/Shaft",
+            "nullable": true
+          },
+          "shaftId": {
+            "type": "string"
+          }
+        }
+      },
+      "JobAttachment": {
+        "type": "object",
+        "properties": {
+          "id": {
             "type": "string"
           },
-          "assignedDriverId": {
+          "job": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "priority": {
+                "type": "string",
+                "enum": [
+                  "HIGH",
+                  "MEDIUM",
+                  "LOW"
+                ]
+              },
+              "siteClassification": {
+                "type": "string",
+                "enum": [
+                  "GREEN",
+                  "ORANGE",
+                  "RED"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "PENDING",
+                  "PLANNED",
+                  "BLOCKED",
+                  "IN_PROGRESS",
+                  "COMPLETED",
+                  "CANCELLED"
+                ]
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/JobAttachment"
+                },
+                "nullable": true
+              },
+              "comments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/JobComment"
+                },
+                "nullable": true
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "shaft": {
+                "$ref": "#/components/schemas/Shaft",
+                "nullable": true
+              },
+              "shaftId": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          },
+          "jobId": {
+            "type": "string"
+          },
+          "fileUrl": {
+            "type": "string"
+          },
+          "fileType": {
             "type": "string"
           },
           "createdAt": {
-            "type": "string",
-            "format": "date-time"
+            "$ref": "#/components/schemas/Date"
           },
           "updatedAt": {
-            "type": "string",
-            "format": "date-time"
+            "$ref": "#/components/schemas/Date"
           }
         }
+      },
+      "JobComment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "job": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "priority": {
+                "type": "string",
+                "enum": [
+                  "HIGH",
+                  "MEDIUM",
+                  "LOW"
+                ]
+              },
+              "siteClassification": {
+                "type": "string",
+                "enum": [
+                  "GREEN",
+                  "ORANGE",
+                  "RED"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "PENDING",
+                  "PLANNED",
+                  "BLOCKED",
+                  "IN_PROGRESS",
+                  "COMPLETED",
+                  "CANCELLED"
+                ]
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/JobAttachment"
+                },
+                "nullable": true
+              },
+              "comments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/JobComment"
+                },
+                "nullable": true
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "shaft": {
+                "$ref": "#/components/schemas/Shaft",
+                "nullable": true
+              },
+              "shaftId": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          },
+          "jobId": {
+            "type": "string"
+          },
+          "author": {
+            "$ref": "#/components/schemas/User",
+            "nullable": true
+          },
+          "authorId": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          }
+        }
+      },
+      "Maintenance": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "vehicle": {
+            "$ref": "#/components/schemas/Vehicle",
+            "nullable": true
+          },
+          "vehicleId": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "startDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "status": {
+            "type": "string"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          }
+        }
+      },
+      "Procedure": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "STANDARD",
+              "EXCEPTION"
+            ]
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Question"
+            },
+            "nullable": true
+          },
+          "executions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Execution"
+            },
+            "nullable": true
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          }
+        }
+      },
+      "Question": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "procedure": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "STANDARD",
+                  "EXCEPTION"
+                ]
+              },
+              "questions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Question"
+                },
+                "nullable": true
+              },
+              "executions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Execution"
+                },
+                "nullable": true
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/Date"
+              }
+            },
+            "nullable": true
+          },
+          "procedureId": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "answerType": {
+            "type": "string",
+            "enum": [
+              "TEXT",
+              "BOOLEAN",
+              "CHOICE",
+              "FILE_UPLOAD"
+            ]
+          },
+          "order": {
+            "type": "number"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "TEXT",
+              "BOOLEAN",
+              "CHOICE",
+              "FILE_UPLOAD"
+            ]
+          }
+        }
+      },
+      "RolePermission": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMINISTRATOR",
+              "TRANSPORT_MANAGER",
+              "DRIVER",
+              "REQUESTER",
+              "WORKSHOP_MANAGER"
+            ]
+          },
+          "permission": {
+            "type": "string",
+            "enum": [
+              "CREATE_USER",
+              "READ_USER",
+              "UPDATE_USER",
+              "DELETE_USER",
+              "MANAGE_ROLES",
+              "CREATE_TRANSPORT_REQUEST",
+              "READ_TRANSPORT_REQUEST",
+              "UPDATE_TRANSPORT_REQUEST",
+              "DELETE_TRANSPORT_REQUEST",
+              "CREATE_MAINTENANCE",
+              "READ_MAINTENANCE",
+              "UPDATE_MAINTENANCE",
+              "DELETE_MAINTENANCE",
+              "VIEW_ASSIGNMENTS",
+              "CREATE_VEHICLE",
+              "READ_VEHICLE",
+              "UPDATE_VEHICLE",
+              "DELETE_VEHICLE"
+            ]
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          }
+        }
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User",
+            "nullable": true
+          }
+        }
+      },
+      "Shaft": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "area": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "site": {
+                "$ref": "#/components/schemas/Site",
+                "nullable": true
+              },
+              "siteId": {
+                "type": "string"
+              },
+              "shafts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Shaft"
+                },
+                "nullable": true
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/Date"
+              }
+            },
+            "nullable": true
+          },
+          "areaId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "client": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "idNumber": {
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              },
+              "contactNumber": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "shafts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Shaft"
+                },
+                "nullable": true
+              },
+              "syndicates": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Syndicate"
+                },
+                "nullable": true
+              }
+            },
+            "nullable": true
+          },
+          "clientId": {
+            "type": "string"
+          },
+          "jobs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Job"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "Syndicate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "clients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Client"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "Site": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "areas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Area"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "Telematics": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "vehicle": {
+            "$ref": "#/components/schemas/Vehicle",
+            "nullable": true
+          },
+          "vehicleId": {
+            "type": "string"
+          },
+          "kilometresTravelled": {
+            "type": "number"
+          },
+          "lastUpdated": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMINISTRATOR",
+              "TRANSPORT_MANAGER",
+              "DRIVER",
+              "REQUESTER",
+              "WORKSHOP_MANAGER"
+            ]
+          },
+          "sessions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Session"
+            },
+            "nullable": true
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Permission"
+            }
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "assignedJobs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Job"
+            },
+            "nullable": true
+          },
+          "requestedJobs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Job"
+            },
+            "nullable": true
+          },
+          "jobComments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JobComment"
+            },
+            "nullable": true
+          },
+          "executions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Execution"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "Vehicle": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "registrationNumber": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/VehicleType",
+            "nullable": true
+          },
+          "typeId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "AVAILABLE",
+              "IN_TRANSIT",
+              "UNDER_MAINTENANCE",
+              "OUT_OF_SERVICE"
+            ]
+          },
+          "maintenanceRecords": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Maintenance"
+            },
+            "nullable": true
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          }
+        }
+      },
+      "VehicleType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "vehicles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vehicle"
+            },
+            "nullable": true
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          }
+        }
+      },
+      "VerificationCode": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          }
+        }
+      },
+      "Date": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "JsonValue": {
+        "type": "object",
+        "additionalProperties": true
       }
     }
   },
@@ -135,13 +1116,313 @@
       "bearerAuth": []
     }
   ],
+  "servers": [
+    {
+      "url": "https://zfnsz3gffi.execute-api.eu-west-1.amazonaws.com",
+      "description": "Development API"
+    },
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Development"
+    }
+  ],
   "paths": {
-    "/auth/request-code": {
+    "/area": {
+      "post": {
+        "tags": [
+          "Area"
+        ],
+        "summary": "Create a new area",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Area"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Area created successfully"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Area"
+        ],
+        "summary": "Get all areas",
+        "responses": {
+          "200": {
+            "description": "List of areas retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Area"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/area/{id}": {
+      "get": {
+        "tags": [
+          "Area"
+        ],
+        "summary": "Get an area by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Area found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Area"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Area not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Area"
+        ],
+        "summary": "Update an area",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Area"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Area updated successfully"
+          },
+          "404": {
+            "description": "Area not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Area"
+        ],
+        "summary": "Delete an area",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Area deleted successfully"
+          },
+          "404": {
+            "description": "Area not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/auth/login": {
       "post": {
         "tags": [
           "Authentication"
         ],
-        "summary": "Request an authentication code",
+        "summary": "Login user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Logout user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout successful"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/auth/mobile/login": {
+      "post": {
+        "tags": [
+          "Mobile Authentication"
+        ],
+        "summary": "Mobile login endpoint supporting multiple auth methods",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "loginMethod"
+                ],
+                "properties": {
+                  "loginMethod": {
+                    "type": "string",
+                    "enum": [
+                      "password",
+                      "apple",
+                      "google"
+                    ]
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "idToken": {
+                    "type": "string"
+                  },
+                  "user": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful or OTP sent"
+          },
+          "400": {
+            "description": "Invalid credentials or user not found"
+          },
+          "500": {
+            "description": "Failed to process login request"
+          }
+        }
+      }
+    },
+    "/auth/mobile/logout": {
+      "post": {
+        "tags": [
+          "Mobile Authentication"
+        ],
+        "summary": "Mobile logout endpoint",
+        "responses": {
+          "200": {
+            "description": "Mobile logout successful"
+          }
+        }
+      }
+    },
+    "/auth/forgot-password/request": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Request password reset code",
         "requestBody": {
           "required": true,
           "content": {
@@ -153,7 +1434,8 @@
                 ],
                 "properties": {
                   "email": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "email"
                   }
                 }
               }
@@ -162,20 +1444,23 @@
         },
         "responses": {
           "200": {
-            "description": "Auth code sent successfully"
+            "description": "Reset code sent successfully"
           },
           "400": {
-            "description": "Invalid request"
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Failed to send reset code"
           }
         }
       }
     },
-    "/auth/verify-code": {
+    "/auth/forgot-password/reset": {
       "post": {
         "tags": [
           "Authentication"
         ],
-        "summary": "Verify authentication code",
+        "summary": "Reset password with verification code",
         "requestBody": {
           "required": true,
           "content": {
@@ -184,13 +1469,99 @@
                 "type": "object",
                 "required": [
                   "email",
-                  "code"
+                  "code",
+                  "newPassword"
                 ],
                 "properties": {
                   "email": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "email"
                   },
                   "code": {
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successful"
+          },
+          "400": {
+            "description": "Invalid or expired code"
+          },
+          "500": {
+            "description": "Failed to reset password"
+          }
+        }
+      }
+    },
+    "/auth/mobile/forgot-password/request": {
+      "post": {
+        "tags": [
+          "Mobile Authentication"
+        ],
+        "summary": "Request mobile password reset OTP",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reset OTP sent successfully"
+          },
+          "400": {
+            "description": "Mobile user not found"
+          },
+          "500": {
+            "description": "Failed to send reset OTP"
+          }
+        }
+      }
+    },
+    "/auth/mobile/forgot-password/verify": {
+      "post": {
+        "tags": [
+          "Mobile Authentication"
+        ],
+        "summary": "Verify mobile password reset OTP",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "otp"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "otp": {
                     "type": "string"
                   }
                 }
@@ -200,50 +1571,518 @@
         },
         "responses": {
           "200": {
-            "description": "Authentication successful"
+            "description": "OTP verified successfully"
           },
           "400": {
-            "description": "Invalid code or request"
+            "description": "Invalid or expired OTP"
+          },
+          "500": {
+            "description": "Failed to verify OTP"
           }
         }
       }
     },
-    "/api/jobs": {
+    "/auth/mobile/forgot-password/reset": {
+      "post": {
+        "tags": [
+          "Mobile Authentication"
+        ],
+        "summary": "Complete mobile password reset with OTP",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "otp",
+                  "newPassword"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "otp": {
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired OTP"
+          },
+          "500": {
+            "description": "Failed to reset password"
+          }
+        }
+      }
+    },
+    "/auth/mobile/update-password": {
+      "post": {
+        "tags": [
+          "Mobile Authentication"
+        ],
+        "summary": "Update mobile user password",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "currentPassword",
+                  "newPassword"
+                ],
+                "properties": {
+                  "currentPassword": {
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password updated successfully"
+          },
+          "400": {
+            "description": "Invalid current password"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Failed to update password"
+          }
+        }
+      }
+    },
+    "/mobile/me": {
       "get": {
         "tags": [
-          "Jobs"
+          "Authentication"
         ],
-        "summary": "Get all jobs",
-        "description": "Retrieve a list of jobs with optional filters",
-        "parameters": [
+        "summary": "Get current user details",
+        "security": [
           {
-            "in": "query",
-            "name": "status",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Filter jobs by status"
-          },
-          {
-            "in": "query",
-            "name": "priority",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Filter jobs by priority"
-          },
-          {
-            "in": "query",
-            "name": "assignedDriverId",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Filter jobs by assigned driver"
+            "bearerAuth": []
           }
         ],
         "responses": {
           "200": {
-            "description": "List of jobs",
+            "description": "User details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "trade": {
+                      "type": "string"
+                    },
+                    "dateOfBirth": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "mobileNumber": {
+                      "type": "string"
+                    },
+                    "postalCode": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Failed to retrieve user details"
+          }
+        }
+      }
+    },
+    "/client": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Create a new client",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Client"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Client created successfully"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Get all clients",
+        "responses": {
+          "200": {
+            "description": "List of clients retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Client"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/client/{id}": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Get a client by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Client found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Client not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Update a client",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Client"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Client updated successfully"
+          },
+          "404": {
+            "description": "Client not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Delete a client",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Client deleted successfully"
+          },
+          "404": {
+            "description": "Client not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/exception": {
+      "post": {
+        "tags": [
+          "Exception"
+        ],
+        "summary": "Create a new exception",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Exception"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Exception created successfully"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Exception"
+        ],
+        "summary": "Get all exceptions",
+        "responses": {
+          "200": {
+            "description": "List of exceptions retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Exception"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/exception/{id}": {
+      "get": {
+        "tags": [
+          "Exception"
+        ],
+        "summary": "Get an exception by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Exception found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Exception"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Exception not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Exception"
+        ],
+        "summary": "Update an exception",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Exception"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Exception updated successfully"
+          },
+          "404": {
+            "description": "Exception not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Exception"
+        ],
+        "summary": "Delete an exception",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Exception deleted successfully"
+          },
+          "404": {
+            "description": "Exception not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/job": {
+      "post": {
+        "tags": [
+          "Job"
+        ],
+        "summary": "Create a new job",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Job"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Job created successfully"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Job"
+        ],
+        "summary": "Get all jobs",
+        "responses": {
+          "200": {
+            "description": "List of jobs retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -254,68 +2093,17 @@
                 }
               }
             }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Jobs"
-        ],
-        "summary": "Create a new job",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "title"
-                ],
-                "properties": {
-                  "title": {
-                    "type": "string"
-                  },
-                  "description": {
-                    "type": "string"
-                  },
-                  "priority": {
-                    "type": "string"
-                  },
-                  "siteClassification": {
-                    "type": "string"
-                  },
-                  "assignedDriverId": {
-                    "type": "string"
-                  },
-                  "requesterId": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Job created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Job"
-                }
-              }
-            }
           },
-          "400": {
-            "description": "Error creating job"
+          "500": {
+            "description": "Server error"
           }
         }
       }
     },
-    "/api/jobs/{id}": {
+    "/job/{id}": {
       "get": {
         "tags": [
-          "Jobs"
+          "Job"
         ],
         "summary": "Get a job by ID",
         "parameters": [
@@ -325,13 +2113,12 @@
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "description": "Job ID"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Job details",
+            "description": "Job found",
             "content": {
               "application/json": {
                 "schema": {
@@ -342,12 +2129,15 @@
           },
           "404": {
             "description": "Job not found"
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       },
       "put": {
         "tags": [
-          "Jobs"
+          "Job"
         ],
         "summary": "Update a job",
         "parameters": [
@@ -357,8 +2147,73 @@
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "description": "Job ID"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Job"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Job updated successfully"
+          },
+          "404": {
+            "description": "Job not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Job"
+        ],
+        "summary": "Delete a job",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Job deleted successfully"
+          },
+          "404": {
+            "description": "Job not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/job/{id}/comment": {
+      "post": {
+        "tags": [
+          "Job"
+        ],
+        "summary": "Add a comment to a job",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -368,10 +2223,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "status": {
+                  "content": {
                     "type": "string"
                   },
-                  "assignedDriverId": {
+                  "authorId": {
                     "type": "string"
                   }
                 }
@@ -380,104 +2235,51 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Job updated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Job"
-                }
-              }
-            }
+          "201": {
+            "description": "Comment added successfully"
           },
-          "400": {
-            "description": "Error updating job"
+          "404": {
+            "description": "Job not found"
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       }
     },
-    "/api/jobs/{id}/complete": {
+    "/procedure": {
       "post": {
         "tags": [
-          "Jobs"
+          "Procedure"
         ],
-        "summary": "Mark a job as completed",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Job ID"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Job marked as completed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Job"
-                }
+        "summary": "Create a new procedure",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Procedure"
               }
             }
-          },
-          "400": {
-            "description": "Error completing job"
           }
-        }
-      }
-    },
-    "/api/jobs/{id}/cancel": {
-      "post": {
-        "tags": [
-          "Jobs"
-        ],
-        "summary": "Cancel a job",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Job ID"
-          }
-        ],
+        },
         "responses": {
-          "200": {
-            "description": "Job cancelled successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Job"
-                }
-              }
-            }
+          "201": {
+            "description": "Procedure created successfully"
           },
-          "400": {
-            "description": "Error cancelling job"
+          "500": {
+            "description": "Server error"
           }
         }
-      }
-    },
-    "/procedures": {
+      },
       "get": {
         "tags": [
-          "Procedures"
+          "Procedure"
         ],
         "summary": "Get all procedures",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "responses": {
           "200": {
-            "description": "List of all procedures",
+            "description": "List of procedures retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -493,95 +2295,14 @@
             "description": "Server error"
           }
         }
-      },
-      "post": {
-        "tags": [
-          "Procedures"
-        ],
-        "summary": "Create a new procedure",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "name",
-                  "description",
-                  "type",
-                  "questions"
-                ],
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "description": {
-                    "type": "string"
-                  },
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "STANDARD",
-                      "EXCEPTION"
-                    ]
-                  },
-                  "questions": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "text": {
-                          "type": "string"
-                        },
-                        "answerType": {
-                          "type": "string",
-                          "enum": [
-                            "TEXT",
-                            "BOOLEAN",
-                            "CHOICE",
-                            "FILE_UPLOAD"
-                          ]
-                        },
-                        "choices": {
-                          "type": "object"
-                        },
-                        "order": {
-                          "type": "integer"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Procedure created successfully"
-          },
-          "500": {
-            "description": "Server error"
-          }
-        }
       }
     },
-    "/procedures/{id}": {
+    "/procedure/{id}": {
       "get": {
         "tags": [
-          "Procedures"
+          "Procedure"
         ],
-        "summary": "Get a specific procedure",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "summary": "Get a procedure by ID",
         "parameters": [
           {
             "in": "path",
@@ -594,7 +2315,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Procedure details",
+            "description": "Procedure found",
             "content": {
               "application/json": {
                 "schema": {
@@ -610,58 +2331,12 @@
             "description": "Server error"
           }
         }
-      }
-    },
-    "/executions": {
-      "post": {
+      },
+      "put": {
         "tags": [
-          "Executions"
+          "Procedure"
         ],
-        "summary": "Start a procedure execution",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "procedureId"
-                ],
-                "properties": {
-                  "procedureId": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Execution started successfully"
-          },
-          "500": {
-            "description": "Server error"
-          }
-        }
-      }
-    },
-    "/executions/{id}": {
-      "patch": {
-        "tags": [
-          "Executions"
-        ],
-        "summary": "Update execution responses",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "summary": "Update a procedure",
         "parameters": [
           {
             "in": "path",
@@ -677,26 +2352,70 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": [
-                  "responses",
-                  "status"
-                ],
-                "properties": {
-                  "responses": {
-                    "type": "object"
-                  },
-                  "status": {
-                    "type": "string"
-                  }
-                }
+                "$ref": "#/components/schemas/Procedure"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Execution updated successfully"
+            "description": "Procedure updated successfully"
+          },
+          "404": {
+            "description": "Procedure not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Procedure"
+        ],
+        "summary": "Delete a procedure",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Procedure deleted successfully"
+          },
+          "404": {
+            "description": "Procedure not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/shaft": {
+      "post": {
+        "tags": [
+          "Shaft"
+        ],
+        "summary": "Create a new shaft",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Shaft"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Shaft created successfully"
           },
           "500": {
             "description": "Server error"
@@ -705,14 +2424,35 @@
       },
       "get": {
         "tags": [
-          "Executions"
+          "Shaft"
         ],
-        "summary": "Get execution details",
-        "security": [
-          {
-            "bearerAuth": []
+        "summary": "Get all shafts",
+        "responses": {
+          "200": {
+            "description": "List of shafts retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Shaft"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
           }
+        }
+      }
+    },
+    "/shaft/{id}": {
+      "get": {
+        "tags": [
+          "Shaft"
         ],
+        "summary": "Get a shaft by ID",
         "parameters": [
           {
             "in": "path",
@@ -725,33 +2465,36 @@
         ],
         "responses": {
           "200": {
-            "description": "Execution details",
+            "description": "Shaft found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Execution"
+                  "$ref": "#/components/schemas/Shaft"
                 }
               }
             }
           },
           "404": {
-            "description": "Execution not found"
+            "description": "Shaft not found"
           },
           "500": {
             "description": "Server error"
           }
         }
-      }
-    },
-    "/exceptions": {
-      "post": {
+      },
+      "put": {
         "tags": [
-          "Exceptions"
+          "Shaft"
         ],
-        "summary": "Log an exception",
-        "security": [
+        "summary": "Update a shaft",
+        "parameters": [
           {
-            "bearerAuth": []
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -759,34 +2502,44 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": [
-                  "executionId",
-                  "description",
-                  "evidence",
-                  "actionTaken"
-                ],
-                "properties": {
-                  "executionId": {
-                    "type": "string"
-                  },
-                  "description": {
-                    "type": "string"
-                  },
-                  "evidence": {
-                    "type": "string"
-                  },
-                  "actionTaken": {
-                    "type": "string"
-                  }
-                }
+                "$ref": "#/components/schemas/Shaft"
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Exception logged successfully"
+          "200": {
+            "description": "Shaft updated successfully"
+          },
+          "404": {
+            "description": "Shaft not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Shaft"
+        ],
+        "summary": "Delete a shaft",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Shaft deleted successfully"
+          },
+          "404": {
+            "description": "Shaft not found"
           },
           "500": {
             "description": "Server error"
@@ -794,7 +2547,307 @@
         }
       }
     },
-    "user": {
+    "/site": {
+      "post": {
+        "tags": [
+          "Site"
+        ],
+        "summary": "Create a new site",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Site"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Site created successfully"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Site"
+        ],
+        "summary": "Get all sites",
+        "responses": {
+          "200": {
+            "description": "List of sites retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Site"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/site/{id}": {
+      "get": {
+        "tags": [
+          "Site"
+        ],
+        "summary": "Get a site by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Site found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Site"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Site not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Site"
+        ],
+        "summary": "Update a site",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Site"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Site updated successfully"
+          },
+          "404": {
+            "description": "Site not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Site"
+        ],
+        "summary": "Delete a site",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Site deleted successfully"
+          },
+          "404": {
+            "description": "Site not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/syndicate": {
+      "post": {
+        "tags": [
+          "Syndicate"
+        ],
+        "summary": "Create a new syndicate",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Syndicate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Syndicate created successfully"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Syndicate"
+        ],
+        "summary": "Get all syndicates",
+        "responses": {
+          "200": {
+            "description": "List of syndicates retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Syndicate"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/syndicate/{id}": {
+      "get": {
+        "tags": [
+          "Syndicate"
+        ],
+        "summary": "Get a syndicate by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Syndicate found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Syndicate"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Syndicate not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Syndicate"
+        ],
+        "summary": "Update a syndicate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Syndicate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Syndicate updated successfully"
+          },
+          "404": {
+            "description": "Syndicate not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Syndicate"
+        ],
+        "summary": "Delete a syndicate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Syndicate deleted successfully"
+          },
+          "404": {
+            "description": "Syndicate not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/user": {
       "post": {
         "tags": [
           "User"
@@ -844,7 +2897,7 @@
         }
       }
     },
-    "user/{id}": {
+    "/user/{id}": {
       "get": {
         "tags": [
           "User"
@@ -944,52 +2997,10 @@
         }
       }
     },
-    "/vehicles": {
-      "get": {
-        "tags": [
-          "Vehicles"
-        ],
-        "summary": "Get all vehicles with optional filters",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "type",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Filter by vehicle type ID"
-          },
-          {
-            "in": "query",
-            "name": "status",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Filter by vehicle status"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of vehicles",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Vehicle"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Failed to fetch vehicles"
-          }
-        }
-      },
+    "/vehicle": {
       "post": {
         "tags": [
-          "Vehicles"
+          "Vehicle"
         ],
         "summary": "Create a new vehicle",
         "requestBody": {
@@ -1007,17 +3018,41 @@
             "description": "Vehicle created successfully"
           },
           "500": {
-            "description": "Failed to create vehicle"
+            "description": "Server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Vehicle"
+        ],
+        "summary": "Get all vehicles",
+        "responses": {
+          "200": {
+            "description": "List of vehicles retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Vehicle"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       }
     },
-    "/vehicles/{id}": {
+    "/vehicle/{id}": {
       "get": {
         "tags": [
-          "Vehicles"
+          "Vehicle"
         ],
-        "summary": "Get specific vehicle by ID",
+        "summary": "Get a vehicle by ID",
         "parameters": [
           {
             "in": "path",
@@ -1025,13 +3060,12 @@
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "description": "The vehicle ID"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Vehicle details",
+            "description": "Vehicle found",
             "content": {
               "application/json": {
                 "schema": {
@@ -1044,13 +3078,13 @@
             "description": "Vehicle not found"
           },
           "500": {
-            "description": "Failed to fetch vehicle"
+            "description": "Server error"
           }
         }
       },
       "put": {
         "tags": [
-          "Vehicles"
+          "Vehicle"
         ],
         "summary": "Update a vehicle",
         "parameters": [
@@ -1060,8 +3094,7 @@
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "description": "The vehicle ID"
+            }
           }
         ],
         "requestBody": {
@@ -1078,14 +3111,17 @@
           "200": {
             "description": "Vehicle updated successfully"
           },
+          "404": {
+            "description": "Vehicle not found"
+          },
           "500": {
-            "description": "Failed to update vehicle"
+            "description": "Server error"
           }
         }
       },
       "delete": {
         "tags": [
-          "Vehicles"
+          "Vehicle"
         ],
         "summary": "Delete a vehicle",
         "parameters": [
@@ -1095,128 +3131,18 @@
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "description": "The vehicle ID"
+            }
           }
         ],
         "responses": {
           "204": {
             "description": "Vehicle deleted successfully"
           },
-          "500": {
-            "description": "Failed to delete vehicle"
-          }
-        }
-      }
-    },
-    "/vehicles/types": {
-      "get": {
-        "tags": [
-          "Vehicle Types"
-        ],
-        "summary": "Get all vehicle types",
-        "responses": {
-          "200": {
-            "description": "A list of vehicle types",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VehicleType"
-                  }
-                }
-              }
-            }
+          "404": {
+            "description": "Vehicle not found"
           },
           "500": {
-            "description": "Failed to fetch vehicle types"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Vehicle Types"
-        ],
-        "summary": "Create a new vehicle type",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VehicleType"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Vehicle type created successfully"
-          },
-          "500": {
-            "description": "Failed to create vehicle type"
-          }
-        }
-      }
-    },
-    "/vehicles/types/{id}": {
-      "put": {
-        "tags": [
-          "Vehicle Types"
-        ],
-        "summary": "Update a vehicle type",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "The vehicle type ID"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VehicleType"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Vehicle type updated successfully"
-          },
-          "500": {
-            "description": "Failed to update vehicle type"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Vehicle Types"
-        ],
-        "summary": "Delete a vehicle type",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "The vehicle type ID"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Vehicle type deleted successfully"
-          },
-          "500": {
-            "description": "Failed to delete vehicle type"
+            "description": "Server error"
           }
         }
       }

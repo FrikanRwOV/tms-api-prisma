@@ -1,12 +1,11 @@
 import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
+import {prisma} from "../../libs/prisma";
 
 const router = Router();
-const prisma = new PrismaClient();
 
 /**
  * @swagger
- * user:
+ * /user:
  *   post:
  *     tags:
  *       - User
@@ -35,7 +34,7 @@ router.post("", async (req, res) => {
 
 /**
  * @swagger
- * user:
+ * /user:
  *   get:
  *     tags:
  *       - User
@@ -64,7 +63,7 @@ router.get("", async (req, res) => {
 
 /**
  * @swagger
- * user/{id}:
+ * /user/{id}:
  *   get:
  *     tags:
  *       - User
@@ -103,7 +102,7 @@ router.get("/:id", async (req, res) => {
 
 /**
  * @swagger
- * user/{id}:
+ * /user/{id}:
  *   put:
  *     tags:
  *       - User
@@ -141,7 +140,7 @@ router.put("/:id", async (req, res) => {
 
 /**
  * @swagger
- * user/{id}:
+ * /user/{id}:
  *   delete:
  *     tags:
  *       - User

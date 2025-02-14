@@ -1,0 +1,38 @@
+<mjml>
+      <mj-head>
+         <mj-font name="Montserrat" href="https://fonts.googleapis.com/css?family=Montserrat" />
+         <mj-attributes>
+         <mj-all font-family="Montserrat,Arial,Open Sans" />
+         </mj-attributes>
+       </mj-head>
+       <mj-body background-color="#fff">
+         <mj-section>
+           <mj-column width="100%">
+             <mj-image width="200px"
+             src="https://magaya-static-assets.s3.eu-west-1.amazonaws.com/magaya-logo-word-light.jpg"></mj-image>
+         </mj-section>
+
+            <mj-section background-color="#FFFFFF">
+     <mj-column width="600px">
+             <mj-text font-size="24px" color="#000" font-weight="500">
+             Hi,<span style="color:#54656F" >
+            </mj-text>
+
+             <mj-text font-size="16px" color="#54656F" font-weight="400">
+             Your OTP is: </mj-text>
+
+       <mj-text font-size="16px" color="#54656F" font-weight="400">
+             ${otp} </mj-text>
+             </mj-column>
+           </mj-section>
+         </mj-section>
+         <mj-section background-color="#FFFFFF">
+         <mj-column>
+         <mj-text font-size="16px" color="#54656F">
+         Best Regards,
+         <p>The <span style="font-weight:800">Magaya Mining Team</span></p>
+     </mj-text>
+     </mj-column>
+           </mj-section>
+       </mj-body>
+     </mjml>

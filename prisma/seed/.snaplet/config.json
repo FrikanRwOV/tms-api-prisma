@@ -1,3 +1,4 @@
 {
-  "adapter": "prisma"
+  "adapter": "prisma",
+  "projectDescription": "This is a project for a mining company called Magaya, it is a transport management system for the company. Agents can request transport jobs, and drivers can view and complete these jobs. Clients are shaft owners."
 }

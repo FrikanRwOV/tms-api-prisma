@@ -1,12 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+generator typescriptInterfaces {
+  provider = "prisma-generator-typescript-interfaces"
+  output   = "./typescript-interfaces.ts"
 }
 
 datasource db {
@@ -14,12 +13,290 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  ADMINISTRATOR
-  TRANSPORT_MANAGER
-  DRIVER
-  REQUESTER
-  WORKSHOP_MANAGER
+model Area {
+  id        String   @id @default(cuid())
+  name      String
+  site      Site     @relation(fields: [siteId], references: [id])
+  siteId    String
+  shafts    Shaft[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Client {
+  id            String   @id @default(cuid())
+  firstName     String
+  middleName    String?
+  lastName      String
+  idNumber      String   @unique
+  address       String
+  contactNumber String
+  whatsapp      String?
+  email         String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  shafts        Shaft[]
+  syndicates    Syndicate[]
+}
+
+model Exception {
+  id          String    @id @default(cuid())
+  execution   Execution @relation(fields: [executionId], references: [id])
+  executionId String
+  description String
+  evidence    Json // Array of file paths/URLs
+  actionTaken String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Execution {
+  id          String          @id @default(cuid())
+  procedure   Procedure       @relation(fields: [procedureId], references: [id])
+  procedureId String
+  user        User            @relation(fields: [userId], references: [id])
+  userId      String
+  responses   Json // Stores answers for each question
+  status      ExecutionStatus @default(IN_PROGRESS)
+  startTime   DateTime        @default(now())
+  endTime     DateTime?
+  exceptions  Exception[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model Job {
+  id                 String             @id @default(cuid())
+  title              String
+  description        String
+  priority           JobPriority
+  siteClassification SiteClassification
+  status             JobStatus          @default(PENDING)
+  assignedDriver     User?              @relation("JobToDriver", fields: [assignedDriverId], references: [id])
+  assignedDriverId   String?
+  requester          User?              @relation("JobToRequester", fields: [requesterId], references: [id])
+  requesterId        String?
+  attachments        JobAttachment[]
+  comments           JobComment[]
+  location           String?
+  completionProof    String?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  shaft              Shaft              @relation(fields: [shaftId], references: [id])
+  shaftId            String
+
+  pickedUpAt DateTime?
+  droppedOffAt DateTime?
+
+
+}
+
+model JobAttachment {
+  id        String   @id @default(cuid())
+  job       Job      @relation(fields: [jobId], references: [id])
+  jobId     String
+  fileUrl   String // URL to the stored file
+  fileType  String // MIME type or file extension
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model JobComment {
+  id        String   @id @default(cuid())
+  job       Job      @relation(fields: [jobId], references: [id])
+  jobId     String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Maintenance {
+  id          String    @id @default(cuid())
+  vehicle     Vehicle   @relation(fields: [vehicleId], references: [id])
+  vehicleId   String
+  description String
+  startDate   DateTime
+  endDate     DateTime?
+  status      String // e.g., scheduled, in-progress, completed
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Procedure {
+  id          String        @id @default(cuid())
+  name        String
+  description String
+  type        ProcedureType
+  questions   Question[]
+  executions  Execution[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Question {
+  id          String       @id @default(cuid())
+  procedure   Procedure    @relation(fields: [procedureId], references: [id])
+  procedureId String
+  text        String
+  answerType  AnswerType
+  choices     Json? // For CHOICE type questions
+  order       Int // To maintain question sequence
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  imageUrl    String?
+  type        QuestionType
+}
+
+model RolePermission {
+  id         String     @id @default(cuid())
+  role       Role
+  permission Permission
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Shaft {
+  id        String   @id @default(cuid())
+  name      String
+  area      Area     @relation(fields: [areaId], references: [id])
+  areaId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  client   Client @relation(fields: [clientId], references: [id])
+  clientId String
+
+  jobs Job[]
+}
+
+model Syndicate {
+  id String @id @default(cuid())
+  name String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  clients Client[]
+}
+
+model Site {
+  id        String   @id @default(cuid())
+  name      String
+  address   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  areas     Area[]
+}
+
+model Telematics {
+  id                  String   @id @default(cuid())
+  vehicle             Vehicle  @relation(fields: [vehicleId], references: [id])
+  vehicleId           String   @unique
+  currentLocation     String? // Could be stored as coordinates or address
+  fuelLevel           Float?
+  kilometresTravelled Float    @default(0)
+  tonsRelocated       Float?
+  lastUpdated         DateTime @default(now())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model User {
+  id              String       @id @default(cuid())
+  email           String       @unique
+  firstName       String
+  lastName        String
+  middleName      String?
+  idNumber        String?
+  contactNumber   String?
+  whatsapp        String?
+  address         String?
+  
+  password        String?
+  authCode        String?
+  authCodeExpires DateTime?
+  role            Role
+  sessions        Session[]
+  permissions     Permission[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  assignedJobs    Job[]        @relation("JobToDriver")
+  requestedJobs   Job[]        @relation("JobToRequester")
+  jobComments     JobComment[]
+  executions      Execution[]
+}
+
+model Vehicle {
+  id                 String        @id @default(cuid())
+  registrationNumber String        @unique
+  type               VehicleType   @relation(fields: [typeId], references: [id])
+  typeId             String
+  status             VehicleStatus @default(AVAILABLE)
+  telematics         Telematics?
+  maintenanceRecords Maintenance[]
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+}
+
+model VehicleType {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  vehicles    Vehicle[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model VerificationCode {
+  id        String   @id @default(cuid())
+  email     String
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  type      String?  @default("OTP")
+}
+
+enum AnswerType {
+  TEXT
+  BOOLEAN
+  CHOICE
+  FILE_UPLOAD
+}
+
+enum ExecutionStatus {
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum JobPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum JobStatus {
+  PENDING
+  PLANNED
+  BLOCKED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum JobType {
+  COLLECT_INTERNAL_SANDS
+  COLLECT_EXTERNAL_SANDS
+  COLLECT_INTERNAL_ORES
+  COLLECT_EXTERNAL_ORES
 }
 
 enum Permission {
@@ -43,17 +320,24 @@ enum Permission {
   DELETE_VEHICLE
 }
 
-enum VehicleStatus {
-  AVAILABLE
-  IN_TRANSIT
-  UNDER_MAINTENANCE
-  OUT_OF_SERVICE
+enum ProcedureType {
+  STANDARD
+  EXCEPTION
 }
 
-enum JobPriority {
-  HIGH
-  MEDIUM
-  LOW
+enum QuestionType {
+  TEXT
+  BOOLEAN
+  CHOICE
+  FILE_UPLOAD
+}
+
+enum Role {
+  ADMINISTRATOR
+  TRANSPORT_MANAGER
+  DRIVER
+  REQUESTER
+  WORKSHOP_MANAGER
 }
 
 enum SiteClassification {
@@ -62,189 +346,9 @@ enum SiteClassification {
   RED
 }
 
-enum JobStatus {
-  PENDING
-  IN_PROGRESS
-  COMPLETED
-  CANCELLED
-}
-
-enum ProcedureType {
-  STANDARD
-  EXCEPTION
-}
-
-enum AnswerType {
-  TEXT
-  BOOLEAN
-  CHOICE
-  FILE_UPLOAD
-}
-
-enum ExecutionStatus {
-  IN_PROGRESS
-  COMPLETED
-  CANCELLED
-}
-
-model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  name          String
-  password      String?
-  authCode      String?
-  authCodeExpires DateTime?
-  role          Role
-  permissions   Permission[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  assignedJobs  Job[] @relation("JobToDriver")
-  requestedJobs Job[] @relation("JobToRequester")
-  jobComments   JobComment[]
-  executions  Execution[]
-}
-
-model RolePermission {
-  id          String     @id @default(cuid())
-  role        Role
-  permission  Permission
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  @@unique([role, permission])
-}
-
-model VehicleType {
-  id          String    @id @default(cuid())
-  name        String    @unique
-  description String?
-  vehicles    Vehicle[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
-model Vehicle {
-  id                String        @id @default(cuid())
-  registrationNumber String       @unique
-  type              VehicleType   @relation(fields: [typeId], references: [id])
-  typeId            String
-  status            VehicleStatus @default(AVAILABLE)
-  telematics        Telematics?
-  maintenanceRecords Maintenance[]
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
-}
-
-model Telematics {
-  id                String    @id @default(cuid())
-  vehicle           Vehicle   @relation(fields: [vehicleId], references: [id])
-  vehicleId         String    @unique
-  currentLocation   String?   // Could be stored as coordinates or address
-  fuelLevel         Float?
-  kilometresTravelled Float   @default(0)
-  tonsRelocated     Float?
-  lastUpdated       DateTime  @default(now())
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-}
-
-model Maintenance {
-  id          String    @id @default(cuid())
-  vehicle     Vehicle   @relation(fields: [vehicleId], references: [id])
-  vehicleId   String
-  description String
-  startDate   DateTime
-  endDate     DateTime?
-  status      String    // e.g., scheduled, in-progress, completed
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
-model Job {
-  id                 String            @id @default(cuid())
-  title             String
-  description       String
-  priority          JobPriority
-  siteClassification SiteClassification
-  status            JobStatus         @default(PENDING)
-  assignedDriver    User?              @relation("JobToDriver", fields: [assignedDriverId], references: [id])
-  assignedDriverId  String?
-  requester         User?              @relation("JobToRequester", fields: [requesterId], references: [id])
-  requesterId       String?
-  attachments       JobAttachment[]
-  comments          JobComment[]
-  location          String?
-  completionProof   String?
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
-}
-
-model JobAttachment {
-  id        String   @id @default(cuid())
-  job       Job      @relation(fields: [jobId], references: [id])
-  jobId     String
-  fileUrl   String   // URL to the stored file
-  fileType  String   // MIME type or file extension
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model JobComment {
-  id        String   @id @default(cuid())
-  job       Job      @relation(fields: [jobId], references: [id])
-  jobId     String
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  String
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Procedure {
-  id          String        @id @default(cuid())
-  name        String
-  description String
-  type        ProcedureType
-  questions   Question[]
-  executions  Execution[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-}
-
-model Question {
-  id          String      @id @default(cuid())
-  procedure   Procedure   @relation(fields: [procedureId], references: [id])
-  procedureId String
-  text        String
-  answerType  AnswerType
-  choices     Json?       // For CHOICE type questions
-  order       Int        // To maintain question sequence
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-}
-
-model Execution {
-  id          String          @id @default(cuid())
-  procedure   Procedure       @relation(fields: [procedureId], references: [id])
-  procedureId String
-  user        User            @relation(fields: [userId], references: [id])
-  userId      String
-  responses   Json            // Stores answers for each question
-  status      ExecutionStatus @default(IN_PROGRESS)
-  startTime   DateTime        @default(now())
-  endTime     DateTime?
-  exceptions  Exception[]
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-}
-
-model Exception {
-  id          String    @id @default(cuid())
-  execution   Execution @relation(fields: [executionId], references: [id])
-  executionId String
-  description String
-  evidence    Json      // Array of file paths/URLs
-  actionTaken String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+enum VehicleStatus {
+  AVAILABLE
+  IN_TRANSIT
+  UNDER_MAINTENANCE
+  OUT_OF_SERVICE
 }

@@ -1,5 +1,335 @@
 {
   "models": {
+    "Area": {
+      "id": "public.Area",
+      "schemaName": "public",
+      "tableName": "Area",
+      "fields": [
+        {
+          "id": "public.Area.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.Area.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Area.siteId",
+          "name": "siteId",
+          "columnName": "siteId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Area.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Area.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Site",
+          "type": "Site",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "AreaToSite",
+          "relationFromFields": [
+            "siteId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Shaft",
+          "type": "Shaft",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "ShaftToArea",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "Area_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "Client": {
+      "id": "public.Client",
+      "schemaName": "public",
+      "tableName": "Client",
+      "fields": [
+        {
+          "id": "public.Client.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.firstName",
+          "name": "firstName",
+          "columnName": "firstName",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.middleName",
+          "name": "middleName",
+          "columnName": "middleName",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.lastName",
+          "name": "lastName",
+          "columnName": "lastName",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.idNumber",
+          "name": "idNumber",
+          "columnName": "idNumber",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.address",
+          "name": "address",
+          "columnName": "address",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.contactNumber",
+          "name": "contactNumber",
+          "columnName": "contactNumber",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.whatsapp",
+          "name": "whatsapp",
+          "columnName": "whatsapp",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.email",
+          "name": "email",
+          "columnName": "email",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Shaft",
+          "type": "Shaft",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "ShaftToClient",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "_ClientToSyndicate",
+          "type": "_ClientToSyndicate",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "_ClientToSyndicateToClient",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "Client_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "Client_email_key",
+          "fields": [
+            "email"
+          ],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "Client_idNumber_key",
+          "fields": [
+            "idNumber"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
     "Exception": {
       "id": "public.Exception",
       "schemaName": "public",
@@ -418,7 +748,21 @@
           "name": "assignedDriverId",
           "columnName": "assignedDriverId",
           "type": "text",
-          "isRequired": true,
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Job.requesterId",
+          "name": "requesterId",
+          "columnName": "requesterId",
+          "type": "text",
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -484,13 +828,91 @@
           "maxLength": null
         },
         {
-          "name": "User",
-          "type": "User",
+          "id": "public.Job.shaftId",
+          "name": "shaftId",
+          "columnName": "shaftId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Job.pickedUpAt",
+          "name": "pickedUpAt",
+          "columnName": "pickedUpAt",
+          "type": "timestamp",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Job.droppedOffAt",
+          "name": "droppedOffAt",
+          "columnName": "droppedOffAt",
+          "type": "timestamp",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Shaft",
+          "type": "Shaft",
           "isRequired": true,
           "kind": "object",
-          "relationName": "JobToUser",
+          "relationName": "JobToShaft",
+          "relationFromFields": [
+            "shaftId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "User_Job_assignedDriverIdToUser",
+          "type": "User",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "Job_assignedDriverIdToUser",
           "relationFromFields": [
             "assignedDriverId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "User_Job_requesterIdToUser",
+          "type": "User",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "Job_requesterIdToUser",
+          "relationFromFields": [
+            "requesterId"
           ],
           "relationToFields": [
             "id"
@@ -1186,6 +1608,34 @@
           "maxLength": null
         },
         {
+          "id": "public.Question.imageUrl",
+          "name": "imageUrl",
+          "columnName": "imageUrl",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Question.type",
+          "name": "type",
+          "columnName": "type",
+          "type": "QuestionType",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "Procedure",
           "type": "Procedure",
           "isRequired": true,
@@ -1297,12 +1747,437 @@
             "id"
           ],
           "nullNotDistinct": false
+        }
+      ]
+    },
+    "Session": {
+      "id": "public.Session",
+      "schemaName": "public",
+      "tableName": "Session",
+      "fields": [
+        {
+          "id": "public.Session.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
         },
         {
-          "name": "RolePermission_role_permission_key",
+          "id": "public.Session.userId",
+          "name": "userId",
+          "columnName": "userId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Session.token",
+          "name": "token",
+          "columnName": "token",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Session.expiresAt",
+          "name": "expiresAt",
+          "columnName": "expiresAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "User",
+          "type": "User",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "SessionToUser",
+          "relationFromFields": [
+            "userId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "Session_pkey",
           "fields": [
-            "permission",
-            "role"
+            "id"
+          ],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "Session_token_key",
+          "fields": [
+            "token"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "Shaft": {
+      "id": "public.Shaft",
+      "schemaName": "public",
+      "tableName": "Shaft",
+      "fields": [
+        {
+          "id": "public.Shaft.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.Shaft.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Shaft.areaId",
+          "name": "areaId",
+          "columnName": "areaId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Shaft.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Shaft.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Shaft.clientId",
+          "name": "clientId",
+          "columnName": "clientId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Area",
+          "type": "Area",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "ShaftToArea",
+          "relationFromFields": [
+            "areaId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Client",
+          "type": "Client",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "ShaftToClient",
+          "relationFromFields": [
+            "clientId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Job",
+          "type": "Job",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "JobToShaft",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "Shaft_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "Site": {
+      "id": "public.Site",
+      "schemaName": "public",
+      "tableName": "Site",
+      "fields": [
+        {
+          "id": "public.Site.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.Site.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Site.address",
+          "name": "address",
+          "columnName": "address",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Site.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Site.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Area",
+          "type": "Area",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "AreaToSite",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "Site_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "Syndicate": {
+      "id": "public.Syndicate",
+      "schemaName": "public",
+      "tableName": "Syndicate",
+      "fields": [
+        {
+          "id": "public.Syndicate.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.Syndicate.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Syndicate.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Syndicate.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "_ClientToSyndicate",
+          "type": "_ClientToSyndicate",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "_ClientToSyndicateToSyndicate",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "Syndicate_pkey",
+          "fields": [
+            "id"
           ],
           "nullNotDistinct": false
         }
@@ -1509,11 +2384,95 @@
           "maxLength": null
         },
         {
-          "id": "public.User.name",
-          "name": "name",
-          "columnName": "name",
+          "id": "public.User.firstName",
+          "name": "firstName",
+          "columnName": "firstName",
           "type": "text",
           "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.User.lastName",
+          "name": "lastName",
+          "columnName": "lastName",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.User.middleName",
+          "name": "middleName",
+          "columnName": "middleName",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.User.idNumber",
+          "name": "idNumber",
+          "columnName": "idNumber",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.User.contactNumber",
+          "name": "contactNumber",
+          "columnName": "contactNumber",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.User.whatsapp",
+          "name": "whatsapp",
+          "columnName": "whatsapp",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.User.address",
+          "name": "address",
+          "columnName": "address",
+          "type": "text",
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -1527,7 +2486,35 @@
           "name": "password",
           "columnName": "password",
           "type": "text",
-          "isRequired": true,
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.User.authCode",
+          "name": "authCode",
+          "columnName": "authCode",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.User.authCodeExpires",
+          "name": "authCodeExpires",
+          "columnName": "authCodeExpires",
+          "type": "timestamp",
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -1607,11 +2594,25 @@
           "hasDefaultValue": false
         },
         {
-          "name": "Job",
+          "name": "Job_Job_assignedDriverIdToUser",
           "type": "Job",
           "isRequired": false,
           "kind": "object",
-          "relationName": "JobToUser",
+          "relationName": "Job_assignedDriverIdToUser",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Job_Job_requesterIdToUser",
+          "type": "Job",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "Job_requesterIdToUser",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -1626,6 +2627,20 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "JobCommentToUser",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Session",
+          "type": "Session",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "SessionToUser",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -1911,6 +2926,187 @@
           "nullNotDistinct": false
         }
       ]
+    },
+    "VerificationCode": {
+      "id": "public.VerificationCode",
+      "schemaName": "public",
+      "tableName": "VerificationCode",
+      "fields": [
+        {
+          "id": "public.VerificationCode.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.VerificationCode.email",
+          "name": "email",
+          "columnName": "email",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.VerificationCode.code",
+          "name": "code",
+          "columnName": "code",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.VerificationCode.expiresAt",
+          "name": "expiresAt",
+          "columnName": "expiresAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.VerificationCode.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.VerificationCode.type",
+          "name": "type",
+          "columnName": "type",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "VerificationCode_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "_ClientToSyndicate": {
+      "id": "public._ClientToSyndicate",
+      "schemaName": "public",
+      "tableName": "_ClientToSyndicate",
+      "fields": [
+        {
+          "id": "public._ClientToSyndicate.A",
+          "name": "A",
+          "columnName": "A",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public._ClientToSyndicate.B",
+          "name": "B",
+          "columnName": "B",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "name": "Client",
+          "type": "Client",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "_ClientToSyndicateToClient",
+          "relationFromFields": [
+            "A"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Syndicate",
+          "type": "Syndicate",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "_ClientToSyndicateToSyndicate",
+          "relationFromFields": [
+            "B"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "_ClientToSyndicate_AB_pkey",
+          "fields": [
+            "A",
+            "B"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
     }
   },
   "enums": {
@@ -1963,6 +3159,9 @@
       "schemaName": "public",
       "values": [
         {
+          "name": "BLOCKED"
+        },
+        {
           "name": "CANCELLED"
         },
         {
@@ -1973,6 +3172,26 @@
         },
         {
           "name": "PENDING"
+        },
+        {
+          "name": "PLANNED"
+        }
+      ]
+    },
+    "JobType": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "COLLECT_EXTERNAL_ORES"
+        },
+        {
+          "name": "COLLECT_EXTERNAL_SANDS"
+        },
+        {
+          "name": "COLLECT_INTERNAL_ORES"
+        },
+        {
+          "name": "COLLECT_INTERNAL_SANDS"
         }
       ]
     },
@@ -2043,6 +3262,23 @@
         },
         {
           "name": "STANDARD"
+        }
+      ]
+    },
+    "QuestionType": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "BOOLEAN"
+        },
+        {
+          "name": "CHOICE"
+        },
+        {
+          "name": "FILE_UPLOAD"
+        },
+        {
+          "name": "TEXT"
         }
       ]
     },
