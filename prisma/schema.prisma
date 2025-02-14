@@ -24,19 +24,21 @@ model Area {
 }
 
 model Client {
-  id            String   @id @default(cuid())
-  firstName     String
-  middleName    String?
-  lastName      String
-  idNumber      String   @unique
-  address       String
-  contactNumber String
-  whatsapp      String?
-  email         String   @unique
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  shafts        Shaft[]
-  syndicates    Syndicate[]
+  id                      String      @id @default(cuid())
+  firstName               String
+  middleName              String?
+  lastName                String
+  idNumber                String      @unique
+  address                 String
+  contactNumber           String[]
+  whatsapp                String[]
+  potentialContactNumbers Boolean     @default(false)
+  email                   String[]
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
+  shafts                  Shaft[]
+  syndicates              Syndicate[]
+  Job                     Job[]
 }
 
 model Exception {
@@ -85,10 +87,11 @@ model Job {
   shaft              Shaft              @relation(fields: [shaftId], references: [id])
   shaftId            String
 
-  pickedUpAt DateTime?
+  client   Client @relation(fields: [clientId], references: [id])
+  clientId String
+
+  pickedUpAt   DateTime?
   droppedOffAt DateTime?
-
-
 }
 
 model JobAttachment {
@@ -114,8 +117,8 @@ model JobComment {
 
 model Maintenance {
   id          String    @id @default(cuid())
-  vehicle     Vehicle   @relation(fields: [vehicleId], references: [id])
-  vehicleId   String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId String
   description String
   startDate   DateTime
   endDate     DateTime?
@@ -180,11 +183,11 @@ model Shaft {
 }
 
 model Syndicate {
-  id String @id @default(cuid())
-  name String
+  id        String   @id @default(cuid())
+  name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  clients Client[]
+  clients   Client[]
 }
 
 model Site {
@@ -197,29 +200,29 @@ model Site {
 }
 
 model Telematics {
-  id                  String   @id @default(cuid())
-  vehicle             Vehicle  @relation(fields: [vehicleId], references: [id])
-  vehicleId           String   @unique
+  id                  String    @id @default(cuid())
+  equipment           Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId         String    @unique
   currentLocation     String? // Could be stored as coordinates or address
   fuelLevel           Float?
-  kilometresTravelled Float    @default(0)
+  kilometresTravelled Float     @default(0)
   tonsRelocated       Float?
-  lastUpdated         DateTime @default(now())
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  lastUpdated         DateTime  @default(now())
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 }
 
 model User {
-  id              String       @id @default(cuid())
-  email           String       @unique
-  firstName       String
-  lastName        String
-  middleName      String?
-  idNumber        String?
-  contactNumber   String?
-  whatsapp        String?
-  address         String?
-  
+  id            String  @id @default(cuid())
+  email         String  @unique
+  firstName     String
+  lastName      String
+  middleName    String?
+  idNumber      String?
+  contactNumber String?
+  whatsapp      String?
+  address       String?
+
   password        String?
   authCode        String?
   authCodeExpires DateTime?
@@ -234,25 +237,54 @@ model User {
   executions      Execution[]
 }
 
-model Vehicle {
-  id                 String        @id @default(cuid())
-  registrationNumber String        @unique
-  type               VehicleType   @relation(fields: [typeId], references: [id])
+model Equipment {
+  id                 String          @id @default(cuid())
+  description        String?
+  category           EquipmentCategory
+  make               String?
+  model              String?
+  year               Int?
+  registrationNumber String?
+  capacity           Float?
+  capacityUnit       CapacityUnit?
+  type               EquipmentType   @relation(fields: [typeId], references: [id])
   typeId             String
-  status             VehicleStatus @default(AVAILABLE)
+  status             EquipmentStatus @default(AVAILABLE)
   telematics         Telematics?
   maintenanceRecords Maintenance[]
-  createdAt          DateTime      @default(now())
-  updatedAt          DateTime      @updatedAt
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 }
 
-model VehicleType {
-  id          String    @id @default(cuid())
-  name        String    @unique
+enum CapacityUnit {
+  TONNES
+  METRES_CUBED
+  KILOGRAMS
+  LITRES
+  KVA
+}
+
+enum EquipmentCategory {
+  TRAILER
+  CRANE
+  EXCAVATOR
+  DOZER
+  WEIGH_BRIDGE
+  TELEMATICS_DEVICE
+  VEHICLE
+  CRUSHER
+  MILL
+  LOADER
+  GENERATOR
+}
+
+model EquipmentType {
+  id          String      @id @default(cuid())
+  name        String      @unique
   description String?
-  vehicles    Vehicle[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  equipment   Equipment[] // Renamed from vehicles
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
 model VerificationCode {
@@ -304,20 +336,28 @@ enum Permission {
   READ_USER
   UPDATE_USER
   DELETE_USER
+  CREATE_CLIENT
+  READ_CLIENT
+  UPDATE_CLIENT
+  DELETE_CLIENT
   MANAGE_ROLES
-  CREATE_TRANSPORT_REQUEST
-  READ_TRANSPORT_REQUEST
-  UPDATE_TRANSPORT_REQUEST
-  DELETE_TRANSPORT_REQUEST
+  CREATE_JOB
+  READ_JOB
+  UPDATE_JOB
+  DELETE_JOB
   CREATE_MAINTENANCE
   READ_MAINTENANCE
   UPDATE_MAINTENANCE
   DELETE_MAINTENANCE
   VIEW_ASSIGNMENTS
-  CREATE_VEHICLE
-  READ_VEHICLE
-  UPDATE_VEHICLE
-  DELETE_VEHICLE
+  CREATE_ASSIGNMENT
+  READ_ASSIGNMENT
+  UPDATE_ASSIGNMENT
+  DELETE_ASSIGNMENT
+  CREATE_EQUIPMENT
+  READ_EQUIPMENT
+  UPDATE_EQUIPMENT
+  DELETE_EQUIPMENT
 }
 
 enum ProcedureType {
@@ -335,8 +375,9 @@ enum QuestionType {
 enum Role {
   ADMINISTRATOR
   TRANSPORT_MANAGER
+  AGENT
   DRIVER
-  REQUESTER
+  CLIENT_MANAGER
   WORKSHOP_MANAGER
 }
 
@@ -346,9 +387,10 @@ enum SiteClassification {
   RED
 }
 
-enum VehicleStatus {
+enum EquipmentStatus {
   AVAILABLE
   IN_TRANSIT
+  IN_USE
   UNDER_MAINTENANCE
   OUT_OF_SERVICE
 }

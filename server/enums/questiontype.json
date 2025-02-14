@@ -1,0 +1,33 @@
+{
+  "name": "QuestionType",
+  "values": [
+    "TEXT",
+    "BOOLEAN",
+    "CHOICE",
+    "FILE_UPLOAD"
+  ],
+  "lookup": {
+    "TEXT": "TEXT",
+    "BOOLEAN": "BOOLEAN",
+    "CHOICE": "CHOICE",
+    "FILE_UPLOAD": "FILE_UPLOAD"
+  },
+  "options": [
+    {
+      "label": "T E X T",
+      "value": "TEXT"
+    },
+    {
+      "label": "B O O L E A N",
+      "value": "BOOLEAN"
+    },
+    {
+      "label": "C H O I C E",
+      "value": "CHOICE"
+    },
+    {
+      "label": "F I L E_ U P L O A D",
+      "value": "FILE_UPLOAD"
+    }
+  ]
+}

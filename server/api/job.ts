@@ -50,34 +50,182 @@ router.post("", async (req, res) => {
  *   get:
  *     tags:
  *       - Job
- *     summary: Get all jobs
+ *     summary: Get all jobs with pagination, search, and filters
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term
+ *       - in: query
+ *         name: searchFields
+ *         schema:
+ *           type: string
+ *           default: "title,description,location"
+ *         description: Comma-separated list of fields to search in
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [PENDING, PLANNED, BLOCKED, IN_PROGRESS, COMPLETED, CANCELLED]
+ *         description: Filter by job status
+ *       - in: query
+ *         name: priority
+ *         schema:
+ *           type: string
+ *           enum: [HIGH, MEDIUM, LOW]
+ *         description: Filter by priority
+ *       - in: query
+ *         name: assignedDriverId
+ *         schema:
+ *           type: string
+ *         description: Filter by assigned driver
+ *       - in: query
+ *         name: requesterId
+ *         schema:
+ *           type: string
+ *         description: Filter by requester
+ *       - in: query
+ *         name: shaftId
+ *         schema:
+ *           type: string
+ *         description: Filter by shaft
  *     responses:
  *       200:
  *         description: List of jobs retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Job'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Job'
+ *                 metadata:
+ *                   type: object
+ *                   properties:
+ *                     totalCount:
+ *                       type: integer
+ *                     currentPage:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     search:
+ *                       type: string
+ *                     searchFields:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                     status:
+ *                       type: string
+ *                     priority:
+ *                       type: string
+ *                     assignedDriverId:
+ *                       type: string
+ *                     requesterId:
+ *                       type: string
+ *                     shaftId:
+ *                       type: string
  *       500:
  *         description: Server error
  */
 router.get("", async (req, res) => {
   try {
-    const jobs = await prisma.job.findMany({
-      include: {
-        assignedDriver: true,
-        requester: true,
-        attachments: true,
-        comments: {
-          include: {
-            author: true
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const search = (req.query.search as string) || '';
+    const searchFields = (req.query.searchFields as string || 'title,description,location').split(',');
+    const status = req.query.status as string;
+    const priority = req.query.priority as string;
+    const assignedDriverId = req.query.assignedDriverId as string;
+    const requesterId = req.query.requesterId as string;
+    const shaftId = req.query.shaftId as string;
+
+    const where: any = {};
+
+    if (status) {
+      where.status = status;
+    }
+
+    if (priority) {
+      where.priority = priority;
+    }
+
+    if (assignedDriverId) {
+      where.assignedDriverId = assignedDriverId;
+    }
+
+    if (requesterId) {
+      where.requesterId = requesterId;
+    }
+
+    if (shaftId) {
+      where.shaftId = shaftId;
+    }
+
+    if (search) {
+      where.OR = searchFields.map(field => ({
+        [field]: { contains: search, mode: 'insensitive' }
+      }));
+    }
+
+    const [totalCount, jobs] = await Promise.all([
+      prisma.job.count({ where }),
+      prisma.job.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          assignedDriver: true,
+          requester: true,
+          attachments: true,
+          comments: {
+            include: {
+              author: true
+            }
           }
+        },
+        orderBy: {
+          createdAt: 'desc'
         }
+      })
+    ]);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      data: jobs,
+      metadata: {
+        totalCount,
+        currentPage: page,
+        totalPages,
+        limit,
+        search: search || undefined,
+        searchFields,
+        status: status || undefined,
+        priority: priority || undefined,
+        assignedDriverId: assignedDriverId || undefined,
+        requesterId: requesterId || undefined,
+        shaftId: shaftId || undefined
       }
     });
-    res.json(jobs);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to retrieve jobs", details: error });

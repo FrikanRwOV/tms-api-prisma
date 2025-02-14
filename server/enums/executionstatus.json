@@ -1,0 +1,27 @@
+{
+  "name": "ExecutionStatus",
+  "values": [
+    "IN_PROGRESS",
+    "COMPLETED",
+    "CANCELLED"
+  ],
+  "lookup": {
+    "IN_PROGRESS": "IN_PROGRESS",
+    "COMPLETED": "COMPLETED",
+    "CANCELLED": "CANCELLED"
+  },
+  "options": [
+    {
+      "label": "I N_ P R O G R E S S",
+      "value": "IN_PROGRESS"
+    },
+    {
+      "label": "C O M P L E T E D",
+      "value": "COMPLETED"
+    },
+    {
+      "label": "C A N C E L L E D",
+      "value": "CANCELLED"
+    }
+  ]
+}

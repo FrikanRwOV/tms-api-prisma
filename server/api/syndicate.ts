@@ -43,27 +43,108 @@ router.post("", async (req, res) => {
  *   get:
  *     tags:
  *       - Syndicate
- *     summary: Get all syndicates
+ *     summary: Get all syndicates with pagination, search, and filters
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term
+ *       - in: query
+ *         name: searchFields
+ *         schema:
+ *           type: string
+ *           default: "name"
+ *         description: Comma-separated list of fields to search in
  *     responses:
  *       200:
  *         description: List of syndicates retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Syndicate'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Syndicate'
+ *                 metadata:
+ *                   type: object
+ *                   properties:
+ *                     totalCount:
+ *                       type: integer
+ *                     currentPage:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     search:
+ *                       type: string
+ *                     searchFields:
+ *                       type: array
+ *                       items:
+ *                         type: string
  *       500:
  *         description: Server error
  */
 router.get("", async (req, res) => {
   try {
-    const syndicates = await prisma.syndicate.findMany({
-      include: {
-        clients: true
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const search = (req.query.search as string) || '';
+    const searchFields = (req.query.searchFields as string || 'name').split(',');
+
+    const where: any = {};
+
+    if (search) {
+      where.OR = searchFields.map(field => ({
+        [field]: { contains: search, mode: 'insensitive' }
+      }));
+    }
+
+    const [totalCount, syndicates] = await Promise.all([
+      prisma.syndicate.count({ where }),
+      prisma.syndicate.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          clients: true
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      })
+    ]);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      data: syndicates,
+      metadata: {
+        totalCount,
+        currentPage: page,
+        totalPages,
+        limit,
+        search: search || undefined,
+        searchFields
       }
     });
-    res.json(syndicates);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to retrieve syndicates", details: error });

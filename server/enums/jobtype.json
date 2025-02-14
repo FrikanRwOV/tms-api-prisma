@@ -1,0 +1,33 @@
+{
+  "name": "JobType",
+  "values": [
+    "COLLECT_INTERNAL_SANDS",
+    "COLLECT_EXTERNAL_SANDS",
+    "COLLECT_INTERNAL_ORES",
+    "COLLECT_EXTERNAL_ORES"
+  ],
+  "lookup": {
+    "COLLECT_INTERNAL_SANDS": "COLLECT_INTERNAL_SANDS",
+    "COLLECT_EXTERNAL_SANDS": "COLLECT_EXTERNAL_SANDS",
+    "COLLECT_INTERNAL_ORES": "COLLECT_INTERNAL_ORES",
+    "COLLECT_EXTERNAL_ORES": "COLLECT_EXTERNAL_ORES"
+  },
+  "options": [
+    {
+      "label": "C O L L E C T_ I N T E R N A L_ S A N D S",
+      "value": "COLLECT_INTERNAL_SANDS"
+    },
+    {
+      "label": "C O L L E C T_ E X T E R N A L_ S A N D S",
+      "value": "COLLECT_EXTERNAL_SANDS"
+    },
+    {
+      "label": "C O L L E C T_ I N T E R N A L_ O R E S",
+      "value": "COLLECT_INTERNAL_ORES"
+    },
+    {
+      "label": "C O L L E C T_ E X T E R N A L_ O R E S",
+      "value": "COLLECT_EXTERNAL_ORES"
+    }
+  ]
+}

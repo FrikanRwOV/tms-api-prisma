@@ -3,7 +3,7 @@ const serverless = require("serverless-http");
 
 import userRoutes from "./server/api/user";
 import authRoutes from "./server/api/auth";
-import vehicleRoutes from "./server/api/vehicle";
+import equipmentRoutes from "./server/api/equipment";
 import procedureRoutes from "./server/api/procedure";
 import clientRoutes from "./server/api/client";
 import jobRoutes from "./server/api/job";
@@ -32,12 +32,20 @@ app.get('/interfaces', (req, res) => {
   res.redirect(`https://${bucketName}-${stage}.s3.eu-west-1.amazonaws.com/typescript-interfaces.ts`);
 });
 
+app.get("/enums", (req, res) => {
+  const stage = process.env.STAGE || "dev";
+  const bucketName = process.env.SWAGGER_BUCKET_NAME || "tms-swagger-api-dev";
+  res.redirect(
+    `https://${bucketName}-${stage}.s3.eu-west-1.amazonaws.com/enums/`
+  );
+});
+
 app.use("/auth", authRoutes);
 app.use("/client", clientRoutes);
 app.use("/job", jobRoutes);
 app.use("/procedure", procedureRoutes);
 app.use("/user", userRoutes);
-app.use("/vehicle", vehicleRoutes);
+app.use("/equipment", equipmentRoutes);
 app.use("/site", siteRoutes);
 app.use("/area", areaRoutes);
 app.use("/shaft", shaftRoutes);

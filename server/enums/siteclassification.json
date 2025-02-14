@@ -1,0 +1,27 @@
+{
+  "name": "SiteClassification",
+  "values": [
+    "GREEN",
+    "ORANGE",
+    "RED"
+  ],
+  "lookup": {
+    "GREEN": "GREEN",
+    "ORANGE": "ORANGE",
+    "RED": "RED"
+  },
+  "options": [
+    {
+      "label": "G R E E N",
+      "value": "GREEN"
+    },
+    {
+      "label": "O R A N G E",
+      "value": "ORANGE"
+    },
+    {
+      "label": "R E D",
+      "value": "RED"
+    }
+  ]
+}

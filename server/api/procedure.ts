@@ -44,32 +44,127 @@ router.post("", async (req, res) => {
  *   get:
  *     tags:
  *       - Procedure
- *     summary: Get all procedures
+ *     summary: Get all procedures with pagination, search, and filters
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term
+ *       - in: query
+ *         name: searchFields
+ *         schema:
+ *           type: string
+ *           default: "name,description"
+ *         description: Comma-separated list of fields to search in
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *           enum: [STANDARD, EXCEPTION]
+ *         description: Filter by procedure type
  *     responses:
  *       200:
  *         description: List of procedures retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Procedure'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Procedure'
+ *                 metadata:
+ *                   type: object
+ *                   properties:
+ *                     totalCount:
+ *                       type: integer
+ *                     currentPage:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     search:
+ *                       type: string
+ *                     searchFields:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                     type:
+ *                       type: string
  *       500:
  *         description: Server error
  */
 router.get("", async (req, res) => {
   try {
-    const procedures = await prisma.procedure.findMany({
-      include: {
-        questions: {
-          orderBy: {
-            order: 'asc'
-          }
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const search = (req.query.search as string) || '';
+    const searchFields = (req.query.searchFields as string || 'name,description').split(',');
+    const type = req.query.type as string;
+
+    const where: any = {};
+
+    if (type) {
+      where.type = type;
+    }
+
+    if (search) {
+      where.OR = searchFields.map(field => ({
+        [field]: { contains: search, mode: 'insensitive' }
+      }));
+    }
+
+    const [totalCount, procedures] = await Promise.all([
+      prisma.procedure.count({ where }),
+      prisma.procedure.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          questions: {
+            orderBy: {
+              order: 'asc'
+            }
+          },
+          executions: true
         },
-        executions: true,
-      },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      })
+    ]);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      data: procedures,
+      metadata: {
+        totalCount,
+        currentPage: page,
+        totalPages,
+        limit,
+        search: search || undefined,
+        searchFields,
+        type: type || undefined
+      }
     });
-    res.json(procedures);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to retrieve procedures", details: error });

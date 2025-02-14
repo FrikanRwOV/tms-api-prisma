@@ -1,0 +1,45 @@
+{
+  "name": "JobStatus",
+  "values": [
+    "PENDING",
+    "PLANNED",
+    "BLOCKED",
+    "IN_PROGRESS",
+    "COMPLETED",
+    "CANCELLED"
+  ],
+  "lookup": {
+    "PENDING": "PENDING",
+    "PLANNED": "PLANNED",
+    "BLOCKED": "BLOCKED",
+    "IN_PROGRESS": "IN_PROGRESS",
+    "COMPLETED": "COMPLETED",
+    "CANCELLED": "CANCELLED"
+  },
+  "options": [
+    {
+      "label": "P E N D I N G",
+      "value": "PENDING"
+    },
+    {
+      "label": "P L A N N E D",
+      "value": "PLANNED"
+    },
+    {
+      "label": "B L O C K E D",
+      "value": "BLOCKED"
+    },
+    {
+      "label": "I N_ P R O G R E S S",
+      "value": "IN_PROGRESS"
+    },
+    {
+      "label": "C O M P L E T E D",
+      "value": "COMPLETED"
+    },
+    {
+      "label": "C A N C E L L E D",
+      "value": "CANCELLED"
+    }
+  ]
+}

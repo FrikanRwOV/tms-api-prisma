@@ -1,0 +1,45 @@
+{
+  "name": "Role",
+  "values": [
+    "ADMINISTRATOR",
+    "TRANSPORT_MANAGER",
+    "AGENT",
+    "DRIVER",
+    "CLIENT_MANAGER",
+    "WORKSHOP_MANAGER"
+  ],
+  "lookup": {
+    "ADMINISTRATOR": "ADMINISTRATOR",
+    "TRANSPORT_MANAGER": "TRANSPORT_MANAGER",
+    "AGENT": "AGENT",
+    "DRIVER": "DRIVER",
+    "CLIENT_MANAGER": "CLIENT_MANAGER",
+    "WORKSHOP_MANAGER": "WORKSHOP_MANAGER"
+  },
+  "options": [
+    {
+      "label": "A D M I N I S T R A T O R",
+      "value": "ADMINISTRATOR"
+    },
+    {
+      "label": "T R A N S P O R T_ M A N A G E R",
+      "value": "TRANSPORT_MANAGER"
+    },
+    {
+      "label": "A G E N T",
+      "value": "AGENT"
+    },
+    {
+      "label": "D R I V E R",
+      "value": "DRIVER"
+    },
+    {
+      "label": "C L I E N T_ M A N A G E R",
+      "value": "CLIENT_MANAGER"
+    },
+    {
+      "label": "W O R K S H O P_ M A N A G E R",
+      "value": "WORKSHOP_MANAGER"
+    }
+  ]
+}

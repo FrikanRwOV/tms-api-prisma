@@ -1,0 +1,165 @@
+{
+  "name": "Permission",
+  "values": [
+    "CREATE_USER",
+    "READ_USER",
+    "UPDATE_USER",
+    "DELETE_USER",
+    "CREATE_CLIENT",
+    "READ_CLIENT",
+    "UPDATE_CLIENT",
+    "DELETE_CLIENT",
+    "MANAGE_ROLES",
+    "CREATE_JOB",
+    "READ_JOB",
+    "UPDATE_JOB",
+    "DELETE_JOB",
+    "CREATE_MAINTENANCE",
+    "READ_MAINTENANCE",
+    "UPDATE_MAINTENANCE",
+    "DELETE_MAINTENANCE",
+    "VIEW_ASSIGNMENTS",
+    "CREATE_ASSIGNMENT",
+    "READ_ASSIGNMENT",
+    "UPDATE_ASSIGNMENT",
+    "DELETE_ASSIGNMENT",
+    "CREATE_EQUIPMENT",
+    "READ_EQUIPMENT",
+    "UPDATE_EQUIPMENT",
+    "DELETE_EQUIPMENT"
+  ],
+  "lookup": {
+    "CREATE_USER": "CREATE_USER",
+    "READ_USER": "READ_USER",
+    "UPDATE_USER": "UPDATE_USER",
+    "DELETE_USER": "DELETE_USER",
+    "CREATE_CLIENT": "CREATE_CLIENT",
+    "READ_CLIENT": "READ_CLIENT",
+    "UPDATE_CLIENT": "UPDATE_CLIENT",
+    "DELETE_CLIENT": "DELETE_CLIENT",
+    "MANAGE_ROLES": "MANAGE_ROLES",
+    "CREATE_JOB": "CREATE_JOB",
+    "READ_JOB": "READ_JOB",
+    "UPDATE_JOB": "UPDATE_JOB",
+    "DELETE_JOB": "DELETE_JOB",
+    "CREATE_MAINTENANCE": "CREATE_MAINTENANCE",
+    "READ_MAINTENANCE": "READ_MAINTENANCE",
+    "UPDATE_MAINTENANCE": "UPDATE_MAINTENANCE",
+    "DELETE_MAINTENANCE": "DELETE_MAINTENANCE",
+    "VIEW_ASSIGNMENTS": "VIEW_ASSIGNMENTS",
+    "CREATE_ASSIGNMENT": "CREATE_ASSIGNMENT",
+    "READ_ASSIGNMENT": "READ_ASSIGNMENT",
+    "UPDATE_ASSIGNMENT": "UPDATE_ASSIGNMENT",
+    "DELETE_ASSIGNMENT": "DELETE_ASSIGNMENT",
+    "CREATE_EQUIPMENT": "CREATE_EQUIPMENT",
+    "READ_EQUIPMENT": "READ_EQUIPMENT",
+    "UPDATE_EQUIPMENT": "UPDATE_EQUIPMENT",
+    "DELETE_EQUIPMENT": "DELETE_EQUIPMENT"
+  },
+  "options": [
+    {
+      "label": "C R E A T E_ U S E R",
+      "value": "CREATE_USER"
+    },
+    {
+      "label": "R E A D_ U S E R",
+      "value": "READ_USER"
+    },
+    {
+      "label": "U P D A T E_ U S E R",
+      "value": "UPDATE_USER"
+    },
+    {
+      "label": "D E L E T E_ U S E R",
+      "value": "DELETE_USER"
+    },
+    {
+      "label": "C R E A T E_ C L I E N T",
+      "value": "CREATE_CLIENT"
+    },
+    {
+      "label": "R E A D_ C L I E N T",
+      "value": "READ_CLIENT"
+    },
+    {
+      "label": "U P D A T E_ C L I E N T",
+      "value": "UPDATE_CLIENT"
+    },
+    {
+      "label": "D E L E T E_ C L I E N T",
+      "value": "DELETE_CLIENT"
+    },
+    {
+      "label": "M A N A G E_ R O L E S",
+      "value": "MANAGE_ROLES"
+    },
+    {
+      "label": "C R E A T E_ J O B",
+      "value": "CREATE_JOB"
+    },
+    {
+      "label": "R E A D_ J O B",
+      "value": "READ_JOB"
+    },
+    {
+      "label": "U P D A T E_ J O B",
+      "value": "UPDATE_JOB"
+    },
+    {
+      "label": "D E L E T E_ J O B",
+      "value": "DELETE_JOB"
+    },
+    {
+      "label": "C R E A T E_ M A I N T E N A N C E",
+      "value": "CREATE_MAINTENANCE"
+    },
+    {
+      "label": "R E A D_ M A I N T E N A N C E",
+      "value": "READ_MAINTENANCE"
+    },
+    {
+      "label": "U P D A T E_ M A I N T E N A N C E",
+      "value": "UPDATE_MAINTENANCE"
+    },
+    {
+      "label": "D E L E T E_ M A I N T E N A N C E",
+      "value": "DELETE_MAINTENANCE"
+    },
+    {
+      "label": "V I E W_ A S S I G N M E N T S",
+      "value": "VIEW_ASSIGNMENTS"
+    },
+    {
+      "label": "C R E A T E_ A S S I G N M E N T",
+      "value": "CREATE_ASSIGNMENT"
+    },
+    {
+      "label": "R E A D_ A S S I G N M E N T",
+      "value": "READ_ASSIGNMENT"
+    },
+    {
+      "label": "U P D A T E_ A S S I G N M E N T",
+      "value": "UPDATE_ASSIGNMENT"
+    },
+    {
+      "label": "D E L E T E_ A S S I G N M E N T",
+      "value": "DELETE_ASSIGNMENT"
+    },
+    {
+      "label": "C R E A T E_ E Q U I P M E N T",
+      "value": "CREATE_EQUIPMENT"
+    },
+    {
+      "label": "R E A D_ E Q U I P M E N T",
+      "value": "READ_EQUIPMENT"
+    },
+    {
+      "label": "U P D A T E_ E Q U I P M E N T",
+      "value": "UPDATE_EQUIPMENT"
+    },
+    {
+      "label": "D E L E T E_ E Q U I P M E N T",
+      "value": "DELETE_EQUIPMENT"
+    }
+  ]
+}

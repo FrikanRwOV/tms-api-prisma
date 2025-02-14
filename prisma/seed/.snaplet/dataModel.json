@@ -208,48 +208,6 @@
           "maxLength": null
         },
         {
-          "id": "public.Client.contactNumber",
-          "name": "contactNumber",
-          "columnName": "contactNumber",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.Client.whatsapp",
-          "name": "whatsapp",
-          "columnName": "whatsapp",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.Client.email",
-          "name": "email",
-          "columnName": "email",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.Client.createdAt",
           "name": "createdAt",
           "columnName": "createdAt",
@@ -276,6 +234,76 @@
           "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
+        },
+        {
+          "id": "public.Client.potentialContactNumbers",
+          "name": "potentialContactNumbers",
+          "columnName": "potentialContactNumbers",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.contactNumber",
+          "name": "contactNumber",
+          "columnName": "contactNumber",
+          "type": "text[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.whatsapp",
+          "name": "whatsapp",
+          "columnName": "whatsapp",
+          "type": "text[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.email",
+          "name": "email",
+          "columnName": "email",
+          "type": "text[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Job",
+          "type": "Job",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "JobToClient",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         },
         {
           "name": "Shaft",
@@ -315,16 +343,269 @@
           "nullNotDistinct": false
         },
         {
-          "name": "Client_email_key",
+          "name": "Client_idNumber_key",
           "fields": [
-            "email"
+            "idNumber"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "Equipment": {
+      "id": "public.Equipment",
+      "schemaName": "public",
+      "tableName": "Equipment",
+      "fields": [
+        {
+          "id": "public.Equipment.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.Equipment.registrationNumber",
+          "name": "registrationNumber",
+          "columnName": "registrationNumber",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Equipment.typeId",
+          "name": "typeId",
+          "columnName": "typeId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Equipment.status",
+          "name": "status",
+          "columnName": "status",
+          "type": "EquipmentStatus",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Equipment.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Equipment.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "EquipmentType",
+          "type": "EquipmentType",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "EquipmentToEquipmentType",
+          "relationFromFields": [
+            "typeId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Maintenance",
+          "type": "Maintenance",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MaintenanceToEquipment",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Telematics",
+          "type": "Telematics",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "TelematicsToEquipment",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "Equipment_pkey",
+          "fields": [
+            "id"
           ],
           "nullNotDistinct": false
         },
         {
-          "name": "Client_idNumber_key",
+          "name": "Equipment_registrationNumber_key",
           "fields": [
-            "idNumber"
+            "registrationNumber"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "EquipmentType": {
+      "id": "public.EquipmentType",
+      "schemaName": "public",
+      "tableName": "EquipmentType",
+      "fields": [
+        {
+          "id": "public.EquipmentType.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.EquipmentType.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.EquipmentType.description",
+          "name": "description",
+          "columnName": "description",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.EquipmentType.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.EquipmentType.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Equipment",
+          "type": "Equipment",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "EquipmentToEquipmentType",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "EquipmentType_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "EquipmentType_name_key",
+          "fields": [
+            "name"
           ],
           "nullNotDistinct": false
         }
@@ -870,6 +1151,38 @@
           "maxLength": null
         },
         {
+          "id": "public.Job.clientId",
+          "name": "clientId",
+          "columnName": "clientId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Client",
+          "type": "Client",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "JobToClient",
+          "relationFromFields": [
+            "clientId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "Shaft",
           "type": "Shaft",
           "isRequired": true,
@@ -1236,20 +1549,6 @@
           "maxLength": null
         },
         {
-          "id": "public.Maintenance.vehicleId",
-          "name": "vehicleId",
-          "columnName": "vehicleId",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.Maintenance.description",
           "name": "description",
           "columnName": "description",
@@ -1334,13 +1633,27 @@
           "maxLength": null
         },
         {
-          "name": "Vehicle",
-          "type": "Vehicle",
+          "id": "public.Maintenance.equipmentId",
+          "name": "equipmentId",
+          "columnName": "equipmentId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Equipment",
+          "type": "Equipment",
           "isRequired": true,
           "kind": "object",
-          "relationName": "MaintenanceToVehicle",
+          "relationName": "MaintenanceToEquipment",
           "relationFromFields": [
-            "vehicleId"
+            "equipmentId"
           ],
           "relationToFields": [
             "id"
@@ -2203,20 +2516,6 @@
           "maxLength": null
         },
         {
-          "id": "public.Telematics.vehicleId",
-          "name": "vehicleId",
-          "columnName": "vehicleId",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.Telematics.currentLocation",
           "name": "currentLocation",
           "columnName": "currentLocation",
@@ -2315,13 +2614,27 @@
           "maxLength": null
         },
         {
-          "name": "Vehicle",
-          "type": "Vehicle",
+          "id": "public.Telematics.equipmentId",
+          "name": "equipmentId",
+          "columnName": "equipmentId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Equipment",
+          "type": "Equipment",
           "isRequired": true,
           "kind": "object",
-          "relationName": "TelematicsToVehicle",
+          "relationName": "TelematicsToEquipment",
           "relationFromFields": [
-            "vehicleId"
+            "equipmentId"
           ],
           "relationToFields": [
             "id"
@@ -2342,9 +2655,9 @@
           "nullNotDistinct": false
         },
         {
-          "name": "Telematics_vehicleId_key",
+          "name": "Telematics_equipmentId_key",
           "fields": [
-            "vehicleId"
+            "equipmentId"
           ],
           "nullNotDistinct": false
         }
@@ -2667,266 +2980,6 @@
         }
       ]
     },
-    "Vehicle": {
-      "id": "public.Vehicle",
-      "schemaName": "public",
-      "tableName": "Vehicle",
-      "fields": [
-        {
-          "id": "public.Vehicle.id",
-          "name": "id",
-          "columnName": "id",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.Vehicle.registrationNumber",
-          "name": "registrationNumber",
-          "columnName": "registrationNumber",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.Vehicle.typeId",
-          "name": "typeId",
-          "columnName": "typeId",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.Vehicle.status",
-          "name": "status",
-          "columnName": "status",
-          "type": "VehicleStatus",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.Vehicle.createdAt",
-          "name": "createdAt",
-          "columnName": "createdAt",
-          "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.Vehicle.updatedAt",
-          "name": "updatedAt",
-          "columnName": "updatedAt",
-          "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "VehicleType",
-          "type": "VehicleType",
-          "isRequired": true,
-          "kind": "object",
-          "relationName": "VehicleToVehicleType",
-          "relationFromFields": [
-            "typeId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "Maintenance",
-          "type": "Maintenance",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "MaintenanceToVehicle",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "Telematics",
-          "type": "Telematics",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "TelematicsToVehicle",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "Vehicle_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "Vehicle_registrationNumber_key",
-          "fields": [
-            "registrationNumber"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
-    },
-    "VehicleType": {
-      "id": "public.VehicleType",
-      "schemaName": "public",
-      "tableName": "VehicleType",
-      "fields": [
-        {
-          "id": "public.VehicleType.id",
-          "name": "id",
-          "columnName": "id",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.VehicleType.name",
-          "name": "name",
-          "columnName": "name",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.VehicleType.description",
-          "name": "description",
-          "columnName": "description",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.VehicleType.createdAt",
-          "name": "createdAt",
-          "columnName": "createdAt",
-          "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.VehicleType.updatedAt",
-          "name": "updatedAt",
-          "columnName": "updatedAt",
-          "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "Vehicle",
-          "type": "Vehicle",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "VehicleToVehicleType",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "VehicleType_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "VehicleType_name_key",
-          "fields": [
-            "name"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
-    },
     "VerificationCode": {
       "id": "public.VerificationCode",
       "schemaName": "public",
@@ -3127,6 +3180,23 @@
         }
       ]
     },
+    "EquipmentStatus": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "AVAILABLE"
+        },
+        {
+          "name": "IN_TRANSIT"
+        },
+        {
+          "name": "OUT_OF_SERVICE"
+        },
+        {
+          "name": "UNDER_MAINTENANCE"
+        }
+      ]
+    },
     "ExecutionStatus": {
       "schemaName": "public",
       "values": [
@@ -3199,55 +3269,79 @@
       "schemaName": "public",
       "values": [
         {
-          "name": "CREATE_MAINTENANCE"
+          "name": "CREATE_ASSIGNMENT"
         },
         {
-          "name": "CREATE_TRANSPORT_REQUEST"
+          "name": "CREATE_CLIENT"
+        },
+        {
+          "name": "CREATE_EQUIPMENT"
+        },
+        {
+          "name": "CREATE_JOB"
+        },
+        {
+          "name": "CREATE_MAINTENANCE"
         },
         {
           "name": "CREATE_USER"
         },
         {
-          "name": "CREATE_VEHICLE"
+          "name": "DELETE_ASSIGNMENT"
+        },
+        {
+          "name": "DELETE_CLIENT"
+        },
+        {
+          "name": "DELETE_EQUIPMENT"
+        },
+        {
+          "name": "DELETE_JOB"
         },
         {
           "name": "DELETE_MAINTENANCE"
         },
         {
-          "name": "DELETE_TRANSPORT_REQUEST"
-        },
-        {
           "name": "DELETE_USER"
-        },
-        {
-          "name": "DELETE_VEHICLE"
         },
         {
           "name": "MANAGE_ROLES"
         },
         {
-          "name": "READ_MAINTENANCE"
+          "name": "READ_ASSIGNMENT"
         },
         {
-          "name": "READ_TRANSPORT_REQUEST"
+          "name": "READ_CLIENT"
+        },
+        {
+          "name": "READ_EQUIPMENT"
+        },
+        {
+          "name": "READ_JOB"
+        },
+        {
+          "name": "READ_MAINTENANCE"
         },
         {
           "name": "READ_USER"
         },
         {
-          "name": "READ_VEHICLE"
+          "name": "UPDATE_ASSIGNMENT"
+        },
+        {
+          "name": "UPDATE_CLIENT"
+        },
+        {
+          "name": "UPDATE_EQUIPMENT"
+        },
+        {
+          "name": "UPDATE_JOB"
         },
         {
           "name": "UPDATE_MAINTENANCE"
         },
         {
-          "name": "UPDATE_TRANSPORT_REQUEST"
-        },
-        {
           "name": "UPDATE_USER"
-        },
-        {
-          "name": "UPDATE_VEHICLE"
         },
         {
           "name": "VIEW_ASSIGNMENTS"
@@ -3289,10 +3383,13 @@
           "name": "ADMINISTRATOR"
         },
         {
-          "name": "DRIVER"
+          "name": "AGENT"
         },
         {
-          "name": "REQUESTER"
+          "name": "CLIENT_MANAGER"
+        },
+        {
+          "name": "DRIVER"
         },
         {
           "name": "TRANSPORT_MANAGER"
@@ -3313,23 +3410,6 @@
         },
         {
           "name": "RED"
-        }
-      ]
-    },
-    "VehicleStatus": {
-      "schemaName": "public",
-      "values": [
-        {
-          "name": "AVAILABLE"
-        },
-        {
-          "name": "IN_TRANSIT"
-        },
-        {
-          "name": "OUT_OF_SERVICE"
-        },
-        {
-          "name": "UNDER_MAINTENANCE"
         }
       ]
     }

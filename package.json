@@ -7,15 +7,17 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node index.ts",
     "dev": "nodemon --exec ts-node index.ts",
-    "deploy": "npx prisma generate && npm run generate:swagger-schemas && npm run generate:swagger && npm run generate:swagger-html && npm run generate:email-templates && npm run upload-interfaces && serverless deploy",
+    "deploy": "npx prisma generate && npm run generate:enums && npm run upload-enums && npm run generate:swagger-schemas && npm run generate:swagger && npm run generate:swagger-html && npm run generate:email-templates && npm run upload-interfaces && serverless deploy",
     "generate:swagger-schemas": "ts-node scripts/generate-swagger-schemas.ts",
     "seed": "npx tsx prisma/seed/seed.ts",
     "generate:swagger": "ts-node scripts/generate-swagger-json.ts",
     "generate:swagger-html": "ts-node scripts/generate-swagger-html.ts",
     "generate:email-templates": "ts-node scripts/generate-email-templates.ts",
     "upload-interfaces": "ts-node scripts/upload-typescript-interfaces.ts",
+    "upload-enums": "ts-node scripts/upload-enums.ts",
     "arrange-schema": "ts-node scripts/arrange-schema.ts",
-    "generate:commit": "ts-node scripts/generate-commit-message.ts"
+    "generate:commit": "ts-node scripts/generate-commit-message.ts",
+    "generate:enums": "ts-node scripts/generateEnumJson.ts"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed/seed.ts"

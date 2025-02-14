@@ -14,6 +14,32 @@
       }
     },
     "schemas": {
+      "CapacityUnit": {
+        "type": "string",
+        "enum": [
+          "TONNES",
+          "METRES_CUBED",
+          "KILOGRAMS",
+          "LITRES",
+          "KVA"
+        ]
+      },
+      "EquipmentCategory": {
+        "type": "string",
+        "enum": [
+          "TRAILER",
+          "CRANE",
+          "EXCAVATOR",
+          "DOZER",
+          "WEIGH_BRIDGE",
+          "TELEMATICS_DEVICE",
+          "VEHICLE",
+          "CRUSHER",
+          "MILL",
+          "LOADER",
+          "GENERATOR"
+        ]
+      },
       "AnswerType": {
         "type": "string",
         "enum": [
@@ -66,20 +92,28 @@
           "READ_USER",
           "UPDATE_USER",
           "DELETE_USER",
+          "CREATE_CLIENT",
+          "READ_CLIENT",
+          "UPDATE_CLIENT",
+          "DELETE_CLIENT",
           "MANAGE_ROLES",
-          "CREATE_TRANSPORT_REQUEST",
-          "READ_TRANSPORT_REQUEST",
-          "UPDATE_TRANSPORT_REQUEST",
-          "DELETE_TRANSPORT_REQUEST",
+          "CREATE_JOB",
+          "READ_JOB",
+          "UPDATE_JOB",
+          "DELETE_JOB",
           "CREATE_MAINTENANCE",
           "READ_MAINTENANCE",
           "UPDATE_MAINTENANCE",
           "DELETE_MAINTENANCE",
           "VIEW_ASSIGNMENTS",
-          "CREATE_VEHICLE",
-          "READ_VEHICLE",
-          "UPDATE_VEHICLE",
-          "DELETE_VEHICLE"
+          "CREATE_ASSIGNMENT",
+          "READ_ASSIGNMENT",
+          "UPDATE_ASSIGNMENT",
+          "DELETE_ASSIGNMENT",
+          "CREATE_EQUIPMENT",
+          "READ_EQUIPMENT",
+          "UPDATE_EQUIPMENT",
+          "DELETE_EQUIPMENT"
         ]
       },
       "ProcedureType": {
@@ -103,8 +137,9 @@
         "enum": [
           "ADMINISTRATOR",
           "TRANSPORT_MANAGER",
+          "AGENT",
           "DRIVER",
-          "REQUESTER",
+          "CLIENT_MANAGER",
           "WORKSHOP_MANAGER"
         ]
       },
@@ -116,11 +151,12 @@
           "RED"
         ]
       },
-      "VehicleStatus": {
+      "EquipmentStatus": {
         "type": "string",
         "enum": [
           "AVAILABLE",
           "IN_TRANSIT",
+          "IN_USE",
           "UNDER_MAINTENANCE",
           "OUT_OF_SERVICE"
         ]
@@ -175,10 +211,25 @@
             "type": "string"
           },
           "contactNumber": {
-            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "whatsapp": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "potentialContactNumbers": {
+            "type": "boolean"
           },
           "email": {
-            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "createdAt": {
             "$ref": "#/components/schemas/Date"
@@ -197,6 +248,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Syndicate"
+            },
+            "nullable": true
+          },
+          "Job": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Job"
             },
             "nullable": true
           }
@@ -343,6 +401,78 @@
           },
           "shaftId": {
             "type": "string"
+          },
+          "client": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "idNumber": {
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              },
+              "contactNumber": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "whatsapp": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "potentialContactNumbers": {
+                "type": "boolean"
+              },
+              "email": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "shafts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Shaft"
+                },
+                "nullable": true
+              },
+              "syndicates": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Syndicate"
+                },
+                "nullable": true
+              },
+              "Job": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Job"
+                },
+                "nullable": true
+              }
+            },
+            "nullable": true
+          },
+          "clientId": {
+            "type": "string"
           }
         }
       },
@@ -416,6 +546,78 @@
                 "nullable": true
               },
               "shaftId": {
+                "type": "string"
+              },
+              "client": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "idNumber": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "contactNumber": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "whatsapp": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "potentialContactNumbers": {
+                    "type": "boolean"
+                  },
+                  "email": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "createdAt": {
+                    "$ref": "#/components/schemas/Date"
+                  },
+                  "updatedAt": {
+                    "$ref": "#/components/schemas/Date"
+                  },
+                  "shafts": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Shaft"
+                    },
+                    "nullable": true
+                  },
+                  "syndicates": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Syndicate"
+                    },
+                    "nullable": true
+                  },
+                  "Job": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Job"
+                    },
+                    "nullable": true
+                  }
+                },
+                "nullable": true
+              },
+              "clientId": {
                 "type": "string"
               }
             },
@@ -509,6 +711,78 @@
               },
               "shaftId": {
                 "type": "string"
+              },
+              "client": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "idNumber": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "contactNumber": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "whatsapp": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "potentialContactNumbers": {
+                    "type": "boolean"
+                  },
+                  "email": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "createdAt": {
+                    "$ref": "#/components/schemas/Date"
+                  },
+                  "updatedAt": {
+                    "$ref": "#/components/schemas/Date"
+                  },
+                  "shafts": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Shaft"
+                    },
+                    "nullable": true
+                  },
+                  "syndicates": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Syndicate"
+                    },
+                    "nullable": true
+                  },
+                  "Job": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Job"
+                    },
+                    "nullable": true
+                  }
+                },
+                "nullable": true
+              },
+              "clientId": {
+                "type": "string"
               }
             },
             "nullable": true
@@ -540,11 +814,11 @@
           "id": {
             "type": "string"
           },
-          "vehicle": {
-            "$ref": "#/components/schemas/Vehicle",
+          "equipment": {
+            "$ref": "#/components/schemas/Equipment",
             "nullable": true
           },
-          "vehicleId": {
+          "equipmentId": {
             "type": "string"
           },
           "description": {
@@ -699,8 +973,9 @@
             "enum": [
               "ADMINISTRATOR",
               "TRANSPORT_MANAGER",
+              "AGENT",
               "DRIVER",
-              "REQUESTER",
+              "CLIENT_MANAGER",
               "WORKSHOP_MANAGER"
             ]
           },
@@ -711,20 +986,28 @@
               "READ_USER",
               "UPDATE_USER",
               "DELETE_USER",
+              "CREATE_CLIENT",
+              "READ_CLIENT",
+              "UPDATE_CLIENT",
+              "DELETE_CLIENT",
               "MANAGE_ROLES",
-              "CREATE_TRANSPORT_REQUEST",
-              "READ_TRANSPORT_REQUEST",
-              "UPDATE_TRANSPORT_REQUEST",
-              "DELETE_TRANSPORT_REQUEST",
+              "CREATE_JOB",
+              "READ_JOB",
+              "UPDATE_JOB",
+              "DELETE_JOB",
               "CREATE_MAINTENANCE",
               "READ_MAINTENANCE",
               "UPDATE_MAINTENANCE",
               "DELETE_MAINTENANCE",
               "VIEW_ASSIGNMENTS",
-              "CREATE_VEHICLE",
-              "READ_VEHICLE",
-              "UPDATE_VEHICLE",
-              "DELETE_VEHICLE"
+              "CREATE_ASSIGNMENT",
+              "READ_ASSIGNMENT",
+              "UPDATE_ASSIGNMENT",
+              "DELETE_ASSIGNMENT",
+              "CREATE_EQUIPMENT",
+              "READ_EQUIPMENT",
+              "UPDATE_EQUIPMENT",
+              "DELETE_EQUIPMENT"
             ]
           },
           "createdAt": {
@@ -825,10 +1108,25 @@
                 "type": "string"
               },
               "contactNumber": {
-                "type": "string"
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "whatsapp": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "potentialContactNumbers": {
+                "type": "boolean"
               },
               "email": {
-                "type": "string"
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
               },
               "createdAt": {
                 "$ref": "#/components/schemas/Date"
@@ -847,6 +1145,13 @@
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/Syndicate"
+                },
+                "nullable": true
+              },
+              "Job": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Job"
                 },
                 "nullable": true
               }
@@ -922,11 +1227,11 @@
           "id": {
             "type": "string"
           },
-          "vehicle": {
-            "$ref": "#/components/schemas/Vehicle",
+          "equipment": {
+            "$ref": "#/components/schemas/Equipment",
             "nullable": true
           },
-          "vehicleId": {
+          "equipmentId": {
             "type": "string"
           },
           "kilometresTravelled": {
@@ -967,6 +1272,7 @@
               "TRANSPORT_MANAGER",
               "DRIVER",
               "REQUESTER",
+              "WORKSHOP_MANAGER",
               "WORKSHOP_MANAGER"
             ]
           },
@@ -1047,17 +1353,30 @@
           "role"
         ]
       },
-      "Vehicle": {
+      "Equipment": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string"
           },
-          "registrationNumber": {
-            "type": "string"
+          "category": {
+            "type": "string",
+            "enum": [
+              "TRAILER",
+              "CRANE",
+              "EXCAVATOR",
+              "DOZER",
+              "WEIGH_BRIDGE",
+              "TELEMATICS_DEVICE",
+              "VEHICLE",
+              "CRUSHER",
+              "MILL",
+              "LOADER",
+              "GENERATOR"
+            ]
           },
           "type": {
-            "$ref": "#/components/schemas/VehicleType",
+            "$ref": "#/components/schemas/EquipmentType",
             "nullable": true
           },
           "typeId": {
@@ -1068,6 +1387,7 @@
             "enum": [
               "AVAILABLE",
               "IN_TRANSIT",
+              "IN_USE",
               "UNDER_MAINTENANCE",
               "OUT_OF_SERVICE"
             ]
@@ -1087,7 +1407,7 @@
           }
         }
       },
-      "VehicleType": {
+      "EquipmentType": {
         "type": "object",
         "properties": {
           "id": {
@@ -1096,10 +1416,10 @@
           "name": {
             "type": "string"
           },
-          "vehicles": {
+          "equipment": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Vehicle"
+              "$ref": "#/components/schemas/Equipment"
             },
             "nullable": true
           },
@@ -1186,16 +1506,95 @@
         "tags": [
           "Area"
         ],
-        "summary": "Get all areas",
+        "summary": "Get all areas with pagination, search, and filters",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term"
+          },
+          {
+            "in": "query",
+            "name": "searchFields",
+            "schema": {
+              "type": "string",
+              "default": "name,site.name"
+            },
+            "description": "Comma-separated list of fields to search in"
+          },
+          {
+            "in": "query",
+            "name": "siteId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by site ID"
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of areas retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Area"
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Area"
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "totalCount": {
+                          "type": "integer"
+                        },
+                        "currentPage": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "search": {
+                          "type": "string"
+                        },
+                        "searchFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "siteId": {
+                          "type": "string"
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -1809,16 +2208,84 @@
         "tags": [
           "Client"
         ],
-        "summary": "Get all clients",
+        "summary": "Get all clients with pagination, search, and filters",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term"
+          },
+          {
+            "in": "query",
+            "name": "searchFields",
+            "schema": {
+              "type": "string",
+              "default": "firstName,lastName,email,idNumber,contactNumber"
+            },
+            "description": "Comma-separated list of fields to search in"
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of clients retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Client"
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Client"
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "totalCount": {
+                          "type": "integer"
+                        },
+                        "currentPage": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "search": {
+                          "type": "string"
+                        },
+                        "searchFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -1930,6 +2397,152 @@
         }
       }
     },
+    "/equipment": {
+      "post": {
+        "tags": [
+          "Equipment"
+        ],
+        "summary": "Create new equipment",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Equipment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Equipment created successfully"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Equipment"
+        ],
+        "summary": "Get all equipment with pagination, search, and filters",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term"
+          },
+          {
+            "in": "query",
+            "name": "searchFields",
+            "schema": {
+              "type": "string",
+              "default": "registrationNumber,type.name"
+            },
+            "description": "Comma-separated list of fields to search in"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "AVAILABLE",
+                "IN_TRANSIT",
+                "UNDER_MAINTENANCE",
+                "OUT_OF_SERVICE"
+              ]
+            },
+            "description": "Filter by equipment status"
+          },
+          {
+            "in": "query",
+            "name": "typeId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by equipment type ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of equipment retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Equipment"
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "totalCount": {
+                          "type": "integer"
+                        },
+                        "currentPage": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "search": {
+                          "type": "string"
+                        },
+                        "searchFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "typeId": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/exception": {
       "post": {
         "tags": [
@@ -1959,16 +2572,95 @@
         "tags": [
           "Exception"
         ],
-        "summary": "Get all exceptions",
+        "summary": "Get all exceptions with pagination, search, and filters",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term"
+          },
+          {
+            "in": "query",
+            "name": "searchFields",
+            "schema": {
+              "type": "string",
+              "default": "description,actionTaken"
+            },
+            "description": "Comma-separated list of fields to search in"
+          },
+          {
+            "in": "query",
+            "name": "executionId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by execution ID"
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of exceptions retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Exception"
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Exception"
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "totalCount": {
+                          "type": "integer"
+                        },
+                        "currentPage": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "search": {
+                          "type": "string"
+                        },
+                        "searchFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "executionId": {
+                          "type": "string"
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -2109,16 +2801,152 @@
         "tags": [
           "Job"
         ],
-        "summary": "Get all jobs",
+        "summary": "Get all jobs with pagination, search, and filters",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term"
+          },
+          {
+            "in": "query",
+            "name": "searchFields",
+            "schema": {
+              "type": "string",
+              "default": "title,description,location"
+            },
+            "description": "Comma-separated list of fields to search in"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "PLANNED",
+                "BLOCKED",
+                "IN_PROGRESS",
+                "COMPLETED",
+                "CANCELLED"
+              ]
+            },
+            "description": "Filter by job status"
+          },
+          {
+            "in": "query",
+            "name": "priority",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            },
+            "description": "Filter by priority"
+          },
+          {
+            "in": "query",
+            "name": "assignedDriverId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by assigned driver"
+          },
+          {
+            "in": "query",
+            "name": "requesterId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by requester"
+          },
+          {
+            "in": "query",
+            "name": "shaftId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by shaft"
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of jobs retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Job"
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Job"
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "totalCount": {
+                          "type": "integer"
+                        },
+                        "currentPage": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "search": {
+                          "type": "string"
+                        },
+                        "searchFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "priority": {
+                          "type": "string"
+                        },
+                        "assignedDriverId": {
+                          "type": "string"
+                        },
+                        "requesterId": {
+                          "type": "string"
+                        },
+                        "shaftId": {
+                          "type": "string"
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -2306,16 +3134,99 @@
         "tags": [
           "Procedure"
         ],
-        "summary": "Get all procedures",
+        "summary": "Get all procedures with pagination, search, and filters",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term"
+          },
+          {
+            "in": "query",
+            "name": "searchFields",
+            "schema": {
+              "type": "string",
+              "default": "name,description"
+            },
+            "description": "Comma-separated list of fields to search in"
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "STANDARD",
+                "EXCEPTION"
+              ]
+            },
+            "description": "Filter by procedure type"
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of procedures retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Procedure"
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Procedure"
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "totalCount": {
+                          "type": "integer"
+                        },
+                        "currentPage": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "search": {
+                          "type": "string"
+                        },
+                        "searchFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "type": {
+                          "type": "string"
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -2456,16 +3367,106 @@
         "tags": [
           "Shaft"
         ],
-        "summary": "Get all shafts",
+        "summary": "Get all shafts with pagination, search, and filters",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term"
+          },
+          {
+            "in": "query",
+            "name": "searchFields",
+            "schema": {
+              "type": "string",
+              "default": "name,area.name,area.site.name"
+            },
+            "description": "Comma-separated list of fields to search in"
+          },
+          {
+            "in": "query",
+            "name": "areaId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by area ID"
+          },
+          {
+            "in": "query",
+            "name": "clientId",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by client ID"
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of shafts retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Shaft"
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Shaft"
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "totalCount": {
+                          "type": "integer"
+                        },
+                        "currentPage": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "search": {
+                          "type": "string"
+                        },
+                        "searchFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "areaId": {
+                          "type": "string"
+                        },
+                        "clientId": {
+                          "type": "string"
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -2606,16 +3607,84 @@
         "tags": [
           "Site"
         ],
-        "summary": "Get all sites",
+        "summary": "Get all sites with pagination, search, and filters",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term"
+          },
+          {
+            "in": "query",
+            "name": "searchFields",
+            "schema": {
+              "type": "string",
+              "default": "name,address"
+            },
+            "description": "Comma-separated list of fields to search in"
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of sites retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Site"
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Site"
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "totalCount": {
+                          "type": "integer"
+                        },
+                        "currentPage": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "search": {
+                          "type": "string"
+                        },
+                        "searchFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -2756,16 +3825,84 @@
         "tags": [
           "Syndicate"
         ],
-        "summary": "Get all syndicates",
+        "summary": "Get all syndicates with pagination, search, and filters",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term"
+          },
+          {
+            "in": "query",
+            "name": "searchFields",
+            "schema": {
+              "type": "string",
+              "default": "name"
+            },
+            "description": "Comma-separated list of fields to search in"
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of syndicates retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Syndicate"
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Syndicate"
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "totalCount": {
+                          "type": "integer"
+                        },
+                        "currentPage": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "search": {
+                          "type": "string"
+                        },
+                        "searchFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -2906,16 +4043,102 @@
         "tags": [
           "User"
         ],
-        "summary": "Get all users",
+        "summary": "Get all users with pagination, search, and filters",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term"
+          },
+          {
+            "in": "query",
+            "name": "searchFields",
+            "schema": {
+              "type": "string",
+              "default": "firstName,lastName,email,contactNumber"
+            },
+            "description": "Comma-separated list of fields to search in"
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ADMINISTRATOR",
+                "TRANSPORT_MANAGER",
+                "DRIVER",
+                "REQUESTER",
+                "WORKSHOP_MANAGER"
+              ]
+            },
+            "description": "Filter by user role"
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of users retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/User"
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "totalCount": {
+                          "type": "integer"
+                        },
+                        "currentPage": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "search": {
+                          "type": "string"
+                        },
+                        "searchFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "role": {
+                          "type": "string"
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -3020,156 +4243,6 @@
           },
           "404": {
             "description": "User not found"
-          },
-          "500": {
-            "description": "Server error"
-          }
-        }
-      }
-    },
-    "/vehicle": {
-      "post": {
-        "tags": [
-          "Vehicle"
-        ],
-        "summary": "Create a new vehicle",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Vehicle"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Vehicle created successfully"
-          },
-          "500": {
-            "description": "Server error"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Vehicle"
-        ],
-        "summary": "Get all vehicles",
-        "responses": {
-          "200": {
-            "description": "List of vehicles retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Vehicle"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error"
-          }
-        }
-      }
-    },
-    "/vehicle/{id}": {
-      "get": {
-        "tags": [
-          "Vehicle"
-        ],
-        "summary": "Get a vehicle by ID",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Vehicle found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Vehicle"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Vehicle not found"
-          },
-          "500": {
-            "description": "Server error"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Vehicle"
-        ],
-        "summary": "Update a vehicle",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Vehicle"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Vehicle updated successfully"
-          },
-          "404": {
-            "description": "Vehicle not found"
-          },
-          "500": {
-            "description": "Server error"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Vehicle"
-        ],
-        "summary": "Delete a vehicle",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Vehicle deleted successfully"
-          },
-          "404": {
-            "description": "Vehicle not found"
           },
           "500": {
             "description": "Server error"

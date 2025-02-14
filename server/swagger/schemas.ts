@@ -1,5 +1,31 @@
 
 export const schemas = {
+  "CapacityUnit": {
+    "type": "string",
+    "enum": [
+      "TONNES",
+      "METRES_CUBED",
+      "KILOGRAMS",
+      "LITRES",
+      "KVA"
+    ]
+  },
+  "EquipmentCategory": {
+    "type": "string",
+    "enum": [
+      "TRAILER",
+      "CRANE",
+      "EXCAVATOR",
+      "DOZER",
+      "WEIGH_BRIDGE",
+      "TELEMATICS_DEVICE",
+      "VEHICLE",
+      "CRUSHER",
+      "MILL",
+      "LOADER",
+      "GENERATOR"
+    ]
+  },
   "AnswerType": {
     "type": "string",
     "enum": [
@@ -52,20 +78,28 @@ export const schemas = {
       "READ_USER",
       "UPDATE_USER",
       "DELETE_USER",
+      "CREATE_CLIENT",
+      "READ_CLIENT",
+      "UPDATE_CLIENT",
+      "DELETE_CLIENT",
       "MANAGE_ROLES",
-      "CREATE_TRANSPORT_REQUEST",
-      "READ_TRANSPORT_REQUEST",
-      "UPDATE_TRANSPORT_REQUEST",
-      "DELETE_TRANSPORT_REQUEST",
+      "CREATE_JOB",
+      "READ_JOB",
+      "UPDATE_JOB",
+      "DELETE_JOB",
       "CREATE_MAINTENANCE",
       "READ_MAINTENANCE",
       "UPDATE_MAINTENANCE",
       "DELETE_MAINTENANCE",
       "VIEW_ASSIGNMENTS",
-      "CREATE_VEHICLE",
-      "READ_VEHICLE",
-      "UPDATE_VEHICLE",
-      "DELETE_VEHICLE"
+      "CREATE_ASSIGNMENT",
+      "READ_ASSIGNMENT",
+      "UPDATE_ASSIGNMENT",
+      "DELETE_ASSIGNMENT",
+      "CREATE_EQUIPMENT",
+      "READ_EQUIPMENT",
+      "UPDATE_EQUIPMENT",
+      "DELETE_EQUIPMENT"
     ]
   },
   "ProcedureType": {
@@ -89,8 +123,9 @@ export const schemas = {
     "enum": [
       "ADMINISTRATOR",
       "TRANSPORT_MANAGER",
+      "AGENT",
       "DRIVER",
-      "REQUESTER",
+      "CLIENT_MANAGER",
       "WORKSHOP_MANAGER"
     ]
   },
@@ -102,11 +137,12 @@ export const schemas = {
       "RED"
     ]
   },
-  "VehicleStatus": {
+  "EquipmentStatus": {
     "type": "string",
     "enum": [
       "AVAILABLE",
       "IN_TRANSIT",
+      "IN_USE",
       "UNDER_MAINTENANCE",
       "OUT_OF_SERVICE"
     ]
@@ -161,10 +197,25 @@ export const schemas = {
         "type": "string"
       },
       "contactNumber": {
-        "type": "string"
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "whatsapp": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "potentialContactNumbers": {
+        "type": "boolean"
       },
       "email": {
-        "type": "string"
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
       },
       "createdAt": {
         "$ref": "#/components/schemas/Date"
@@ -183,6 +234,13 @@ export const schemas = {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/Syndicate"
+        },
+        "nullable": true
+      },
+      "Job": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Job"
         },
         "nullable": true
       }
@@ -329,6 +387,78 @@ export const schemas = {
       },
       "shaftId": {
         "type": "string"
+      },
+      "client": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "idNumber": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "contactNumber": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "whatsapp": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "potentialContactNumbers": {
+            "type": "boolean"
+          },
+          "email": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "shafts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Shaft"
+            },
+            "nullable": true
+          },
+          "syndicates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Syndicate"
+            },
+            "nullable": true
+          },
+          "Job": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Job"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "clientId": {
+        "type": "string"
       }
     }
   },
@@ -402,6 +532,78 @@ export const schemas = {
             "nullable": true
           },
           "shaftId": {
+            "type": "string"
+          },
+          "client": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "idNumber": {
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              },
+              "contactNumber": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "whatsapp": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "potentialContactNumbers": {
+                "type": "boolean"
+              },
+              "email": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "shafts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Shaft"
+                },
+                "nullable": true
+              },
+              "syndicates": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Syndicate"
+                },
+                "nullable": true
+              },
+              "Job": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Job"
+                },
+                "nullable": true
+              }
+            },
+            "nullable": true
+          },
+          "clientId": {
             "type": "string"
           }
         },
@@ -495,6 +697,78 @@ export const schemas = {
           },
           "shaftId": {
             "type": "string"
+          },
+          "client": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "idNumber": {
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              },
+              "contactNumber": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "whatsapp": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "potentialContactNumbers": {
+                "type": "boolean"
+              },
+              "email": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "shafts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Shaft"
+                },
+                "nullable": true
+              },
+              "syndicates": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Syndicate"
+                },
+                "nullable": true
+              },
+              "Job": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Job"
+                },
+                "nullable": true
+              }
+            },
+            "nullable": true
+          },
+          "clientId": {
+            "type": "string"
           }
         },
         "nullable": true
@@ -526,11 +800,11 @@ export const schemas = {
       "id": {
         "type": "string"
       },
-      "vehicle": {
-        "$ref": "#/components/schemas/Vehicle",
+      "equipment": {
+        "$ref": "#/components/schemas/Equipment",
         "nullable": true
       },
-      "vehicleId": {
+      "equipmentId": {
         "type": "string"
       },
       "description": {
@@ -685,8 +959,9 @@ export const schemas = {
         "enum": [
           "ADMINISTRATOR",
           "TRANSPORT_MANAGER",
+          "AGENT",
           "DRIVER",
-          "REQUESTER",
+          "CLIENT_MANAGER",
           "WORKSHOP_MANAGER"
         ]
       },
@@ -697,20 +972,28 @@ export const schemas = {
           "READ_USER",
           "UPDATE_USER",
           "DELETE_USER",
+          "CREATE_CLIENT",
+          "READ_CLIENT",
+          "UPDATE_CLIENT",
+          "DELETE_CLIENT",
           "MANAGE_ROLES",
-          "CREATE_TRANSPORT_REQUEST",
-          "READ_TRANSPORT_REQUEST",
-          "UPDATE_TRANSPORT_REQUEST",
-          "DELETE_TRANSPORT_REQUEST",
+          "CREATE_JOB",
+          "READ_JOB",
+          "UPDATE_JOB",
+          "DELETE_JOB",
           "CREATE_MAINTENANCE",
           "READ_MAINTENANCE",
           "UPDATE_MAINTENANCE",
           "DELETE_MAINTENANCE",
           "VIEW_ASSIGNMENTS",
-          "CREATE_VEHICLE",
-          "READ_VEHICLE",
-          "UPDATE_VEHICLE",
-          "DELETE_VEHICLE"
+          "CREATE_ASSIGNMENT",
+          "READ_ASSIGNMENT",
+          "UPDATE_ASSIGNMENT",
+          "DELETE_ASSIGNMENT",
+          "CREATE_EQUIPMENT",
+          "READ_EQUIPMENT",
+          "UPDATE_EQUIPMENT",
+          "DELETE_EQUIPMENT"
         ]
       },
       "createdAt": {
@@ -811,10 +1094,25 @@ export const schemas = {
             "type": "string"
           },
           "contactNumber": {
-            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "whatsapp": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "potentialContactNumbers": {
+            "type": "boolean"
           },
           "email": {
-            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "createdAt": {
             "$ref": "#/components/schemas/Date"
@@ -833,6 +1131,13 @@ export const schemas = {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Syndicate"
+            },
+            "nullable": true
+          },
+          "Job": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Job"
             },
             "nullable": true
           }
@@ -908,11 +1213,11 @@ export const schemas = {
       "id": {
         "type": "string"
       },
-      "vehicle": {
-        "$ref": "#/components/schemas/Vehicle",
+      "equipment": {
+        "$ref": "#/components/schemas/Equipment",
         "nullable": true
       },
-      "vehicleId": {
+      "equipmentId": {
         "type": "string"
       },
       "kilometresTravelled": {
@@ -949,8 +1254,9 @@ export const schemas = {
         "enum": [
           "ADMINISTRATOR",
           "TRANSPORT_MANAGER",
+          "AGENT",
           "DRIVER",
-          "REQUESTER",
+          "CLIENT_MANAGER",
           "WORKSHOP_MANAGER"
         ]
       },
@@ -1003,17 +1309,30 @@ export const schemas = {
       }
     }
   },
-  "Vehicle": {
+  "Equipment": {
     "type": "object",
     "properties": {
       "id": {
         "type": "string"
       },
-      "registrationNumber": {
-        "type": "string"
+      "category": {
+        "type": "string",
+        "enum": [
+          "TRAILER",
+          "CRANE",
+          "EXCAVATOR",
+          "DOZER",
+          "WEIGH_BRIDGE",
+          "TELEMATICS_DEVICE",
+          "VEHICLE",
+          "CRUSHER",
+          "MILL",
+          "LOADER",
+          "GENERATOR"
+        ]
       },
       "type": {
-        "$ref": "#/components/schemas/VehicleType",
+        "$ref": "#/components/schemas/EquipmentType",
         "nullable": true
       },
       "typeId": {
@@ -1024,6 +1343,7 @@ export const schemas = {
         "enum": [
           "AVAILABLE",
           "IN_TRANSIT",
+          "IN_USE",
           "UNDER_MAINTENANCE",
           "OUT_OF_SERVICE"
         ]
@@ -1043,7 +1363,7 @@ export const schemas = {
       }
     }
   },
-  "VehicleType": {
+  "EquipmentType": {
     "type": "object",
     "properties": {
       "id": {
@@ -1052,10 +1372,10 @@ export const schemas = {
       "name": {
         "type": "string"
       },
-      "vehicles": {
+      "equipment": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/Vehicle"
+          "$ref": "#/components/schemas/Equipment"
         },
         "nullable": true
       },

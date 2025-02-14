@@ -1,0 +1,21 @@
+{
+  "name": "ProcedureType",
+  "values": [
+    "STANDARD",
+    "EXCEPTION"
+  ],
+  "lookup": {
+    "STANDARD": "STANDARD",
+    "EXCEPTION": "EXCEPTION"
+  },
+  "options": [
+    {
+      "label": "S T A N D A R D",
+      "value": "STANDARD"
+    },
+    {
+      "label": "E X C E P T I O N",
+      "value": "EXCEPTION"
+    }
+  ]
+}

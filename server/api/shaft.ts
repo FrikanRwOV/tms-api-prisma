@@ -49,33 +49,142 @@ router.post("", async (req, res) => {
  *   get:
  *     tags:
  *       - Shaft
- *     summary: Get all shafts
+ *     summary: Get all shafts with pagination, search, and filters
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term
+ *       - in: query
+ *         name: searchFields
+ *         schema:
+ *           type: string
+ *           default: "name,area.name,area.site.name"
+ *         description: Comma-separated list of fields to search in
+ *       - in: query
+ *         name: areaId
+ *         schema:
+ *           type: string
+ *         description: Filter by area ID
+ *       - in: query
+ *         name: clientId
+ *         schema:
+ *           type: string
+ *         description: Filter by client ID
  *     responses:
  *       200:
  *         description: List of shafts retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Shaft'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Shaft'
+ *                 metadata:
+ *                   type: object
+ *                   properties:
+ *                     totalCount:
+ *                       type: integer
+ *                     currentPage:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     search:
+ *                       type: string
+ *                     searchFields:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                     areaId:
+ *                       type: string
+ *                     clientId:
+ *                       type: string
  *       500:
  *         description: Server error
  */
 router.get("", async (req, res) => {
   try {
-    const shafts = await prisma.shaft.findMany({
-      include: {
-        area: {
-          include: {
-            site: true
-          }
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const search = (req.query.search as string) || '';
+    const searchFields = (req.query.searchFields as string || 'name,area.name,area.site.name').split(',');
+    const areaId = req.query.areaId as string;
+    const clientId = req.query.clientId as string;
+
+    const where: any = {};
+
+    if (areaId) {
+      where.areaId = areaId;
+    }
+
+    if (clientId) {
+      where.clientId = clientId;
+    }
+
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { area: { name: { contains: search, mode: 'insensitive' } } },
+        { area: { site: { name: { contains: search, mode: 'insensitive' } } } }
+      ];
+    }
+
+    const [totalCount, shafts] = await Promise.all([
+      prisma.shaft.count({ where }),
+      prisma.shaft.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          area: {
+            include: {
+              site: true
+            }
+          },
+          client: true,
+          jobs: true
         },
-        client: true,
-        jobs: true
+        orderBy: {
+          createdAt: 'desc'
+        }
+      })
+    ]);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      data: shafts,
+      metadata: {
+        totalCount,
+        currentPage: page,
+        totalPages,
+        limit,
+        search: search || undefined,
+        searchFields,
+        areaId: areaId || undefined,
+        clientId: clientId || undefined
       }
     });
-    res.json(shafts);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to retrieve shafts", details: error });

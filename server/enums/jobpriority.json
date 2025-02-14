@@ -1,0 +1,27 @@
+{
+  "name": "JobPriority",
+  "values": [
+    "HIGH",
+    "MEDIUM",
+    "LOW"
+  ],
+  "lookup": {
+    "HIGH": "HIGH",
+    "MEDIUM": "MEDIUM",
+    "LOW": "LOW"
+  },
+  "options": [
+    {
+      "label": "H I G H",
+      "value": "HIGH"
+    },
+    {
+      "label": "M E D I U M",
+      "value": "MEDIUM"
+    },
+    {
+      "label": "L O W",
+      "value": "LOW"
+    }
+  ]
+}

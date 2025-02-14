@@ -1,0 +1,75 @@
+{
+  "name": "EquipmentCategory",
+  "values": [
+    "TRAILER",
+    "CRANE",
+    "EXCAVATOR",
+    "DOZER",
+    "WEIGH_BRIDGE",
+    "TELEMATICS_DEVICE",
+    "VEHICLE",
+    "CRUSHER",
+    "MILL",
+    "LOADER",
+    "GENERATOR"
+  ],
+  "lookup": {
+    "TRAILER": "TRAILER",
+    "CRANE": "CRANE",
+    "EXCAVATOR": "EXCAVATOR",
+    "DOZER": "DOZER",
+    "WEIGH_BRIDGE": "WEIGH_BRIDGE",
+    "TELEMATICS_DEVICE": "TELEMATICS_DEVICE",
+    "VEHICLE": "VEHICLE",
+    "CRUSHER": "CRUSHER",
+    "MILL": "MILL",
+    "LOADER": "LOADER",
+    "GENERATOR": "GENERATOR"
+  },
+  "options": [
+    {
+      "label": "T R A I L E R",
+      "value": "TRAILER"
+    },
+    {
+      "label": "C R A N E",
+      "value": "CRANE"
+    },
+    {
+      "label": "E X C A V A T O R",
+      "value": "EXCAVATOR"
+    },
+    {
+      "label": "D O Z E R",
+      "value": "DOZER"
+    },
+    {
+      "label": "W E I G H_ B R I D G E",
+      "value": "WEIGH_BRIDGE"
+    },
+    {
+      "label": "T E L E M A T I C S_ D E V I C E",
+      "value": "TELEMATICS_DEVICE"
+    },
+    {
+      "label": "V E H I C L E",
+      "value": "VEHICLE"
+    },
+    {
+      "label": "C R U S H E R",
+      "value": "CRUSHER"
+    },
+    {
+      "label": "M I L L",
+      "value": "MILL"
+    },
+    {
+      "label": "L O A D E R",
+      "value": "LOADER"
+    },
+    {
+      "label": "G E N E R A T O R",
+      "value": "GENERATOR"
+    }
+  ]
+}

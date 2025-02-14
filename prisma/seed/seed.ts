@@ -13,14 +13,20 @@ const main = async () => {
   await seed.$resetDatabase();
 
   const hashedPassword = await bcrypt.hash("password123!", 10);
-  await seed.user([
+  const users = [
     {
       id: "1",
       email: "frikan@openvantage.co.za",
       firstName: "Frikan",
       lastName: "van der Merwe",
       role: "ADMINISTRATOR",
-      permissions: ["READ_USER", "CREATE_USER", "UPDATE_USER", "DELETE_USER", "MANAGE_ROLES"],
+      permissions: [
+        "READ_USER",
+        "CREATE_USER",
+        "UPDATE_USER",
+        "DELETE_USER",
+        "MANAGE_ROLES",
+      ],
       password: hashedPassword,
     },
     {
@@ -30,11 +36,17 @@ const main = async () => {
       lastName: "van der Merwe",
       role: "TRANSPORT_MANAGER",
       permissions: [
-        "READ_TRANSPORT_REQUEST",
-        "CREATE_TRANSPORT_REQUEST",
-        "UPDATE_TRANSPORT_REQUEST",
         "VIEW_ASSIGNMENTS",
-        "READ_VEHICLE"
+        "CREATE_JOB",
+        "READ_JOB",
+        "UPDATE_JOB",
+        "DELETE_JOB",
+        "READ_EQUIPMENT",
+        "UPDATE_EQUIPMENT",
+        "DELETE_EQUIPMENT",
+          "READ_ASSIGNMENT",
+          "UPDATE_ASSIGNMENT",
+          "DELETE_ASSIGNMENT",
       ],
       password: hashedPassword,
     },
@@ -44,51 +56,93 @@ const main = async () => {
       firstName: "Pieter",
       lastName: "van der Merwe",
       role: "DRIVER",
+      permissions: ["VIEW_ASSIGNMENTS", "READ_EQUIPMENT"],
+      password: hashedPassword,
+    },
+    {
+      id: "4",
+      email: "pieter+agent@openvantage.co.za",
+      firstName: "Pieter",
+      lastName: "AGENT",
+      role: "AGENT",
       permissions: [
-        "READ_TRANSPORT_REQUEST",
+        "CREATE_CLIENT",
+        "READ_CLIENT",
+        "UPDATE_CLIENT",
+        "DELETE_CLIENT",
+        "CREATE_JOB",
+        "READ_JOB",
+        "UPDATE_JOB",
+        "DELETE_JOB",
         "VIEW_ASSIGNMENTS",
-        "READ_VEHICLE"
       ],
       password: hashedPassword,
     },
-  ]);
-
-
-  await seed.client({
-    id: "1",
-    name: "Magaya Test Client",
-    address: "123 Main St, Johannesburg, South Africa",
-    contactNumber: "+27 11 123 4567",
-    whatsapp: "+27 11 123 4567",
-  });
-  await seed.shaft({
-    id: "1",
-    name: "Magaya Test Shaft",
-    clientId: "1",
-  });
-  await seed.syndicate({
-    id: "1",
-    name: "Magaya Test Syndicate",
-  });
-  await seed.vehicleType({
-    id: "1",
-    name: "Magaya Test Vehicle Type",
-  });
-  await seed.vehicle({
-    id: "1",
-    name: "Magaya Test Vehicle",
-    vehicleTypeId: "1",
-  });
-  await seed.job({
-    id: "1",
-    jobTypeId: "1",
-    vehicleId: "1",
-    clientId: "1",
-    shaftId: "1",
-    syndicateId: "1",
-  });
-
+  ];
   
+  const additionalUsers = Array.from({ length: 5000 }, (_, i) => ({
+    id: `${i + 5}`,
+    email: `user${i + 4}@openvantage.co.za`,
+    permissions: [
+      "CREATE_CLIENT",
+      "READ_CLIENT",
+      "UPDATE_CLIENT",
+      "DELETE_CLIENT",
+      "CREATE_JOB",
+      "READ_JOB",
+      "UPDATE_JOB",
+      "DELETE_JOB",
+      "VIEW_ASSIGNMENTS",
+    ],
+    password: hashedPassword,
+  }));
+
+  const allUsers = [...users, ...additionalUsers];
+  await seed.user(allUsers);
+
+  const clients = Array.from({ length: 50 }, (_, i) => ({
+    id: `${i + 1}`,
+    name: `Client ${i + 1}`,
+    idNumber: `ID-${i + 1}`,
+    email: `client${i + 1}@openvantage.co.za`,
+  }));
+
+  await seed.client(clients);
+
+  const syndicates = Array.from({ length: 50 }, (_, i) => ({
+    id: `${i + 1}`,
+  }));
+  await seed.syndicate(syndicates);
+
+  const equipmentTypes = Array.from({ length: 20 }, (_, i) => ({
+    id: `${i + 1}`,
+  }));
+  await seed.equipmentType(equipmentTypes);
+  
+  const equipment = Array.from({ length: 50 }, (_, i) => ({
+    id: `${i + 1}`,
+    registrationNumber: `REG-${i + 1}`,
+    typeId: `${Math.floor(Math.random() * 20) + 1}`,
+  }));
+  await seed.equipment(equipment);
+
+  const sites = Array.from({ length: 5 }, (_, i) => ({
+    id: `${i + 1}`,
+  }));
+  await seed.site(sites);
+
+  const areas = Array.from({ length: 5 }, (_, i) => ({
+    id: `${i + 1}`,
+    siteID: '1'
+  }));
+  await seed.area(areas);
+
+  const shafts = Array.from({ length: 5 }, (_, i) => ({
+    id: `${i + 1}`,
+    areaID: `${Math.floor(Math.random() * 5) + 1}`,
+    clientID: `${Math.floor(Math.random() * 5) + 1}`,
+  }));
+  await seed.shaft(shafts);
 
   console.log("Database seeded successfully!");
 

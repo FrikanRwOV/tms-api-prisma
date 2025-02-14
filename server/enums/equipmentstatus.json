@@ -1,0 +1,39 @@
+{
+  "name": "EquipmentStatus",
+  "values": [
+    "AVAILABLE",
+    "IN_TRANSIT",
+    "IN_USE",
+    "UNDER_MAINTENANCE",
+    "OUT_OF_SERVICE"
+  ],
+  "lookup": {
+    "AVAILABLE": "AVAILABLE",
+    "IN_TRANSIT": "IN_TRANSIT",
+    "IN_USE": "IN_USE",
+    "UNDER_MAINTENANCE": "UNDER_MAINTENANCE",
+    "OUT_OF_SERVICE": "OUT_OF_SERVICE"
+  },
+  "options": [
+    {
+      "label": "A V A I L A B L E",
+      "value": "AVAILABLE"
+    },
+    {
+      "label": "I N_ T R A N S I T",
+      "value": "IN_TRANSIT"
+    },
+    {
+      "label": "I N_ U S E",
+      "value": "IN_USE"
+    },
+    {
+      "label": "U N D E R_ M A I N T E N A N C E",
+      "value": "UNDER_MAINTENANCE"
+    },
+    {
+      "label": "O U T_ O F_ S E R V I C E",
+      "value": "OUT_OF_SERVICE"
+    }
+  ]
+}

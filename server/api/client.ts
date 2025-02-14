@@ -25,8 +25,17 @@ const router = Router();
 router.post("", async (req, res) => {
   try {
     const data = req.body;
+    // Ensure array fields are properly handled
+    const formattedData = {
+      ...data,
+      contactNumber: Array.isArray(data.contactNumber) ? data.contactNumber : [data.contactNumber].filter(Boolean),
+      whatsapp: Array.isArray(data.whatsapp) ? data.whatsapp : [data.whatsapp].filter(Boolean),
+      email: Array.isArray(data.email) ? data.email : [data.email].filter(Boolean),
+      potentialContactNumbers: data.potentialContactNumbers ?? false
+    };
+
     const created = await prisma.client.create({
-      data,
+      data: formattedData,
       include: {
         shafts: true,
         syndicates: true
@@ -44,28 +53,109 @@ router.post("", async (req, res) => {
  *   get:
  *     tags:
  *       - Client
- *     summary: Get all clients
+ *     summary: Get all clients with pagination, search, and filters
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term
+ *       - in: query
+ *         name: searchFields
+ *         schema:
+ *           type: string
+ *           default: "firstName,lastName,email,idNumber,contactNumber"
+ *         description: Comma-separated list of fields to search in
  *     responses:
  *       200:
  *         description: List of clients retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Client'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Client'
+ *                 metadata:
+ *                   type: object
+ *                   properties:
+ *                     totalCount:
+ *                       type: integer
+ *                     currentPage:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     search:
+ *                       type: string
+ *                     searchFields:
+ *                       type: array
+ *                       items:
+ *                         type: string
  *       500:
  *         description: Server error
  */
 router.get("", async (req, res) => {
   try {
-    const clients = await prisma.client.findMany({
-      include: {
-        shafts: true,
-        syndicates: true
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const search = (req.query.search as string) || '';
+    const searchFields = (req.query.searchFields as string || 'firstName,lastName,email,idNumber,contactNumber').split(',');
+
+    const where: any = {};
+
+    if (search) {
+      where.OR = searchFields.map(field => ({
+        [field]: { contains: search, mode: 'insensitive' }
+      }));
+    }
+
+    const [totalCount, clients] = await Promise.all([
+      prisma.client.count({ where }),
+      prisma.client.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          shafts: true,
+          syndicates: true
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      })
+    ]);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      data: clients,
+      metadata: {
+        totalCount,
+        currentPage: page,
+        totalPages,
+        limit,
+        search: search || undefined,
+        searchFields
       }
     });
-    res.json(clients);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to retrieve clients", details: error });
@@ -147,9 +237,18 @@ router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const data = req.body;
+    // Ensure array fields are properly handled
+    const formattedData = {
+      ...data,
+      contactNumber: Array.isArray(data.contactNumber) ? data.contactNumber : [data.contactNumber].filter(Boolean),
+      whatsapp: Array.isArray(data.whatsapp) ? data.whatsapp : [data.whatsapp].filter(Boolean),
+      email: Array.isArray(data.email) ? data.email : [data.email].filter(Boolean),
+      potentialContactNumbers: data.potentialContactNumbers ?? false
+    };
+
     const updated = await prisma.client.update({
       where: { id },
-      data,
+      data: formattedData,
       include: {
         shafts: true,
         syndicates: true

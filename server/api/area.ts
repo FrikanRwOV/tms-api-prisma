@@ -44,28 +44,123 @@ router.post("", async (req, res) => {
  *   get:
  *     tags:
  *       - Area
- *     summary: Get all areas
+ *     summary: Get all areas with pagination, search, and filters
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term
+ *       - in: query
+ *         name: searchFields
+ *         schema:
+ *           type: string
+ *           default: "name,site.name"
+ *         description: Comma-separated list of fields to search in
+ *       - in: query
+ *         name: siteId
+ *         schema:
+ *           type: string
+ *         description: Filter by site ID
  *     responses:
  *       200:
  *         description: List of areas retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Area'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Area'
+ *                 metadata:
+ *                   type: object
+ *                   properties:
+ *                     totalCount:
+ *                       type: integer
+ *                     currentPage:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     search:
+ *                       type: string
+ *                     searchFields:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                     siteId:
+ *                       type: string
  *       500:
  *         description: Server error
  */
 router.get("", async (req, res) => {
   try {
-    const areas = await prisma.area.findMany({
-      include: {
-        site: true,
-        shafts: true
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const search = (req.query.search as string) || '';
+    const searchFields = (req.query.searchFields as string || 'name,site.name').split(',');
+    const siteId = req.query.siteId as string;
+
+    const where: any = {};
+
+    if (siteId) {
+      where.siteId = siteId;
+    }
+
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { site: { name: { contains: search, mode: 'insensitive' } } }
+      ];
+    }
+
+    const [totalCount, areas] = await Promise.all([
+      prisma.area.count({ where }),
+      prisma.area.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          site: true,
+          shafts: true
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      })
+    ]);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      data: areas,
+      metadata: {
+        totalCount,
+        currentPage: page,
+        totalPages,
+        limit,
+        search: search || undefined,
+        searchFields,
+        siteId: siteId || undefined
       }
     });
-    res.json(areas);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to retrieve areas", details: error });

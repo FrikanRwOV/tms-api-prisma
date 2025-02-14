@@ -1,0 +1,39 @@
+{
+  "name": "CapacityUnit",
+  "values": [
+    "TONNES",
+    "METRES_CUBED",
+    "KILOGRAMS",
+    "LITRES",
+    "KVA"
+  ],
+  "lookup": {
+    "TONNES": "TONNES",
+    "METRES_CUBED": "METRES_CUBED",
+    "KILOGRAMS": "KILOGRAMS",
+    "LITRES": "LITRES",
+    "KVA": "KVA"
+  },
+  "options": [
+    {
+      "label": "T O N N E S",
+      "value": "TONNES"
+    },
+    {
+      "label": "M E T R E S_ C U B E D",
+      "value": "METRES_CUBED"
+    },
+    {
+      "label": "K I L O G R A M S",
+      "value": "KILOGRAMS"
+    },
+    {
+      "label": "L I T R E S",
+      "value": "LITRES"
+    },
+    {
+      "label": "K V A",
+      "value": "KVA"
+    }
+  ]
+}
