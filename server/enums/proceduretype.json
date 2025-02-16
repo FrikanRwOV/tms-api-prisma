@@ -2,16 +2,28 @@
   "name": "ProcedureType",
   "values": [
     "STANDARD",
+    "START_OF_DAY",
+    "END_OF_DAY",
     "EXCEPTION"
   ],
   "lookup": {
     "STANDARD": "STANDARD",
+    "START_OF_DAY": "START_OF_DAY",
+    "END_OF_DAY": "END_OF_DAY",
     "EXCEPTION": "EXCEPTION"
   },
   "options": [
     {
       "label": "S T A N D A R D",
       "value": "STANDARD"
+    },
+    {
+      "label": "S T A R T_ O F_ D A Y",
+      "value": "START_OF_DAY"
+    },
+    {
+      "label": "E N D_ O F_ D A Y",
+      "value": "END_OF_DAY"
     },
     {
       "label": "E X C E P T I O N",

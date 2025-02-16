@@ -34,7 +34,28 @@ router.post("", async (req, res) => {
     });
     res.status(201).json(created);
   } catch (error) {
-    res.status(500).json({ error: "Failed to create procedure", details: error });
+    console.error('Error creating procedure:', error);
+    
+    if (error.code === 'P2002') {
+      return res.status(409).json({
+        error: "Unique constraint violation",
+        field: error.meta?.target?.[0],
+        details: error.message
+      });
+    }
+    
+    if (error.name === 'PrismaClientValidationError') {
+      return res.status(400).json({
+        error: "Validation error on prisma schema",
+        details: error.message
+      });
+    }
+
+    res.status(500).json({
+      error: "Failed to create procedure",
+      type: error.name,
+      details: error.message
+    });
   }
 });
 
@@ -264,7 +285,27 @@ router.put("/:id", async (req, res) => {
     });
     res.json(updated);
   } catch (error) {
-    res.status(500).json({ error: "Failed to update procedure", details: error });
+    console.error('Error updating procedure:', error);
+    
+    if (error.code === 'P2025') {
+      return res.status(404).json({
+        error: "Record not found",
+        details: error.message
+      });
+    }
+
+    if (error.name === 'PrismaClientValidationError') {
+      return res.status(400).json({
+        error: "Validation error",
+        details: error.message
+      });
+    }
+
+    res.status(500).json({
+      error: "Failed to update procedure",
+      type: error.name,
+      details: error.message
+    });
   }
 });
 

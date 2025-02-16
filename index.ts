@@ -1,6 +1,7 @@
 import express from "express";
 const serverless = require("serverless-http");
 import cors from "cors";
+import { authenticateToken } from "./server/middleware/auth";
 
 import userRoutes from "./server/api/user";
 import authRoutes from "./server/api/auth";
@@ -14,28 +15,26 @@ import shaftRoutes from "./server/api/shaft";
 import syndicateRoutes from "./server/api/syndicate";
 import exceptionRoutes from "./server/api/exception";
 import uploadRoutes from "./server/api/upload";
-
+import executionRoutes from "./server/api/execution";
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Redirect /docs to static Swagger documentation
-app.get('/docs', (req, res) => {
+// Public routes (no authentication required)
+app.use("/auth", authRoutes);
+app.use("/docs", (req, res) => {
   const stage = process.env.STAGE || "dev";
   const bucketName = process.env.SWAGGER_BUCKET_NAME || "tms-swagger-api-dev";
   res.redirect(
     `https://${bucketName}-${stage}.s3.eu-west-1.amazonaws.com/${stage}/index.html`
   );
 });
-
-// Redirect /interfaces to static TypeScript interfaces
-app.get('/interfaces', (req, res) => {
+app.use("/interfaces", (req, res) => {
   const stage = process.env.STAGE || 'dev';
   const bucketName = process.env.SWAGGER_BUCKET_NAME || "tms-swagger-api-dev";
   res.redirect(`https://${bucketName}-${stage}.s3.eu-west-1.amazonaws.com/typescript-interfaces.ts`);
 });
-
-app.get("/enums", (req, res) => {
+app.use("/enums", (req, res) => {
   const stage = process.env.STAGE || "dev";
   const bucketName = process.env.SWAGGER_BUCKET_NAME || "tms-swagger-api-dev";
   res.redirect(
@@ -43,18 +42,20 @@ app.get("/enums", (req, res) => {
   );
 });
 
-app.use("/auth", authRoutes);
-app.use("/client", clientRoutes);
-app.use("/job", jobRoutes);
-app.use("/procedure", procedureRoutes);
-app.use("/user", userRoutes);
-app.use("/equipment", equipmentRoutes);
-app.use("/site", siteRoutes);
-app.use("/area", areaRoutes);
-app.use("/shaft", shaftRoutes);
-app.use("/syndicate", syndicateRoutes);
-app.use("/exception", exceptionRoutes);
-app.use("/upload", uploadRoutes);
+// Protected routes (authentication required)
+app.use("/client", authenticateToken, clientRoutes);
+app.use("/job", authenticateToken, jobRoutes);
+app.use("/procedure", authenticateToken, procedureRoutes);
+app.use("/execution", authenticateToken, executionRoutes);
+app.use("/user", authenticateToken, userRoutes);
+app.use("/equipment", authenticateToken, equipmentRoutes);
+app.use("/site", authenticateToken, siteRoutes);
+app.use("/area", authenticateToken, areaRoutes);
+app.use("/shaft", authenticateToken, shaftRoutes);
+app.use("/syndicate", authenticateToken, syndicateRoutes);
+app.use("/exception", authenticateToken, exceptionRoutes);
+app.use("/upload", authenticateToken, uploadRoutes);
+
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });

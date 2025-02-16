@@ -351,7 +351,6 @@ router.post("/forgot-password/reset", async (req, res) => {
         type: "PASSWORD_RESET",
       },
     });
-    console.log(verification);
 
     if (!verification) {
       return res.status(400).json({ error: "Invalid or expired reset code" });
@@ -764,8 +763,6 @@ router.post("/mobile/update-password", async (req, res) => {
  *         description: Failed to retrieve user details
  */
 router.get("/mobile/me", async (req, res) => {
-  console.log("mobile me");
-  console.log(req.headers);
   try {
     const token = req.headers["authorization"]?.split(" ")[1];
     if (!token) {
@@ -782,7 +779,6 @@ router.get("/mobile/me", async (req, res) => {
     }
 
     const { password, ...userDetails } = session.user;
-    console.log(userDetails);
     res.json(userDetails);
   } catch (error) {
     await sendDiscordError(error as Error);

@@ -17,13 +17,15 @@ async function authenticateToken(
   res: Response,
   next: NextFunction
 ) {
-  const token = req.headers["authorization"];
+const token = req.headers["authorization"]?.replace("Bearer ", "");
+
 
   if (!token) {
     return res.sendStatus(401);
   }
 
   try {
+  
     const payload = jwt.verify(token, process.env.JWT_SECRET as string) as {
       userId: string;
     };
@@ -40,6 +42,7 @@ async function authenticateToken(
     req.user = session.user;
     next();
   } catch (error) {
+    console.log("**** error **** ", error);
     return res.sendStatus(403);
   }
 }

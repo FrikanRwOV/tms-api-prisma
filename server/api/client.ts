@@ -15,10 +15,56 @@ const router = Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Client'
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               idNumber:
+ *                 type: string
+ *               contactNumber:
+ *                 oneOf:
+ *                   - type: array
+ *                     items:
+ *                       type: string
+ *                   - type: string
+ *               whatsapp:
+ *                 oneOf:
+ *                   - type: array
+ *                     items:
+ *                       type: string
+ *                   - type: string
+ *               email:
+ *                 oneOf:
+ *                   - type: array
+ *                     items:
+ *                       type: string
+ *                   - type: string
+ *               potentialContactNumbers:
+ *                 type: boolean
+ *                 default: false
+ *               shafts:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Array of shaft IDs
+ *               syndicates:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Array of syndicate IDs
  *     responses:
  *       201:
  *         description: Client created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Client'
+ *       401:
+ *         description: Unauthorized - User not found
+ *       409:
+ *         description: Unique constraint violation
  *       500:
  *         description: Server error
  */
@@ -37,11 +83,24 @@ router.post("", async (req, res) => {
       contactNumber: Array.isArray(data.contactNumber) ? data.contactNumber : [data.contactNumber].filter(Boolean),
       whatsapp: Array.isArray(data.whatsapp) ? data.whatsapp : [data.whatsapp].filter(Boolean),
       email: Array.isArray(data.email) ? data.email : [data.email].filter(Boolean),
-      potentialContactNumbers: data.potentialContactNumbers ?? false
+      potentialContactNumbers: data.potentialContactNumbers ?? false,
+      // Remove shafts and syndicates from the main data object
+      shafts: undefined,
+      syndicates: undefined
     };
 
     const created = await prisma.client.create({
-      data: formattedData,
+      data: {
+        ...formattedData,
+        // Create connections to shafts using connect
+        shafts: data.shafts ? {
+          connect: data.shafts.map((id: string) => ({ id }))
+        } : undefined,
+        // Create connections to syndicates using connect
+        syndicates: data.syndicates ? {
+          connect: data.syndicates.map((id: string) => ({ id }))
+        } : undefined
+      },
       include: {
         shafts: true,
         syndicates: true,
@@ -50,7 +109,28 @@ router.post("", async (req, res) => {
     });
     res.status(201).json(created);
   } catch (error) {
-    res.status(500).json({ error: "Failed to create client", details: error });
+    console.error('Error creating client:', error);
+    
+    if (error.code === 'P2002') {
+      return res.status(409).json({
+        error: "Unique constraint violation",
+        field: error.meta?.target?.[0],
+        details: error.message
+      });
+    }
+    
+    if (error.name === 'PrismaClientValidationError') {
+      return res.status(400).json({
+        error: "Validation error on prisma schema",
+        details: error.message
+      });
+    }
+
+    res.status(500).json({
+      error: "Failed to create client",
+      type: error.name,
+      details: error.message
+    });
   }
 });
 
@@ -143,7 +223,6 @@ router.get("/my-clients", async (req, res) => {
         include: {
           shafts: true,
           syndicates: true,
-          createdBy: true
         },
         orderBy: {
           createdAt: 'desc'
@@ -152,7 +231,6 @@ router.get("/my-clients", async (req, res) => {
     ]);
 
     const totalPages = Math.ceil(totalCount / limit);
-
     res.json({
       data: clients,
       metadata: {
@@ -387,12 +465,56 @@ router.get("/:id", async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Client'
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               idNumber:
+ *                 type: string
+ *               contactNumber:
+ *                 oneOf:
+ *                   - type: array
+ *                     items:
+ *                       type: string
+ *                   - type: string
+ *               whatsapp:
+ *                 oneOf:
+ *                   - type: array
+ *                     items:
+ *                       type: string
+ *                   - type: string
+ *               email:
+ *                 oneOf:
+ *                   - type: array
+ *                     items:
+ *                       type: string
+ *                   - type: string
+ *               potentialContactNumbers:
+ *                 type: boolean
+ *                 default: false
+ *               shafts:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Array of shaft IDs to set (replaces existing connections)
+ *               syndicates:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Array of syndicate IDs to set (replaces existing connections)
  *     responses:
  *       200:
  *         description: Client updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Client'
  *       404:
  *         description: Client not found
+ *       400:
+ *         description: Validation error
  *       500:
  *         description: Server error
  */
@@ -400,26 +522,57 @@ router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const data = req.body;
-    // Ensure array fields are properly handled
+    delete data.id;
     const formattedData = {
       ...data,
       contactNumber: Array.isArray(data.contactNumber) ? data.contactNumber : [data.contactNumber].filter(Boolean),
       whatsapp: Array.isArray(data.whatsapp) ? data.whatsapp : [data.whatsapp].filter(Boolean),
       email: Array.isArray(data.email) ? data.email : [data.email].filter(Boolean),
-      potentialContactNumbers: data.potentialContactNumbers ?? false
+      potentialContactNumbers: data.potentialContactNumbers ?? false,
+      shafts: undefined,
+      syndicates: undefined
     };
 
     const updated = await prisma.client.update({
       where: { id },
-      data: formattedData,
+      data: {
+        ...formattedData,
+        shafts: data.shafts ? {
+          set: data.shafts.map((shaftId: string) => ({ id: shaftId.id }))
+        } : undefined,
+        syndicates: data.syndicates ? {
+          set: data.syndicates.map((syndicateId: string) => ({ id: syndicateId.id }))
+        } : undefined
+      },
       include: {
         shafts: true,
-        syndicates: true
+        syndicates: true,
+        createdBy: true
       }
     });
     res.json(updated);
   } catch (error) {
-    res.status(500).json({ error: "Failed to update client", details: error });
+    console.error('Error updating client:', error);
+    
+    if (error.code === 'P2025') {
+      return res.status(404).json({
+        error: "Record not found",
+        details: error.message
+      });
+    }
+
+    if (error.name === 'PrismaClientValidationError') {
+      return res.status(400).json({
+        error: "Validation error",
+        details: error.message
+      });
+    }
+
+    res.status(500).json({
+      error: "Failed to update client",
+      type: error.name,
+      details: error.message
+    });
   }
 });
 

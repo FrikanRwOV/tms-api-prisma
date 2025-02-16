@@ -106,6 +106,8 @@ export const schemas = {
     "type": "string",
     "enum": [
       "STANDARD",
+      "START_OF_DAY",
+      "END_OF_DAY",
       "EXCEPTION"
     ]
   },
@@ -875,6 +877,8 @@ export const schemas = {
         "type": "string",
         "enum": [
           "STANDARD",
+          "START_OF_DAY",
+          "END_OF_DAY",
           "EXCEPTION"
         ]
       },
@@ -922,6 +926,8 @@ export const schemas = {
             "type": "string",
             "enum": [
               "STANDARD",
+              "START_OF_DAY",
+              "END_OF_DAY",
               "EXCEPTION"
             ]
           },

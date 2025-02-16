@@ -366,6 +366,8 @@ enum Permission {
 
 enum ProcedureType {
   STANDARD
+  START_OF_DAY
+  END_OF_DAY
   EXCEPTION
 }
 
