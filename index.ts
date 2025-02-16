@@ -13,6 +13,7 @@ import areaRoutes from "./server/api/area";
 import shaftRoutes from "./server/api/shaft";
 import syndicateRoutes from "./server/api/syndicate";
 import exceptionRoutes from "./server/api/exception";
+import uploadRoutes from "./server/api/upload";
 
 const app = express();
 app.use(cors());
@@ -53,7 +54,7 @@ app.use("/area", areaRoutes);
 app.use("/shaft", shaftRoutes);
 app.use("/syndicate", syndicateRoutes);
 app.use("/exception", exceptionRoutes);
-
+app.use("/upload", uploadRoutes);
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });

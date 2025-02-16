@@ -24,10 +24,16 @@ const router = Router();
  */
 router.post("", async (req, res) => {
   try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized - User not found" });
+    }
+
     const data = req.body;
     // Ensure array fields are properly handled
     const formattedData = {
       ...data,
+      createdById: userId,
       contactNumber: Array.isArray(data.contactNumber) ? data.contactNumber : [data.contactNumber].filter(Boolean),
       whatsapp: Array.isArray(data.whatsapp) ? data.whatsapp : [data.whatsapp].filter(Boolean),
       email: Array.isArray(data.email) ? data.email : [data.email].filter(Boolean),
@@ -38,12 +44,129 @@ router.post("", async (req, res) => {
       data: formattedData,
       include: {
         shafts: true,
-        syndicates: true
+        syndicates: true,
+        createdBy: true
       }
     });
     res.status(201).json(created);
   } catch (error) {
     res.status(500).json({ error: "Failed to create client", details: error });
+  }
+});
+
+/**
+ * @swagger
+ * /client/my-clients:
+ *   get:
+ *     tags:
+ *       - Client
+ *     summary: Get all clients created by the current user
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term
+ *       - in: query
+ *         name: filter
+ *         schema:
+ *           type: string
+ *         description: Filter clients by status (e.g., ACTIVE, INACTIVE)
+ *     responses:
+ *       200:
+ *         description: List of user's clients retrieved successfully
+ *       401:
+ *         description: Unauthorized - User not found
+ *       500:
+ *         description: Server error
+ */
+router.get("/my-clients", async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized - User not found" });
+    }
+
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const search = (req.query.search as string) || '';
+    const filter = req.query.filter as string | undefined;
+
+    const where: any = {
+      createdById: userId
+    };
+
+    // Add status filter if provided
+    if (filter && filter !== 'all') {
+      where.status = filter;
+    }
+
+    // Add search conditions if search term provided
+    if (search) {
+      where.OR = [
+        { firstName: { contains: search, mode: 'insensitive' } },
+        { lastName: { contains: search, mode: 'insensitive' } },
+        { idNumber: { contains: search, mode: 'insensitive' } },
+        {
+          contactNumber: {
+            hasSome: [search]
+          }
+        },
+        {
+          email: {
+            hasSome: [search]
+          }
+        }
+      ];
+    }
+
+    const [totalCount, clients] = await Promise.all([
+      prisma.client.count({ where }),
+      prisma.client.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          shafts: true,
+          syndicates: true,
+          createdBy: true
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      })
+    ]);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      data: clients,
+      metadata: {
+        totalCount,
+        currentPage: page,
+        totalPages,
+        limit,
+        search: search || undefined,
+        filter: filter || undefined
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to retrieve clients", details: error });
   }
 });
 
@@ -330,5 +453,7 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to delete client", details: error });
   }
 });
+
+
 
 export default router; 

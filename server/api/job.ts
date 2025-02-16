@@ -24,9 +24,17 @@ const router = Router();
  */
 router.post("", async (req, res) => {
   try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized - User not found" });
+    }
+
     const data = req.body;
     const created = await prisma.job.create({ 
-      data,
+      data: {
+        ...data,
+        requesterId: userId
+      },
       include: {
         assignedDriver: true,
         requester: true,
@@ -420,6 +428,122 @@ router.post("/:id/comment", async (req, res) => {
     res.status(201).json(comment);
   } catch (error) {
     res.status(500).json({ error: "Failed to add comment", details: error });
+  }
+});
+
+/**
+ * @swagger
+ * /job/requested:
+ *   get:
+ *     tags:
+ *       - Job
+ *     summary: Get jobs where the user is the requester
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [PENDING, PLANNED, BLOCKED, IN_PROGRESS, COMPLETED, CANCELLED]
+ *         description: Filter by job status
+ *     responses:
+ *       200:
+ *         description: List of requested jobs retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Job'
+ *                 metadata:
+ *                   type: object
+ *                   properties:
+ *                     totalCount:
+ *                       type: integer
+ *                     currentPage:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     status:
+ *                       type: string
+ *       401:
+ *         description: Unauthorized - User not found
+ *       500:
+ *         description: Server error
+ */
+router.get("/requested", async (req, res) => {
+  try {
+    const userId = req.user?.id; // Assuming you have user info in request from auth middleware
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized - User not found" });
+    }
+
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    const status = req.query.status as string;
+
+    const where: any = {
+      requesterId: userId
+    };
+
+    if (status) {
+      where.status = status;
+    }
+
+    const [totalCount, jobs] = await Promise.all([
+      prisma.job.count({ where }),
+      prisma.job.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          assignedDriver: true,
+          requester: true,
+          attachments: true,
+          comments: {
+            include: {
+              author: true
+            }
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      })
+    ]);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      data: jobs,
+      metadata: {
+        totalCount,
+        currentPage: page,
+        totalPages,
+        limit,
+        status: status || undefined
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to retrieve requested jobs", details: error });
   }
 });
 

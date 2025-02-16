@@ -38,20 +38,6 @@ provider:
 
 package:
   individually: true
-  patterns:
-    - 'node_modules/.pnpm/sharp@0.33.5/**'
-    - 'node_modules/.pnpm/@prisma+client@6.3.1_prisma@6.3.1/node_modules/.prisma/client/schema.prisma'
-    - 'node_modules/.pnpm/@prisma+client@6.3.1_prisma@6.3.1/node_modules/.prisma/client/libquery_engine-*'
-
-layers:
-  sharp:
-    path: layer/nodejs
-    name: sharp
-    description: Sharp image processing library
-    compatibleArchitectures:
-      - x86_64
-    compatibleRuntimes:
-      - nodejs20.x
     
 custom:
   stage: ${opt:stage, 'dev'}
@@ -72,16 +58,8 @@ functions:
     handler: index.handler
     events:
       - httpApi: "*"
-  fileservice:
-    handler: upload/index.fileservice
-    layers:
-      - !Ref SharpLambdaLayer
-    events:
-      - http:
-          path: /upload
-          method: post
-          cors: true
     package:
       patterns:
-        - 'node_modules/sharp'
-        - 'node_modules/@img'
+        - 'node_modules/.pnpm/@prisma+client@6.0.1_prisma@6.0.1/node_modules/.prisma/client/schema.prisma'
+        - 'node_modules/.pnpm/@prisma+client@6.0.1_prisma@6.0.1/node_modules/.prisma/client/libquery_engine-*'
+

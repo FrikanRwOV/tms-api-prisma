@@ -47,6 +47,8 @@ export interface Client {
   address: string;
   contactNumber: string[];
   whatsapp: string[];
+  createdBy?: User | null;
+  createdById: string | null;
   potentialContactNumbers: boolean;
   email: string[];
   createdAt: Date;
@@ -246,6 +248,7 @@ export interface User {
   requestedJobs?: Job[];
   jobComments?: JobComment[];
   executions?: Execution[];
+  Client?: Client[];
 }
 
 export interface Equipment {

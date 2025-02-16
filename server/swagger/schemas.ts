@@ -1348,6 +1348,13 @@ export const schemas = {
           "$ref": "#/components/schemas/Execution"
         },
         "nullable": true
+      },
+      "Client": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Client"
+        },
+        "nullable": true
       }
     }
   },

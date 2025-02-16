@@ -1,6 +1,6 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { init } from "@paralleldrive/cuid2";
-import sharp from "sharp";
+const { Jimp } = require("jimp");
 const createId = init();
 
 
@@ -20,31 +20,37 @@ const s3Client = new S3Client({
  */
 async function fileservice(event) {
   try {
-    console.log("sharp", event);
-    if (!sharp) {
-      throw new Error('Sharp is not initialized');
-    }
+  
 
-    // check if a request body is present
+    // check if a request body is present and parse JSON
     if (!event.body) {
-      throw "Please provide a binary file!";
+      throw "Please provide a JSON payload!";
     }
 
-    // get the content-type header
-    const contentType =
-      event.headers["Content-Type"] || event.headers["content-type"];
+    let payload;
+    try {
+      payload = JSON.parse(event.body);
+    } catch (e) {
+      throw "Invalid JSON payload!";
+    }
 
-    // get the original file buffer from the request body
-    const originalFileBuffer = Buffer.from(event.body, "base64");
+    if (!payload.type || !payload.body) {
+      throw "Payload must contain 'type' and 'body' fields!";
+    }
 
-    // determine the file mime type and extension
-    const originalFileType = contentType;
+    console.log("payload", payload);  
+
+    // get the file type from payload
+    const originalFileType = payload.type;
+
+    // get the file buffer from base64-encoded body
+    const originalFileBuffer = Buffer.from(payload.body, "base64");
 
     // generate a unique folder id
     const folderId = createId();
 
     // concat folderId with original file name
-    const originalFileName = `${folderId}/original`;
+    const originalFileName = `${folderId}/original.${originalFileType.split("/")[1]}`;
 
     // upload the file to s3
     const { Location: originalLocation } = await upload(
@@ -59,16 +65,17 @@ async function fileservice(event) {
       thumbnail: undefined,
       scaled: undefined,
     };
-
+    console.log("originalFileType", originalFileType);
     // check if file is an image, in order to perform image processing
-    if (originalFileType.split("/")[0] === "image") {
-      // resize the image to 500 x 500 and get the new file buffer
-      const thumbnailFileBuffer = await sharp(originalFileBuffer)
-        .resize(500, 500)
-        .toBuffer();
+    if (originalFileType.split("/")[0] === "image" ) {
+      // Create thumbnail
+      const thumbnailImage = await Jimp.fromBuffer(originalFileBuffer);
+      const thumbnailFileBuffer = await thumbnailImage
+        .resize({ w: 500, h: 500 })
+        .getBuffer(getJimpMimeType(originalFileType));
 
       // concat folderId with thumbnail file name and file extension
-      const thumbnailFileName = `${folderId}/thumbnail`;
+      const thumbnailFileName = `${folderId}/thumbnail.${originalFileType.split("/")[1]}`;
 
       // upload the file to s3
       const { Location: thumbnailLocation } = await upload(
@@ -80,13 +87,14 @@ async function fileservice(event) {
       // add the thumbnail image file url to the response body
       body.thumbnail = thumbnailLocation;
 
-      // resize the image to 1280 x ? and get the new file buffer
-      const scaledFileBuffer = await sharp(originalFileBuffer)
-        .resize(1280)
-        .toBuffer();
+      // Create scaled version
+      const scaledImage = await Jimp.fromBuffer(originalFileBuffer);
+      const scaledFileBuffer = await scaledImage
+        .resize({w: 1280, h: Jimp.AUTO})
+        .getBuffer(getJimpMimeType(originalFileType));
 
       // concat folderId with thumbnail file name and file extension
-      const scaledFileName = `${folderId}/scaled`;
+      const scaledFileName = `${folderId}/scaled.${originalFileType.split("/")[1]}`;
 
       // upload the file to s3
       const { Location: scaledLocation } = await upload(
@@ -108,7 +116,7 @@ async function fileservice(event) {
       body: JSON.stringify(body),
     };
   } catch (error) {
-    console.error('Sharp processing error:', error);
+    console.error('Jimp processing error:', error);
     // catch all errors and return to client with 400 status
     return {
       statusCode: 400,
@@ -138,12 +146,25 @@ async function upload(blobName, buffer, type) {
     Key: blobName,
     Body: buffer,
     ContentType: type,
-    ACL: "public-read",
   };
 
   const command = new PutObjectCommand(params);
   const response = await s3Client.send(command);
   return { Location: `https://${params.Bucket}.s3.amazonaws.com/${params.Key}` };
+}
+
+function getJimpMimeType(mimeType: string) {
+  switch(mimeType.toLowerCase()) {
+    case 'image/jpeg':
+    case 'image/jpg':
+      return Jimp.MIME_JPEG;
+    case 'image/png':
+      return Jimp.MIME_PNG;
+    case 'image/bmp':
+      return Jimp.MIME_BMP;
+    default:
+      return Jimp.MIME_JPEG; // default fallback
+  }
 }
 
 exports.fileservice = fileservice;

@@ -24,18 +24,20 @@ model Area {
 }
 
 model Client {
-  id                      String      @id @default(cuid())
+  id                      String       @id @default(cuid())
   firstName               String
   middleName              String?
   lastName                String
-  idNumber                String      @unique
+  idNumber                String       @unique
   address                 String
   contactNumber           String[]
   whatsapp                String[]
-  potentialContactNumbers Boolean     @default(false)
+  createdBy               User?        @relation(fields: [createdById], references: [id])
+  createdById             String?
+  potentialContactNumbers Boolean      @default(false)
   email                   String[]
-  createdAt               DateTime    @default(now())
-  updatedAt               DateTime    @updatedAt
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt
   shafts                  Shaft[]
   syndicates              Syndicate[]
   Job                     Job[]
@@ -236,10 +238,11 @@ model User {
   requestedJobs   Job[]        @relation("JobToRequester")
   jobComments     JobComment[]
   executions      Execution[]
+  Client          Client[]
 }
 
 model Equipment {
-  id                 String          @id @default(cuid())
+  id                 String            @id @default(cuid())
   description        String?
   category           EquipmentCategory
   make               String?
@@ -248,13 +251,13 @@ model Equipment {
   registrationNumber String?
   capacity           Float?
   capacityUnit       CapacityUnit?
-  type               EquipmentType   @relation(fields: [typeId], references: [id])
+  type               EquipmentType     @relation(fields: [typeId], references: [id])
   typeId             String
-  status             EquipmentStatus @default(AVAILABLE)
+  status             EquipmentStatus   @default(AVAILABLE)
   telematics         Telematics?
   maintenanceRecords Maintenance[]
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @updatedAt
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
 }
 
 enum CapacityUnit {

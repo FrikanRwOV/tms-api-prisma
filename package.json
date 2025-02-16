@@ -57,10 +57,10 @@
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",
     "express": "^4.21.1",
+    "jimp": "^1.6.0",
     "jsonwebtoken": "^9.0.2",
     "mjml": "^4.15.3",
     "serverless-http": "^3.2.0",
-    "sharp": "^0.33.5",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
@@ -68,12 +68,10 @@
     "config": "prisma/seed/seed.config.ts"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "sharp"
-    ],
     "supportedArchitectures": {
       "os": [
-        "linux"
+        "linux",
+        "darwin"
       ],
       "cpu": [
         "x64",
