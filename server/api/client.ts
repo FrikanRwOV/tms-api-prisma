@@ -73,6 +73,11 @@ router.post("", async (req, res) => {
  *           type: string
  *         description: Search term
  *       - in: query
+ *         name: filter
+ *         schema:
+ *           type: string
+ *         description: Filter clients by status (e.g., ACTIVE, INACTIVE)
+ *       - in: query
  *         name: searchFields
  *         schema:
  *           type: string
@@ -117,14 +122,48 @@ router.get("", async (req, res) => {
     const skip = (page - 1) * limit;
 
     const search = (req.query.search as string) || '';
+    const filter = req.query.filter as string | undefined;
     const searchFields = (req.query.searchFields as string || 'firstName,lastName,email,idNumber,contactNumber').split(',');
 
     const where: any = {};
 
+    // Add status filter if provided
+    if (filter && filter !== 'all') {
+      where.status = filter;
+    }
+
     if (search) {
-      where.OR = searchFields.map(field => ({
-        [field]: { contains: search, mode: 'insensitive' }
-      }));
+      where.OR = searchFields.map(field => {
+        // Handle array fields differently
+        if (field === 'contactNumber') {
+          return {
+            contactNumber: {
+              hasSome: [search]
+            }
+          };
+        }
+        if (field === 'email') {
+          return {
+            email: {
+              hasSome: [search]
+            }
+          };
+        }
+        if (field === 'whatsapp') {
+          return {
+            whatsapp: {
+              hasSome: [search]
+            }
+          };
+        }
+        // Handle regular string fields
+        return {
+          [field]: {
+            contains: search,
+            mode: 'insensitive'
+          }
+        };
+      });
     }
 
     const [totalCount, clients] = await Promise.all([
@@ -153,7 +192,8 @@ router.get("", async (req, res) => {
         totalPages,
         limit,
         search: search || undefined,
-        searchFields
+        searchFields,
+        filter: filter || undefined
       }
     });
   } catch (error) {

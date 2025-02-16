@@ -208,48 +208,6 @@
           "maxLength": null
         },
         {
-          "id": "public.Client.createdAt",
-          "name": "createdAt",
-          "columnName": "createdAt",
-          "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.Client.updatedAt",
-          "name": "updatedAt",
-          "columnName": "updatedAt",
-          "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.Client.potentialContactNumbers",
-          "name": "potentialContactNumbers",
-          "columnName": "potentialContactNumbers",
-          "type": "bool",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.Client.contactNumber",
           "name": "contactNumber",
           "columnName": "contactNumber",
@@ -278,11 +236,53 @@
           "maxLength": null
         },
         {
+          "id": "public.Client.potentialContactNumbers",
+          "name": "potentialContactNumbers",
+          "columnName": "potentialContactNumbers",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "id": "public.Client.email",
           "name": "email",
           "columnName": "email",
           "type": "text[]",
           "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -371,11 +371,109 @@
           "maxLength": null
         },
         {
+          "id": "public.Equipment.description",
+          "name": "description",
+          "columnName": "description",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Equipment.category",
+          "name": "category",
+          "columnName": "category",
+          "type": "EquipmentCategory",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Equipment.make",
+          "name": "make",
+          "columnName": "make",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Equipment.model",
+          "name": "model",
+          "columnName": "model",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Equipment.year",
+          "name": "year",
+          "columnName": "year",
+          "type": "int4",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "id": "public.Equipment.registrationNumber",
           "name": "registrationNumber",
           "columnName": "registrationNumber",
           "type": "text",
-          "isRequired": true,
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Equipment.capacity",
+          "name": "capacity",
+          "columnName": "capacity",
+          "type": "float8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Equipment.capacityUnit",
+          "name": "capacityUnit",
+          "columnName": "capacityUnit",
+          "type": "CapacityUnit",
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -492,13 +590,6 @@
           "name": "Equipment_pkey",
           "fields": [
             "id"
-          ],
-          "nullNotDistinct": false
-        },
-        {
-          "name": "Equipment_registrationNumber_key",
-          "fields": [
-            "registrationNumber"
           ],
           "nullNotDistinct": false
         }
@@ -1123,6 +1214,20 @@
           "maxLength": null
         },
         {
+          "id": "public.Job.clientId",
+          "name": "clientId",
+          "columnName": "clientId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "id": "public.Job.pickedUpAt",
           "name": "pickedUpAt",
           "columnName": "pickedUpAt",
@@ -1142,20 +1247,6 @@
           "columnName": "droppedOffAt",
           "type": "timestamp",
           "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.Job.clientId",
-          "name": "clientId",
-          "columnName": "clientId",
-          "type": "text",
-          "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -1549,6 +1640,20 @@
           "maxLength": null
         },
         {
+          "id": "public.Maintenance.equipmentId",
+          "name": "equipmentId",
+          "columnName": "equipmentId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "id": "public.Maintenance.description",
           "name": "description",
           "columnName": "description",
@@ -1623,20 +1728,6 @@
           "name": "updatedAt",
           "columnName": "updatedAt",
           "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.Maintenance.equipmentId",
-          "name": "equipmentId",
-          "columnName": "equipmentId",
-          "type": "text",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -2516,6 +2607,20 @@
           "maxLength": null
         },
         {
+          "id": "public.Telematics.equipmentId",
+          "name": "equipmentId",
+          "columnName": "equipmentId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "id": "public.Telematics.currentLocation",
           "name": "currentLocation",
           "columnName": "currentLocation",
@@ -2604,20 +2709,6 @@
           "name": "updatedAt",
           "columnName": "updatedAt",
           "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.Telematics.equipmentId",
-          "name": "equipmentId",
-          "columnName": "equipmentId",
-          "type": "text",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -3180,6 +3271,64 @@
         }
       ]
     },
+    "CapacityUnit": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "KILOGRAMS"
+        },
+        {
+          "name": "KVA"
+        },
+        {
+          "name": "LITRES"
+        },
+        {
+          "name": "METRES_CUBED"
+        },
+        {
+          "name": "TONNES"
+        }
+      ]
+    },
+    "EquipmentCategory": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "CRANE"
+        },
+        {
+          "name": "CRUSHER"
+        },
+        {
+          "name": "DOZER"
+        },
+        {
+          "name": "EXCAVATOR"
+        },
+        {
+          "name": "GENERATOR"
+        },
+        {
+          "name": "LOADER"
+        },
+        {
+          "name": "MILL"
+        },
+        {
+          "name": "TELEMATICS_DEVICE"
+        },
+        {
+          "name": "TRAILER"
+        },
+        {
+          "name": "VEHICLE"
+        },
+        {
+          "name": "WEIGH_BRIDGE"
+        }
+      ]
+    },
     "EquipmentStatus": {
       "schemaName": "public",
       "values": [
@@ -3188,6 +3337,9 @@
         },
         {
           "name": "IN_TRANSIT"
+        },
+        {
+          "name": "IN_USE"
         },
         {
           "name": "OUT_OF_SERVICE"

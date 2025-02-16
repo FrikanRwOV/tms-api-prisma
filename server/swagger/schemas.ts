@@ -147,6 +147,13 @@ export const schemas = {
       "OUT_OF_SERVICE"
     ]
   },
+  "ClientStatus": {
+    "type": "string",
+    "enum": [
+      "ACTIVE",
+      "INACTIVE"
+    ]
+  },
   "Area": {
     "type": "object",
     "properties": {
@@ -243,6 +250,13 @@ export const schemas = {
           "$ref": "#/components/schemas/Job"
         },
         "nullable": true
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "ACTIVE",
+          "INACTIVE"
+        ]
       }
     }
   },
@@ -453,6 +467,13 @@ export const schemas = {
               "$ref": "#/components/schemas/Job"
             },
             "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
           }
         },
         "nullable": true
@@ -599,6 +620,13 @@ export const schemas = {
                   "$ref": "#/components/schemas/Job"
                 },
                 "nullable": true
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "ACTIVE",
+                  "INACTIVE"
+                ]
               }
             },
             "nullable": true
@@ -763,6 +791,13 @@ export const schemas = {
                   "$ref": "#/components/schemas/Job"
                 },
                 "nullable": true
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "ACTIVE",
+                  "INACTIVE"
+                ]
               }
             },
             "nullable": true
@@ -1140,6 +1175,13 @@ export const schemas = {
               "$ref": "#/components/schemas/Job"
             },
             "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
           }
         },
         "nullable": true

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node index.ts",
-    "dev": "nodemon --exec ts-node index.ts",
+    "dev": "nodemon --watch server --watch libs --ext ts,json --exec ts-node --transpile-only index.ts",
     "deploy": "npx prisma generate && npm run generate:enums && npm run upload-enums && npm run generate:swagger-schemas && npm run generate:swagger && npm run generate:swagger-html && npm run generate:email-templates && npm run upload-interfaces && serverless deploy",
     "generate:swagger-schemas": "ts-node scripts/generate-swagger-schemas.ts",
     "seed": "npx tsx prisma/seed/seed.ts",
@@ -17,7 +17,10 @@
     "upload-enums": "ts-node scripts/upload-enums.ts",
     "arrange-schema": "ts-node scripts/arrange-schema.ts",
     "generate:commit": "ts-node scripts/generate-commit-message.ts",
-    "generate:enums": "ts-node scripts/generateEnumJson.ts"
+    "generate:enums": "ts-node scripts/generateEnumJson.ts",
+    "dev:force": "ts-node --transpile-only index.ts",
+    "build:force": "tsc --noEmitOnError false",
+    "start:force": "ts-node --transpile-only index.ts"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed/seed.ts"
@@ -46,18 +49,36 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^6.0.1",
+    "@types/cors": "^2.8.17",
     "aws-sdk": "^2.1692.0",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dayjs": "^1.11.13",
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
     "mjml": "^4.15.3",
     "serverless-http": "^3.2.0",
+    "sharp": "^0.33.5",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
   "@snaplet/seed": {
     "config": "prisma/seed/seed.config.ts"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp"
+    ],
+    "supportedArchitectures": {
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "x64",
+        "arm64"
+      ]
+    }
   }
 }

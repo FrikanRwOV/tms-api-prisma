@@ -1,5 +1,6 @@
 import express from "express";
 const serverless = require("serverless-http");
+import cors from "cors";
 
 import userRoutes from "./server/api/user";
 import authRoutes from "./server/api/auth";
@@ -14,6 +15,7 @@ import syndicateRoutes from "./server/api/syndicate";
 import exceptionRoutes from "./server/api/exception";
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 // Redirect /docs to static Swagger documentation
@@ -52,8 +54,8 @@ app.use("/shaft", shaftRoutes);
 app.use("/syndicate", syndicateRoutes);
 app.use("/exception", exceptionRoutes);
 
-// app.listen(3000, () => {
-//   console.log("Server is running on port 3000");
-// });
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});
 
 exports.handler = serverless(app);

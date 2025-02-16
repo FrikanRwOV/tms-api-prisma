@@ -584,7 +584,6 @@ router.post("/mobile/forgot-password/reset", async (req, res) => {
     const user = await prisma.user.findUnique({
       where: {
         email,
-        role: "MOBILE_USER",
       },
     });
 
@@ -727,7 +726,7 @@ router.post("/mobile/update-password", async (req, res) => {
 
 /**
  * @swagger
- * /mobile/me:
+ * /auth/mobile/me:
  *   get:
  *     tags:
  *       - Authentication
@@ -765,6 +764,8 @@ router.post("/mobile/update-password", async (req, res) => {
  *         description: Failed to retrieve user details
  */
 router.get("/mobile/me", async (req, res) => {
+  console.log("mobile me");
+  console.log(req.headers);
   try {
     const token = req.headers["authorization"]?.split(" ")[1];
     if (!token) {
@@ -781,6 +782,7 @@ router.get("/mobile/me", async (req, res) => {
     }
 
     const { password, ...userDetails } = session.user;
+    console.log(userDetails);
     res.json(userDetails);
   } catch (error) {
     await sendDiscordError(error as Error);

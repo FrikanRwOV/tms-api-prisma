@@ -20,6 +20,8 @@ provider:
     JWT_SECRET: ${env:JWT_SECRET}
     DATABASE_URL: ${env:DATABASE_URL}
     DEFAULT_FROM_EMAIL: ${env:DEFAULT_FROM_EMAIL}
+    AWS_S3_UPLOAD_BUCKET: ${env:AWS_S3_UPLOAD_BUCKET}
+  
     
   iam:
     role:
@@ -33,10 +35,24 @@ provider:
           Resource:
             - arn:aws:s3:::${self:provider.environment.SWAGGER_BUCKET_NAME}-${self:provider.stage}/*
             - arn:aws:s3:::${self:provider.environment.SWAGGER_BUCKET_NAME}-${self:provider.stage}
+
 package:
+  individually: true
   patterns:
-    - 'node_modules/.pnpm/@prisma+client@6.0.1_prisma@6.0.1/node_modules/.prisma/client/schema.prisma'
-    - 'node_modules/.pnpm/@prisma+client@6.0.1_prisma@6.0.1/node_modules/.prisma/client/libquery_engine-*'
+    - 'node_modules/.pnpm/sharp@0.33.5/**'
+    - 'node_modules/.pnpm/@prisma+client@6.3.1_prisma@6.3.1/node_modules/.prisma/client/schema.prisma'
+    - 'node_modules/.pnpm/@prisma+client@6.3.1_prisma@6.3.1/node_modules/.prisma/client/libquery_engine-*'
+
+layers:
+  sharp:
+    path: layer/nodejs
+    name: sharp
+    description: Sharp image processing library
+    compatibleArchitectures:
+      - x86_64
+    compatibleRuntimes:
+      - nodejs20.x
+    
 custom:
   stage: ${opt:stage, 'dev'}
 
@@ -56,3 +72,16 @@ functions:
     handler: index.handler
     events:
       - httpApi: "*"
+  fileservice:
+    handler: upload/index.fileservice
+    layers:
+      - !Ref SharpLambdaLayer
+    events:
+      - http:
+          path: /upload
+          method: post
+          cors: true
+    package:
+      patterns:
+        - 'node_modules/sharp'
+        - 'node_modules/@img'

@@ -161,6 +161,13 @@
           "OUT_OF_SERVICE"
         ]
       },
+      "ClientStatus": {
+        "type": "string",
+        "enum": [
+          "ACTIVE",
+          "INACTIVE"
+        ]
+      },
       "Area": {
         "type": "object",
         "properties": {
@@ -257,6 +264,13 @@
               "$ref": "#/components/schemas/Job"
             },
             "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
           }
         }
       },
@@ -467,6 +481,13 @@
                   "$ref": "#/components/schemas/Job"
                 },
                 "nullable": true
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "ACTIVE",
+                  "INACTIVE"
+                ]
               }
             },
             "nullable": true
@@ -613,6 +634,13 @@
                       "$ref": "#/components/schemas/Job"
                     },
                     "nullable": true
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "ACTIVE",
+                      "INACTIVE"
+                    ]
                   }
                 },
                 "nullable": true
@@ -777,6 +805,13 @@
                       "$ref": "#/components/schemas/Job"
                     },
                     "nullable": true
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "ACTIVE",
+                      "INACTIVE"
+                    ]
                   }
                 },
                 "nullable": true
@@ -1154,6 +1189,13 @@
                   "$ref": "#/components/schemas/Job"
                 },
                 "nullable": true
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "ACTIVE",
+                  "INACTIVE"
+                ]
               }
             },
             "nullable": true
@@ -2121,7 +2163,7 @@
         }
       }
     },
-    "/mobile/me": {
+    "/auth/mobile/me": {
       "get": {
         "tags": [
           "Authentication"
@@ -2235,6 +2277,14 @@
               "type": "string"
             },
             "description": "Search term"
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter clients by status (e.g., ACTIVE, INACTIVE)"
           },
           {
             "in": "query",

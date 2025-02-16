@@ -39,6 +39,7 @@ model Client {
   shafts                  Shaft[]
   syndicates              Syndicate[]
   Job                     Job[]
+  status                  ClientStatus @default(ACTIVE)
 }
 
 model Exception {
@@ -393,4 +394,9 @@ enum EquipmentStatus {
   IN_USE
   UNDER_MAINTENANCE
   OUT_OF_SERVICE
+}
+
+enum ClientStatus {
+  ACTIVE
+  INACTIVE
 }

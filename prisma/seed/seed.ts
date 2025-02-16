@@ -104,7 +104,7 @@ const main = async () => {
     id: `${i + 1}`,
     name: `Client ${i + 1}`,
     idNumber: `ID-${i + 1}`,
-    email: `client${i + 1}@openvantage.co.za`,
+    email: [`client${i + 1}@openvantage.co.za`],
   }));
 
   await seed.client(clients);

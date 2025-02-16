@@ -1,0 +1,21 @@
+{
+  "name": "ClientStatus",
+  "values": [
+    "ACTIVE",
+    "INACTIVE"
+  ],
+  "lookup": {
+    "ACTIVE": "ACTIVE",
+    "INACTIVE": "INACTIVE"
+  },
+  "options": [
+    {
+      "label": "A C T I V E",
+      "value": "ACTIVE"
+    },
+    {
+      "label": "I N A C T I V E",
+      "value": "INACTIVE"
+    }
+  ]
+}

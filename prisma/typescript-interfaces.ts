@@ -26,6 +26,8 @@ export type SiteClassification = "GREEN" | "ORANGE" | "RED";
 
 export type EquipmentStatus = "AVAILABLE" | "IN_TRANSIT" | "IN_USE" | "UNDER_MAINTENANCE" | "OUT_OF_SERVICE";
 
+export type ClientStatus = "ACTIVE" | "INACTIVE";
+
 export interface Area {
   id: string;
   name: string;
@@ -52,6 +54,7 @@ export interface Client {
   shafts?: Shaft[];
   syndicates?: Syndicate[];
   Job?: Job[];
+  status: ClientStatus;
 }
 
 export interface Exception {

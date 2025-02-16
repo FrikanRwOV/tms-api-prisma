@@ -11,3 +11,4 @@ export { default as QuestionType } from './questiontype.json';
 export { default as Role } from './role.json';
 export { default as SiteClassification } from './siteclassification.json';
 export { default as EquipmentStatus } from './equipmentstatus.json';
+export { default as ClientStatus } from './clientstatus.json';
