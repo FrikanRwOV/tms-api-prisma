@@ -28,6 +28,8 @@ export type EquipmentStatus = "AVAILABLE" | "IN_TRANSIT" | "IN_USE" | "UNDER_MAI
 
 export type ClientStatus = "ACTIVE" | "INACTIVE";
 
+export type PlanStatus = "DRAFT" | "PUBLISHED" | "COMPLETED" | "CANCELLED";
+
 export interface Area {
   id: string;
   name: string;
@@ -85,12 +87,28 @@ export interface Execution {
   updatedAt: Date;
 }
 
+export interface Loadbay {
+  id: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+  jobs?: Job[];
+  latitude: number | null;
+  longitude: number | null;
+  siteId: string;
+  site?: Site;
+}
+
 export interface Job {
   id: string;
   title: string;
   description: string;
+  jobType: JobType;
   priority: JobPriority;
   siteClassification: SiteClassification;
+  loadbay?: Loadbay | null;
+  loadbayId: string | null;
+  estimatedTonnage: number | null;
   status: JobStatus;
   assignedDriver?: User | null;
   assignedDriverId: string | null;
@@ -108,6 +126,7 @@ export interface Job {
   clientId: string;
   pickedUpAt: Date | null;
   droppedOffAt: Date | null;
+  planAssignment?: PlanAssignment[];
 }
 
 export interface JobAttachment {
@@ -189,6 +208,8 @@ export interface Shaft {
   name: string;
   area?: Area;
   areaId: string;
+  latitude: number | null;
+  longitude: number | null;
   createdAt: Date;
   updatedAt: Date;
   client?: Client;
@@ -211,6 +232,7 @@ export interface Site {
   createdAt: Date;
   updatedAt: Date;
   areas?: Area[];
+  Loadbay?: Loadbay[];
 }
 
 export interface Telematics {
@@ -249,6 +271,7 @@ export interface User {
   jobComments?: JobComment[];
   executions?: Execution[];
   Client?: Client[];
+  createdPlans?: DailyPlan[];
 }
 
 export interface Equipment {
@@ -268,6 +291,7 @@ export interface Equipment {
   maintenanceRecords?: Maintenance[];
   createdAt: Date;
   updatedAt: Date;
+  planAssignments?: PlanAssignment[];
 }
 
 export interface EquipmentType {
@@ -286,6 +310,30 @@ export interface VerificationCode {
   expiresAt: Date;
   createdAt: Date;
   type: string | null;
+}
+
+export interface DailyPlan {
+  id: string;
+  date: Date;
+  status: PlanStatus;
+  createdBy?: User;
+  createdById: string;
+  assignments?: PlanAssignment[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface PlanAssignment {
+  id: string;
+  plan?: DailyPlan;
+  planId: string;
+  equipment?: Equipment;
+  equipmentId: string;
+  job?: Job;
+  jobId: string;
+  order: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 type JsonValue = string | number | boolean | { [key in string]?: JsonValue } | Array<JsonValue> | null;

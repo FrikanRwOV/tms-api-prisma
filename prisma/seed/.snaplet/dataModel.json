@@ -292,6 +292,52 @@
           "maxLength": null
         },
         {
+          "id": "public.Client.status",
+          "name": "status",
+          "columnName": "status",
+          "type": "ClientStatus",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.Client.createdById",
+          "name": "createdById",
+          "columnName": "createdById",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "User",
+          "type": "User",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "ClientToUser",
+          "relationFromFields": [
+            "createdById"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "Job",
           "type": "Job",
           "isRequired": false,
@@ -346,6 +392,138 @@
           "name": "Client_idNumber_key",
           "fields": [
             "idNumber"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "DailyPlan": {
+      "id": "public.DailyPlan",
+      "schemaName": "public",
+      "tableName": "DailyPlan",
+      "fields": [
+        {
+          "id": "public.DailyPlan.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.DailyPlan.date",
+          "name": "date",
+          "columnName": "date",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.DailyPlan.status",
+          "name": "status",
+          "columnName": "status",
+          "type": "PlanStatus",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.DailyPlan.createdById",
+          "name": "createdById",
+          "columnName": "createdById",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.DailyPlan.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.DailyPlan.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "User",
+          "type": "User",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "DailyPlanToUser",
+          "relationFromFields": [
+            "createdById"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "PlanAssignment",
+          "type": "PlanAssignment",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "PlanAssignmentToDailyPlan",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "DailyPlan_pkey",
+          "fields": [
+            "id"
           ],
           "nullNotDistinct": false
         }
@@ -562,6 +740,20 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "MaintenanceToEquipment",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "PlanAssignment",
+          "type": "PlanAssignment",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "PlanAssignmentToEquipment",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -1354,6 +1546,20 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false
+        },
+        {
+          "name": "PlanAssignment",
+          "type": "PlanAssignment",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "PlanAssignmentToJob",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         }
       ],
       "uniqueConstraints": [
@@ -1759,6 +1965,174 @@
       "uniqueConstraints": [
         {
           "name": "Maintenance_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "PlanAssignment": {
+      "id": "public.PlanAssignment",
+      "schemaName": "public",
+      "tableName": "PlanAssignment",
+      "fields": [
+        {
+          "id": "public.PlanAssignment.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlanAssignment.planId",
+          "name": "planId",
+          "columnName": "planId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlanAssignment.equipmentId",
+          "name": "equipmentId",
+          "columnName": "equipmentId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlanAssignment.jobId",
+          "name": "jobId",
+          "columnName": "jobId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlanAssignment.order",
+          "name": "order",
+          "columnName": "order",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlanAssignment.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlanAssignment.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "DailyPlan",
+          "type": "DailyPlan",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "PlanAssignmentToDailyPlan",
+          "relationFromFields": [
+            "planId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Equipment",
+          "type": "Equipment",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "PlanAssignmentToEquipment",
+          "relationFromFields": [
+            "equipmentId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Job",
+          "type": "Job",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "PlanAssignmentToJob",
+          "relationFromFields": [
+            "jobId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "PlanAssignment_pkey",
           "fields": [
             "id"
           ],
@@ -2984,6 +3358,34 @@
           "maxLength": null
         },
         {
+          "name": "Client",
+          "type": "Client",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "ClientToUser",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "DailyPlan",
+          "type": "DailyPlan",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "DailyPlanToUser",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "Execution",
           "type": "Execution",
           "isRequired": false,
@@ -3291,6 +3693,17 @@
         }
       ]
     },
+    "ClientStatus": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "ACTIVE"
+        },
+        {
+          "name": "INACTIVE"
+        }
+      ]
+    },
     "EquipmentCategory": {
       "schemaName": "public",
       "values": [
@@ -3500,14 +3913,37 @@
         }
       ]
     },
+    "PlanStatus": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "CANCELLED"
+        },
+        {
+          "name": "COMPLETED"
+        },
+        {
+          "name": "DRAFT"
+        },
+        {
+          "name": "PUBLISHED"
+        }
+      ]
+    },
     "ProcedureType": {
       "schemaName": "public",
       "values": [
+        {
+          "name": "END_OF_DAY"
+        },
         {
           "name": "EXCEPTION"
         },
         {
           "name": "STANDARD"
+        },
+        {
+          "name": "START_OF_DAY"
         }
       ]
     },

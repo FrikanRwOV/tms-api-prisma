@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { prisma } from "../../libs/prisma";
+import { SiteClassification } from "@prisma/client";
 
 const router = Router();
 
@@ -29,12 +30,60 @@ router.post("", async (req, res) => {
       return res.status(401).json({ error: "Unauthorized - User not found" });
     }
 
-    const data = req.body;
-    const created = await prisma.job.create({ 
-      data: {
-        ...data,
-        requesterId: userId
+    const mobileData = req.body;
+    console.log(mobileData);
+    // Validate shaft exists
+    if (!mobileData.shaft) {
+      return res.status(400).json({ error: "Shaft ID is required" });
+    }
+
+    const shaft = await prisma.shaft.findUnique({
+      where: { id: String(mobileData.shaft) }
+    });
+    console.log(shaft);
+    if (!shaft) {
+      return res.status(404).json({ 
+        error: "Shaft not found",
+        details: `No shaft exists with ID: ${mobileData.shaft}`
+      });
+    }
+
+    // Transform mobile data format to match Prisma schema
+    const data = {
+      title: `${mobileData.jobType} - ${mobileData.loadBay || 'No Load Bay'}`,
+      description: mobileData.notes || "No description provided",
+      requester: {
+        connect: {
+          id: String(userId)
+        }
       },
+      priority: "MEDIUM",
+      status: "PENDING",
+      siteClassification: SiteClassification.GREEN,
+      jobType: mobileData.jobType,
+      estimatedTonnage: parseFloat(mobileData.estimatedTonnage) || 0,
+      loadBay: mobileData.loadBay,
+      preferredCollectionTime: mobileData.preferredCollectionTime,
+      shaft: {
+        connect: {
+          id: String(mobileData.shaft)
+        }
+      },
+      client: {
+        connect: {
+          id: String(mobileData.client)
+        }
+      },
+      attachments: {
+        create: mobileData.attachments?.map(att => ({
+          url: att.url,
+          key: att.key
+        })) || []
+      }
+    };
+
+    const created = await prisma.job.create({
+      data,
       include: {
         assignedDriver: true,
         requester: true,
@@ -48,7 +97,28 @@ router.post("", async (req, res) => {
     });
     res.status(201).json(created);
   } catch (error) {
-    res.status(500).json({ error: "Failed to create job", details: error });
+    console.error('Error creating job:', error);
+    
+    if (error.code === 'P2002') {
+      return res.status(409).json({
+        error: "Unique constraint violation",
+        field: error.meta?.target?.[0],
+        details: error.message
+      });
+    }
+    
+    if (error.name === 'PrismaClientValidationError') {
+      return res.status(400).json({
+        error: "Validation error on prisma schema",
+        details: error.message
+      });
+    }
+
+    res.status(500).json({
+      error: "Failed to create job",
+      type: error.name,
+      details: error.message
+    });
   }
 });
 
@@ -337,7 +407,27 @@ router.put("/:id", async (req, res) => {
     });
     res.json(updated);
   } catch (error) {
-    res.status(500).json({ error: "Failed to update job", details: error });
+    console.error('Error updating job:', error);
+    
+    if (error.code === 'P2025') {
+      return res.status(404).json({
+        error: "Record not found",
+        details: error.message
+      });
+    }
+
+    if (error.name === 'PrismaClientValidationError') {
+      return res.status(400).json({
+        error: "Validation error",
+        details: error.message
+      });
+    }
+
+    res.status(500).json({
+      error: "Failed to update job",
+      type: error.name,
+      details: error.message
+    });
   }
 });
 
@@ -368,7 +458,20 @@ router.delete("/:id", async (req, res) => {
     await prisma.job.delete({ where: { id } });
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete job", details: error });
+    console.error('Error deleting job:', error);
+    
+    if (error.code === 'P2025') {
+      return res.status(404).json({
+        error: "Record not found",
+        details: error.message
+      });
+    }
+
+    res.status(500).json({
+      error: "Failed to delete job",
+      type: error.name,
+      details: error.message
+    });
   }
 });
 
@@ -427,7 +530,28 @@ router.post("/:id/comment", async (req, res) => {
     
     res.status(201).json(comment);
   } catch (error) {
-    res.status(500).json({ error: "Failed to add comment", details: error });
+    console.error('Error adding comment:', error);
+    
+    if (error.code === 'P2002') {
+      return res.status(409).json({
+        error: "Unique constraint violation",
+        field: error.meta?.target?.[0],
+        details: error.message
+      });
+    }
+    
+    if (error.name === 'PrismaClientValidationError') {
+      return res.status(400).json({
+        error: "Validation error",
+        details: error.message
+      });
+    }
+
+    res.status(500).json({
+      error: "Failed to add comment",
+      type: error.name,
+      details: error.message
+    });
   }
 });
 

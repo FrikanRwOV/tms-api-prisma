@@ -170,6 +170,15 @@
           "INACTIVE"
         ]
       },
+      "PlanStatus": {
+        "type": "string",
+        "enum": [
+          "DRAFT",
+          "PUBLISHED",
+          "COMPLETED",
+          "CANCELLED"
+        ]
+      },
       "Area": {
         "type": "object",
         "properties": {
@@ -496,6 +505,13 @@
           },
           "clientId": {
             "type": "string"
+          },
+          "planAssignment": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlanAssignment"
+            },
+            "nullable": true
           }
         }
       },
@@ -649,6 +665,13 @@
               },
               "clientId": {
                 "type": "string"
+              },
+              "planAssignment": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PlanAssignment"
+                },
+                "nullable": true
               }
             },
             "nullable": true
@@ -820,6 +843,13 @@
               },
               "clientId": {
                 "type": "string"
+              },
+              "planAssignment": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PlanAssignment"
+                },
+                "nullable": true
               }
             },
             "nullable": true
@@ -1382,6 +1412,13 @@
             },
             "nullable": true
           },
+          "createdPlans": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DailyPlan"
+            },
+            "nullable": true
+          },
           "middleName": {
             "type": "string"
           },
@@ -1459,6 +1496,13 @@
           },
           "updatedAt": {
             "$ref": "#/components/schemas/Date"
+          },
+          "planAssignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlanAssignment"
+            },
+            "nullable": true
           }
         }
       },
@@ -1502,6 +1546,502 @@
             "$ref": "#/components/schemas/Date"
           },
           "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          }
+        }
+      },
+      "DailyPlan": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "date": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "PUBLISHED",
+              "COMPLETED",
+              "CANCELLED"
+            ]
+          },
+          "createdBy": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string",
+                "enum": [
+                  "ADMINISTRATOR",
+                  "TRANSPORT_MANAGER",
+                  "AGENT",
+                  "DRIVER",
+                  "CLIENT_MANAGER",
+                  "WORKSHOP_MANAGER"
+                ]
+              },
+              "sessions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Session"
+                },
+                "nullable": true
+              },
+              "permissions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Permission"
+                }
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "assignedJobs": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Job"
+                },
+                "nullable": true
+              },
+              "requestedJobs": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Job"
+                },
+                "nullable": true
+              },
+              "jobComments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/JobComment"
+                },
+                "nullable": true
+              },
+              "executions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Execution"
+                },
+                "nullable": true
+              },
+              "Client": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Client"
+                },
+                "nullable": true
+              },
+              "createdPlans": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DailyPlan"
+                },
+                "nullable": true
+              }
+            },
+            "nullable": true
+          },
+          "createdById": {
+            "type": "string"
+          },
+          "assignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlanAssignment"
+            },
+            "nullable": true
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Date"
+          }
+        }
+      },
+      "PlanAssignment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "plan": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "date": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "DRAFT",
+                  "PUBLISHED",
+                  "COMPLETED",
+                  "CANCELLED"
+                ]
+              },
+              "createdBy": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": [
+                      "ADMINISTRATOR",
+                      "TRANSPORT_MANAGER",
+                      "AGENT",
+                      "DRIVER",
+                      "CLIENT_MANAGER",
+                      "WORKSHOP_MANAGER"
+                    ]
+                  },
+                  "sessions": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Session"
+                    },
+                    "nullable": true
+                  },
+                  "permissions": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Permission"
+                    }
+                  },
+                  "createdAt": {
+                    "$ref": "#/components/schemas/Date"
+                  },
+                  "updatedAt": {
+                    "$ref": "#/components/schemas/Date"
+                  },
+                  "assignedJobs": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Job"
+                    },
+                    "nullable": true
+                  },
+                  "requestedJobs": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Job"
+                    },
+                    "nullable": true
+                  },
+                  "jobComments": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/JobComment"
+                    },
+                    "nullable": true
+                  },
+                  "executions": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Execution"
+                    },
+                    "nullable": true
+                  },
+                  "Client": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Client"
+                    },
+                    "nullable": true
+                  },
+                  "createdPlans": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DailyPlan"
+                    },
+                    "nullable": true
+                  }
+                },
+                "nullable": true
+              },
+              "createdById": {
+                "type": "string"
+              },
+              "assignments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PlanAssignment"
+                },
+                "nullable": true
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/Date"
+              }
+            },
+            "nullable": true
+          },
+          "planId": {
+            "type": "string"
+          },
+          "equipment": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string",
+                "enum": [
+                  "TRAILER",
+                  "CRANE",
+                  "EXCAVATOR",
+                  "DOZER",
+                  "WEIGH_BRIDGE",
+                  "TELEMATICS_DEVICE",
+                  "VEHICLE",
+                  "CRUSHER",
+                  "MILL",
+                  "LOADER",
+                  "GENERATOR"
+                ]
+              },
+              "type": {
+                "$ref": "#/components/schemas/EquipmentType",
+                "nullable": true
+              },
+              "typeId": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "AVAILABLE",
+                  "IN_TRANSIT",
+                  "IN_USE",
+                  "UNDER_MAINTENANCE",
+                  "OUT_OF_SERVICE"
+                ]
+              },
+              "maintenanceRecords": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Maintenance"
+                },
+                "nullable": true
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "planAssignments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PlanAssignment"
+                },
+                "nullable": true
+              }
+            },
+            "nullable": true
+          },
+          "equipmentId": {
+            "type": "string"
+          },
+          "job": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "priority": {
+                "type": "string",
+                "enum": [
+                  "HIGH",
+                  "MEDIUM",
+                  "LOW"
+                ]
+              },
+              "siteClassification": {
+                "type": "string",
+                "enum": [
+                  "GREEN",
+                  "ORANGE",
+                  "RED"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "PENDING",
+                  "PLANNED",
+                  "BLOCKED",
+                  "IN_PROGRESS",
+                  "COMPLETED",
+                  "CANCELLED"
+                ]
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/JobAttachment"
+                },
+                "nullable": true
+              },
+              "comments": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/JobComment"
+                },
+                "nullable": true
+              },
+              "createdAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "updatedAt": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "shaft": {
+                "$ref": "#/components/schemas/Shaft",
+                "nullable": true
+              },
+              "shaftId": {
+                "type": "string"
+              },
+              "client": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "idNumber": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "contactNumber": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "whatsapp": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "potentialContactNumbers": {
+                    "type": "boolean"
+                  },
+                  "email": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "createdAt": {
+                    "$ref": "#/components/schemas/Date"
+                  },
+                  "updatedAt": {
+                    "$ref": "#/components/schemas/Date"
+                  },
+                  "shafts": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Shaft"
+                    },
+                    "nullable": true
+                  },
+                  "syndicates": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Syndicate"
+                    },
+                    "nullable": true
+                  },
+                  "Job": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Job"
+                    },
+                    "nullable": true
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "ACTIVE",
+                      "INACTIVE"
+                    ]
+                  }
+                },
+                "nullable": true
+              },
+              "clientId": {
+                "type": "string"
+              },
+              "planAssignment": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PlanAssignment"
+                },
+                "nullable": true
+              }
+            },
+            "nullable": true
+          },
+          "jobId": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "updatedAt": {
             "$ref": "#/components/schemas/Date"
           }
         }
@@ -3668,6 +4208,166 @@
           },
           "401": {
             "description": "Unauthorized - User not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/plan": {
+      "post": {
+        "tags": [
+          "Plan"
+        ],
+        "summary": "Create a new daily plan",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "date"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Plan created successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/plan/{id}/assignments": {
+      "post": {
+        "tags": [
+          "Plan"
+        ],
+        "summary": "Add assignments to a plan",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "assignments"
+                ],
+                "properties": {
+                  "assignments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "equipmentId",
+                        "jobId",
+                        "order"
+                      ],
+                      "properties": {
+                        "equipmentId": {
+                          "type": "string"
+                        },
+                        "jobId": {
+                          "type": "string"
+                        },
+                        "order": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Assignments added successfully"
+          },
+          "404": {
+            "description": "Plan not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/plan/{id}/publish": {
+      "post": {
+        "tags": [
+          "Plan"
+        ],
+        "summary": "Publish a daily plan",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plan published successfully"
+          },
+          "404": {
+            "description": "Plan not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/plan/date/{date}": {
+      "get": {
+        "tags": [
+          "Plan"
+        ],
+        "summary": "Get plans for a specific date",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "date",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plans retrieved successfully"
           },
           "500": {
             "description": "Server error"

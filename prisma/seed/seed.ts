@@ -123,6 +123,7 @@ const main = async () => {
     id: `${i + 1}`,
     registrationNumber: `REG-${i + 1}`,
     typeId: `${Math.floor(Math.random() * 20) + 1}`,
+    capacity: Number((Math.random() * 1000 + 1).toFixed(2)),
   }));
   await seed.equipment(equipment);
 
@@ -143,6 +144,45 @@ const main = async () => {
     clientID: `${Math.floor(Math.random() * 5) + 1}`,
   }));
   await seed.shaft(shafts);
+
+  const jobs = Array.from({ length: 10 }, (_, i) => ({
+    id: `${i + 1}`,
+    title: [
+      "Transport Mining Equipment to Site A",
+      "Emergency Ore Collection from Shaft 3",
+      "Sand Delivery to Processing Plant",
+      "Equipment Relocation Between Sites",
+      "Urgent Material Transport to Main Mine",
+      "Weekly Ore Collection Route",
+      "Heavy Machinery Transport",
+      "Site Cleanup Equipment Delivery",
+      "Mining Supply Chain Transport",
+      "Emergency Equipment Recovery"
+    ][i],
+    description: [
+      "Pickup",
+      "Urgent collection of extracted ore from Shaft 3 for immediate processing",
+      "Regular sand delivery to main processing plant for ongoing operations",
+      "Relocate drilling equipment between Site B and Site C",
+      "Critical material transport needed for main mine operations",
+      "Standard weekly ore collection from designated collection points",
+      "Transport of excavator and support equipment to new mining area",
+      "Delivery of cleanup equipment for environmental maintenance",
+      "Regular transport of mining supplies to various shaft locations",
+      "Emergency recovery of broken-down equipment from remote site"
+    ][i],
+    priority: ["HIGH", "MEDIUM", "LOW"][Math.floor(Math.random() * 3)],
+    siteClassification: ["GREEN", "ORANGE", "RED"][Math.floor(Math.random() * 3)],
+    status: ["PENDING", "PLANNED", "IN_PROGRESS", "COMPLETED"][Math.floor(Math.random() * 4)],
+    location: `Site ${String.fromCharCode(65 + Math.floor(Math.random() * 5))}`,
+    shaftId: `${Math.floor(Math.random() * 5) + 1}`,
+    clientId: `${Math.floor(Math.random() * 50) + 1}`,
+    requesterId: `${Math.floor(Math.random() * 5) + 1}`,
+    assignedDriverId: null, // 50% chance of being assigned to our driver
+    createdAt: new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000), // Random date within last 30 days
+  }));
+
+  await seed.job(jobs);
 
   console.log("Database seeded successfully!");
 

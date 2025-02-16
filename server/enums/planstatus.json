@@ -1,0 +1,33 @@
+{
+  "name": "PlanStatus",
+  "values": [
+    "DRAFT",
+    "PUBLISHED",
+    "COMPLETED",
+    "CANCELLED"
+  ],
+  "lookup": {
+    "DRAFT": "DRAFT",
+    "PUBLISHED": "PUBLISHED",
+    "COMPLETED": "COMPLETED",
+    "CANCELLED": "CANCELLED"
+  },
+  "options": [
+    {
+      "label": "D R A F T",
+      "value": "DRAFT"
+    },
+    {
+      "label": "P U B L I S H E D",
+      "value": "PUBLISHED"
+    },
+    {
+      "label": "C O M P L E T E D",
+      "value": "COMPLETED"
+    },
+    {
+      "label": "C A N C E L L E D",
+      "value": "CANCELLED"
+    }
+  ]
+}

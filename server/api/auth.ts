@@ -786,4 +786,58 @@ router.get("/mobile/me", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /auth/me:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Get current web user details
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User details retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *                 role:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Failed to retrieve user details
+ */
+router.get("/me", async (req, res) => {
+  try {
+    const token = req.headers["authorization"]?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const session = await prisma.session.findUnique({
+      where: { token },
+      include: { user: true },
+    });
+
+    if (!session || !session.user || session.expiresAt < new Date()) {
+      return res.status(401).json({ error: "Invalid or expired session" });
+    }
+
+    const { password, ...userDetails } = session.user;
+    res.json(userDetails);
+  } catch (error) {
+    await sendDiscordError(error as Error);
+    res.status(500).json({ error: "Failed to retrieve user details" });
+  }
+});
+
 export default router;

@@ -70,12 +70,28 @@ model Execution {
   updatedAt   DateTime        @updatedAt
 }
 
+model Loadbay {
+  id          String   @id @default(cuid())
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  jobs        Job[]
+  latitude    Float?
+  longitude   Float?
+  siteId      String
+  site        Site     @relation(fields: [siteId], references: [id])
+}
+
 model Job {
   id                 String             @id @default(cuid())
   title              String
   description        String
+  jobType            JobType            @default(COLLECT_INTERNAL_SANDS)
   priority           JobPriority
   siteClassification SiteClassification
+  loadbay            Loadbay?           @relation(fields: [loadbayId], references: [id])
+  loadbayId          String?
+  estimatedTonnage   Float?
   status             JobStatus          @default(PENDING)
   assignedDriver     User?              @relation("JobToDriver", fields: [assignedDriverId], references: [id])
   assignedDriverId   String?
@@ -95,6 +111,8 @@ model Job {
 
   pickedUpAt   DateTime?
   droppedOffAt DateTime?
+
+  planAssignment PlanAssignment[]
 }
 
 model JobAttachment {
@@ -176,6 +194,8 @@ model Shaft {
   name      String
   area      Area     @relation(fields: [areaId], references: [id])
   areaId    String
+  latitude  Float?
+  longitude Float?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -194,12 +214,13 @@ model Syndicate {
 }
 
 model Site {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   name      String
   address   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   areas     Area[]
+  Loadbay   Loadbay[]
 }
 
 model Telematics {
@@ -239,6 +260,7 @@ model User {
   jobComments     JobComment[]
   executions      Execution[]
   Client          Client[]
+  createdPlans    DailyPlan[]  @relation("PlanCreator")
 }
 
 model Equipment {
@@ -258,6 +280,7 @@ model Equipment {
   maintenanceRecords Maintenance[]
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
+  planAssignments    PlanAssignment[]
 }
 
 enum CapacityUnit {
@@ -404,4 +427,35 @@ enum EquipmentStatus {
 enum ClientStatus {
   ACTIVE
   INACTIVE
+}
+
+model DailyPlan {
+  id          String           @id @default(cuid())
+  date        DateTime
+  status      PlanStatus       @default(DRAFT)
+  createdBy   User             @relation("PlanCreator", fields: [createdById], references: [id])
+  createdById String
+  assignments PlanAssignment[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model PlanAssignment {
+  id          String    @id @default(cuid())
+  plan        DailyPlan @relation(fields: [planId], references: [id])
+  planId      String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId String
+  job         Job       @relation(fields: [jobId], references: [id])
+  jobId       String
+  order       Int // For sequencing jobs for a vehicle
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum PlanStatus {
+  DRAFT
+  PUBLISHED
+  COMPLETED
+  CANCELLED
 }

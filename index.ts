@@ -16,6 +16,7 @@ import syndicateRoutes from "./server/api/syndicate";
 import exceptionRoutes from "./server/api/exception";
 import uploadRoutes from "./server/api/upload";
 import executionRoutes from "./server/api/execution";
+import planRoutes from "./server/api/plan";
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -55,6 +56,7 @@ app.use("/shaft", authenticateToken, shaftRoutes);
 app.use("/syndicate", authenticateToken, syndicateRoutes);
 app.use("/exception", authenticateToken, exceptionRoutes);
 app.use("/upload", authenticateToken, uploadRoutes);
+app.use("/plan", authenticateToken, planRoutes);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
