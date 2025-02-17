@@ -238,4 +238,174 @@ router.get("/date/:date", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /plan:
+ *   get:
+ *     tags:
+ *       - Plan
+ *     summary: Get all plans with pagination and filters
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [DRAFT, PUBLISHED, COMPLETED, CANCELLED]
+ *         description: Filter by plan status
+ *       - in: query
+ *         name: createdById
+ *         schema:
+ *           type: string
+ *         description: Filter by creator
+ *     responses:
+ *       200:
+ *         description: List of plans retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/DailyPlan'
+ *                 metadata:
+ *                   type: object
+ *                   properties:
+ *                     totalCount:
+ *                       type: integer
+ *                     currentPage:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     status:
+ *                       type: string
+ *                     createdById:
+ *                       type: string
+ *       500:
+ *         description: Server error
+ */
+router.get("", async (req, res) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    const status = req.query.status as string;
+    const createdById = req.query.createdById as string;
+
+    const where: any = {};
+
+    if (status) {
+      where.status = status;
+    }
+
+    if (createdById) {
+      where.createdById = createdById;
+    }
+
+    const [totalCount, plans] = await Promise.all([
+      prisma.dailyPlan.count({ where }),
+      prisma.dailyPlan.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          assignments: {
+            include: {
+              equipment: true,
+              job: true,
+            }
+          },
+          createdBy: true
+        },
+        orderBy: {
+          date: 'desc'
+        }
+      })
+    ]);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      data: plans,
+      metadata: {
+        totalCount,
+        currentPage: page,
+        totalPages,
+        limit,
+        status: status || undefined,
+        createdById: createdById || undefined
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to retrieve plans", details: error });
+  }
+});
+
+/**
+ * @swagger
+ * /plan/{id}:
+ *   get:
+ *     tags:
+ *       - Plan
+ *     summary: Get a plan by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Plan found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/DailyPlan'
+ *       404:
+ *         description: Plan not found
+ *       500:
+ *         description: Server error
+ */
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const plan = await prisma.dailyPlan.findUnique({
+      where: { id },
+      include: {
+        assignments: {
+          include: {
+            equipment: true,
+            job: true,
+          }
+        },
+        createdBy: true
+      }
+    });
+
+    if (!plan) {
+      return res.status(404).json({ error: "Plan not found" });
+    }
+
+    res.json(plan);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve plan", details: error });
+  }
+});
+
 export default router; 

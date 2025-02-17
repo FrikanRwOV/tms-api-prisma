@@ -105,7 +105,7 @@ model Job {
   updatedAt          DateTime           @updatedAt
   shaft              Shaft              @relation(fields: [shaftId], references: [id])
   shaftId            String
-
+  preferredCollectionTime String?
   client   Client @relation(fields: [clientId], references: [id])
   clientId String
 
@@ -396,9 +396,14 @@ enum ProcedureType {
 
 enum QuestionType {
   TEXT
+  TEXT_AREA
   BOOLEAN
-  CHOICE
-  FILE_UPLOAD
+  RADIO
+  RADIO_GROUP
+  IMAGE_PICKER
+  SIGNATURE
+  DATE_PICKER
+  DATE_TIME_PICKER
 }
 
 enum Role {

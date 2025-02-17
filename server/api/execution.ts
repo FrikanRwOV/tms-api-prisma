@@ -25,17 +25,71 @@ const router = Router();
 router.post("", async (req, res) => {
   try {
     const data = req.body;
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized - User not found" });
+    }
+  
+    // First check if the procedure exists
+    const procedureExists = await prisma.procedure.findUnique({
+      where: { id: data.procedureId },
+    });
+   
+    if (!procedureExists) {
+      console.log("Procedure not found");
+      return res.status(404).json({
+        error: "Procedure not found",
+        details: `No procedure found with ID: ${data.procedureId}`,
+      });
+    }
+
+    const inputData = {
+      procedure: {
+        connect: {
+          id: data.procedureId,
+        },
+      },
+      status: 'COMPLETED',
+      responses: data.responses,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    };
+
     const created = await prisma.execution.create({
-      data,
+      data: inputData,
       include: {
         procedure: true,
         user: true,
-        exceptions: true
-      }
+        exceptions: true,
+      },
     });
     res.status(201).json(created);
   } catch (error) {
-    res.status(500).json({ error: "Failed to create execution", details: error });
+    console.error("Error creating execution:", error);
+
+    if (error.code === "P2002") {
+      return res.status(409).json({
+        error: "Unique constraint violation",
+        field: error.meta?.target?.[0],
+        details: error.message,
+      });
+    }
+
+    if (error.name === "PrismaClientValidationError") {
+      return res.status(400).json({
+        error: "Validation error",
+        details: error.message,
+      });
+    }
+
+    res.status(500).json({
+      error: "Failed to create execution",
+      type: error.name,
+      details: error.message,
+    });
   }
 });
 
@@ -138,12 +192,12 @@ router.get("", async (req, res) => {
         include: {
           procedure: true,
           user: true,
-          exceptions: true
+          exceptions: true,
         },
         orderBy: {
-          startTime: 'desc'
-        }
-      })
+          startTime: "desc",
+        },
+      }),
     ]);
 
     const totalPages = Math.ceil(totalCount / limit);
@@ -157,12 +211,14 @@ router.get("", async (req, res) => {
         limit,
         status: status || undefined,
         userId: userId || undefined,
-        procedureId: procedureId || undefined
-      }
+        procedureId: procedureId || undefined,
+      },
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to retrieve executions", details: error });
+    res
+      .status(500)
+      .json({ error: "Failed to retrieve executions", details: error });
   }
 });
 
@@ -199,17 +255,19 @@ router.get("/:id", async (req, res) => {
       include: {
         procedure: true,
         user: true,
-        exceptions: true
-      }
+        exceptions: true,
+      },
     });
-    
+
     if (!execution) {
       return res.status(404).json({ error: "Execution not found" });
     }
-    
+
     res.json(execution);
   } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve execution", details: error });
+    res
+      .status(500)
+      .json({ error: "Failed to retrieve execution", details: error });
   }
 });
 
@@ -244,21 +302,41 @@ router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const data = req.body;
-    
+
     const updated = await prisma.execution.update({
       where: { id },
       data,
       include: {
         procedure: true,
         user: true,
-        exceptions: true
-      }
+        exceptions: true,
+      },
     });
-    
+
     res.json(updated);
   } catch (error) {
-    res.status(500).json({ error: "Failed to update execution", details: error });
+    console.error("Error updating execution:", error);
+
+    if (error.code === "P2025") {
+      return res.status(404).json({
+        error: "Record not found",
+        details: error.message,
+      });
+    }
+
+    if (error.name === "PrismaClientValidationError") {
+      return res.status(400).json({
+        error: "Validation error",
+        details: error.message,
+      });
+    }
+
+    res.status(500).json({
+      error: "Failed to update execution",
+      type: error.name,
+      details: error.message,
+    });
   }
 });
 
-export default router; 
+export default router;

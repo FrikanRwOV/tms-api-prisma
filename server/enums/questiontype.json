@@ -2,15 +2,25 @@
   "name": "QuestionType",
   "values": [
     "TEXT",
+    "TEXT_AREA",
     "BOOLEAN",
-    "CHOICE",
-    "FILE_UPLOAD"
+    "RADIO",
+    "RADIO_GROUP",
+    "IMAGE_PICKER",
+    "SIGNATURE",
+    "DATE_PICKER",
+    "DATE_TIME_PICKER"
   ],
   "lookup": {
     "TEXT": "TEXT",
+    "TEXT_AREA": "TEXT_AREA",
     "BOOLEAN": "BOOLEAN",
-    "CHOICE": "CHOICE",
-    "FILE_UPLOAD": "FILE_UPLOAD"
+    "RADIO": "RADIO",
+    "RADIO_GROUP": "RADIO_GROUP",
+    "IMAGE_PICKER": "IMAGE_PICKER",
+    "SIGNATURE": "SIGNATURE",
+    "DATE_PICKER": "DATE_PICKER",
+    "DATE_TIME_PICKER": "DATE_TIME_PICKER"
   },
   "options": [
     {
@@ -18,16 +28,36 @@
       "value": "TEXT"
     },
     {
+      "label": "T E X T_ A R E A",
+      "value": "TEXT_AREA"
+    },
+    {
       "label": "B O O L E A N",
       "value": "BOOLEAN"
     },
     {
-      "label": "C H O I C E",
-      "value": "CHOICE"
+      "label": "R A D I O",
+      "value": "RADIO"
     },
     {
-      "label": "F I L E_ U P L O A D",
-      "value": "FILE_UPLOAD"
+      "label": "R A D I O_ G R O U P",
+      "value": "RADIO_GROUP"
+    },
+    {
+      "label": "I M A G E_ P I C K E R",
+      "value": "IMAGE_PICKER"
+    },
+    {
+      "label": "S I G N A T U R E",
+      "value": "SIGNATURE"
+    },
+    {
+      "label": "D A T E_ P I C K E R",
+      "value": "DATE_PICKER"
+    },
+    {
+      "label": "D A T E_ T I M E_ P I C K E R",
+      "value": "DATE_TIME_PICKER"
     }
   ]
 }

@@ -18,7 +18,7 @@ export type Permission = "CREATE_USER" | "READ_USER" | "UPDATE_USER" | "DELETE_U
 
 export type ProcedureType = "STANDARD" | "START_OF_DAY" | "END_OF_DAY" | "EXCEPTION";
 
-export type QuestionType = "TEXT" | "BOOLEAN" | "CHOICE" | "FILE_UPLOAD";
+export type QuestionType = "TEXT" | "TEXT_AREA" | "BOOLEAN" | "RADIO" | "RADIO_GROUP" | "IMAGE_PICKER" | "SIGNATURE" | "DATE_PICKER" | "DATE_TIME_PICKER";
 
 export type Role = "ADMINISTRATOR" | "TRANSPORT_MANAGER" | "AGENT" | "DRIVER" | "CLIENT_MANAGER" | "WORKSHOP_MANAGER";
 
@@ -122,6 +122,7 @@ export interface Job {
   updatedAt: Date;
   shaft?: Shaft;
   shaftId: string;
+  preferredCollectionTime: string | null;
   client?: Client;
   clientId: string;
   pickedUpAt: Date | null;

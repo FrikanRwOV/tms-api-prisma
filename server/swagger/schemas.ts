@@ -115,9 +115,14 @@ export const schemas = {
     "type": "string",
     "enum": [
       "TEXT",
+      "TEXT_AREA",
       "BOOLEAN",
-      "CHOICE",
-      "FILE_UPLOAD"
+      "RADIO",
+      "RADIO_GROUP",
+      "IMAGE_PICKER",
+      "SIGNATURE",
+      "DATE_PICKER",
+      "DATE_TIME_PICKER"
     ]
   },
   "Role": {
@@ -347,6 +352,37 @@ export const schemas = {
       }
     }
   },
+  "Loadbay": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "createdAt": {
+        "$ref": "#/components/schemas/Date"
+      },
+      "updatedAt": {
+        "$ref": "#/components/schemas/Date"
+      },
+      "jobs": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Job"
+        },
+        "nullable": true
+      },
+      "siteId": {
+        "type": "string"
+      },
+      "site": {
+        "$ref": "#/components/schemas/Site",
+        "nullable": true
+      }
+    }
+  },
   "Job": {
     "type": "object",
     "properties": {
@@ -358,6 +394,15 @@ export const schemas = {
       },
       "description": {
         "type": "string"
+      },
+      "jobType": {
+        "type": "string",
+        "enum": [
+          "COLLECT_INTERNAL_SANDS",
+          "COLLECT_EXTERNAL_SANDS",
+          "COLLECT_INTERNAL_ORES",
+          "COLLECT_EXTERNAL_ORES"
+        ]
       },
       "priority": {
         "type": "string",
@@ -518,6 +563,15 @@ export const schemas = {
           },
           "description": {
             "type": "string"
+          },
+          "jobType": {
+            "type": "string",
+            "enum": [
+              "COLLECT_INTERNAL_SANDS",
+              "COLLECT_EXTERNAL_SANDS",
+              "COLLECT_INTERNAL_ORES",
+              "COLLECT_EXTERNAL_ORES"
+            ]
           },
           "priority": {
             "type": "string",
@@ -696,6 +750,15 @@ export const schemas = {
           },
           "description": {
             "type": "string"
+          },
+          "jobType": {
+            "type": "string",
+            "enum": [
+              "COLLECT_INTERNAL_SANDS",
+              "COLLECT_EXTERNAL_SANDS",
+              "COLLECT_INTERNAL_ORES",
+              "COLLECT_EXTERNAL_ORES"
+            ]
           },
           "priority": {
             "type": "string",
@@ -1012,9 +1075,14 @@ export const schemas = {
         "type": "string",
         "enum": [
           "TEXT",
+          "TEXT_AREA",
           "BOOLEAN",
-          "CHOICE",
-          "FILE_UPLOAD"
+          "RADIO",
+          "RADIO_GROUP",
+          "IMAGE_PICKER",
+          "SIGNATURE",
+          "DATE_PICKER",
+          "DATE_TIME_PICKER"
         ]
       }
     }
@@ -1280,6 +1348,13 @@ export const schemas = {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/Area"
+        },
+        "nullable": true
+      },
+      "Loadbay": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Loadbay"
         },
         "nullable": true
       }
@@ -1844,6 +1919,15 @@ export const schemas = {
           },
           "description": {
             "type": "string"
+          },
+          "jobType": {
+            "type": "string",
+            "enum": [
+              "COLLECT_INTERNAL_SANDS",
+              "COLLECT_EXTERNAL_SANDS",
+              "COLLECT_INTERNAL_ORES",
+              "COLLECT_EXTERNAL_ORES"
+            ]
           },
           "priority": {
             "type": "string",
